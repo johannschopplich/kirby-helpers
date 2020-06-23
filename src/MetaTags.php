@@ -61,10 +61,10 @@ class MetaTags
      * Build an HTML meta tag
      *
      * @param string $key
-     * @param string|null $value
+     * @param array|string|null $value
      * @return string|null
      */
-    public function meta(string $key, ?string $value): ?string
+    public function meta(string $key, $value): ?string
     {
         if (empty($value)) return null;
 
@@ -269,9 +269,8 @@ class MetaTags
      */
     protected function attributeElement(string $key, ?string $value): ?string
     {
-        if ($value !== null) {
-            return $key . '="' . $this->escapeAll($value) . '"';
-        }
+        if (is_null($value)) return null;
+        return $key . '="' . $this->escapeAll($value) . '"';
     }
 
     /**

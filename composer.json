@@ -21,6 +21,7 @@
   },
   "require-dev": {
     "getkirby/cms": "^3",
+    "phpstan/phpstan": "^0.12",
     "phpunit/phpunit": "^9.0"
   },
   "config": {
@@ -37,7 +38,7 @@
   },
   "scripts": {
     "analyze": "phpstan analyse",
-    "fix": "php-cs-fixer fix --config .php_cs",
+    "fix": "php-cs-fixer fix",
     "test": "phpunit",
     "dist": "composer install --no-dev --optimize-autoloader"
   },

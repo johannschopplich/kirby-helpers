@@ -15,13 +15,8 @@ class MetaTagsAdapter
     protected static array $instances = [];
     protected string $indentation;
     protected array $order;
-
-    /**
-     * Current page
-     *
-     * @var \Kirby\Cms\Page
-     */
     protected $page;
+    protected $data;
 
     public function __construct(Page $page)
     {
