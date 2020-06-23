@@ -14,8 +14,8 @@ class MetaTagsAdapter
     public $tags;
 
     protected static array $instances = [];
-    protected string $indentation;
-    protected array $order;
+    protected ?string $indentation;
+    protected ?array $order;
     protected $page;
     protected $data;
 
@@ -36,7 +36,7 @@ class MetaTagsAdapter
         $site = site();
         $templates = option('kirby-extended.meta-tags.templates', []);
         $default = option('kirby-extended.meta-tags.default', [
-            'title' => $page->isHomePage() ? $site->title() : $page->title(),
+            'title' => $page->isHomePage() ? $site->title()->value() : $page->title()->value(),
             'meta' => [
                 'description' => $site->description()
             ],
