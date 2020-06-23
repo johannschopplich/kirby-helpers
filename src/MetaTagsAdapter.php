@@ -3,9 +3,10 @@
 namespace KirbyExtended;
 
 use Exception;
-use Kirby\Toolkit\A;
 use Kirby\Cms\Field;
 use Kirby\Cms\Page;
+use Kirby\Exception\InvalidArgumentException;
+use Kirby\Toolkit\A;
 use KirbyExtended\MetaTags as Tags;
 
 class MetaTagsAdapter
@@ -18,6 +19,14 @@ class MetaTagsAdapter
     protected $page;
     protected $data;
 
+    /**
+     * Constructor
+     *
+     * @param \Kirby\Cms\Page $page
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws Exception
+     */
     public function __construct(Page $page)
     {
         $this->indentation = option('kirby-extended.meta-tags.indentation', null);
@@ -66,19 +75,29 @@ class MetaTagsAdapter
      * Return an existing instance or create a new one
      *
      * @param \Kirby\Cms\Page $page
-     * @return MetaTagsAdapter
+     * @return \KirbyExtended\MetaTagsAdapter
      */
     public static function instance(Page $page)
     {
         return static::$instances[$page->id()] ?? new static($page);
     }
 
-    public function render($groups = null)
+    /**
+     *
+     * @param mixed|null $groups
+     * @return string
+     */
+    public function render($groups = null): string
     {
         return $this->tags->render($groups);
     }
 
-    protected function addTagsFromTemplate()
+    /**
+     * Add tags from template
+     *
+     * @return void
+     */
+    protected function addTagsFromTemplate(): void
     {
         foreach ($this->data as $group => $tags) {
             if ($group === 'title') {
@@ -90,14 +109,29 @@ class MetaTagsAdapter
         }
     }
 
-    protected function addTagsFromGroup($group, $tags)
+    /**
+     * Add tags from group
+     *
+     * @param string $group
+     * @param array $tags
+     * @return void
+     */
+    protected function addTagsFromGroup(string $group, array $tags): void
     {
         foreach ($tags as $tag => $value) {
             $this->addTag($tag, $value, $group);
         }
     }
 
-    protected function addTag($tag, $value, $group)
+    /**
+     * Add single tag
+     *
+     * @param string $tag
+     * @param mixed $value
+     * @param string $group
+     * @return void
+     */
+    protected function addTag(string $tag, $value, string $group): void
     {
         if (is_callable($value)) {
             $value = $value($this->page, site());
@@ -118,7 +152,15 @@ class MetaTagsAdapter
         }
     }
 
-    protected function addTagsArray(string $tag, $value, $group)
+    /**
+     * Add multiple tags
+     *
+     * @param string $tag
+     * @param array $value
+     * @param string $group
+     * @return void
+     */
+    protected function addTagsArray(string $tag, array $value, string $group): void
     {
         foreach ($value as $key => $v) {
             if (strpos($tag, 'namespace:') === 0) {
@@ -137,7 +179,14 @@ class MetaTagsAdapter
         }
     }
 
-    protected function addJsonld(string $type, array $schema)
+    /**
+     * Add JSON-LD
+     *
+     * @param string $type
+     * @param array $schema
+     * @return void
+     */
+    protected function addJsonld(string $type, array $schema): void
     {
         $schema = array_reverse($schema, true);
 

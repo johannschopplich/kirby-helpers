@@ -1,4 +1,5 @@
 parameters:
-  level: 4
+  level: 6
   paths:
-    - %currentWorkingDirectory%/src
+    - src
+  checkMissingIterableValueType: false

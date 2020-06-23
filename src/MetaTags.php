@@ -5,11 +5,11 @@ namespace KirbyExtended;
 /**
  * PHP Meta Tags
  *
- * @version   0.0.2
- * @author    Pedro Borges <oi@pedroborg.es>
+ * @version 0.0.2
+ * @author Pedro Borges <oi@pedroborg.es>
  * @copyright Pedro Borges <oi@pedroborg.es>
- * @link      https://github.com/pedroborges/meta-tags
- * @license   MIT
+ * @link https://github.com/pedroborges/meta-tags
+ * @license MIT
  */
 class MetaTags
 {
@@ -39,7 +39,9 @@ class MetaTags
      */
     public function link(string $key, $value): ?string
     {
-        if (empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
 
         $attributes = ['rel' => $key];
 
@@ -66,7 +68,9 @@ class MetaTags
      */
     public function meta(string $key, $value): ?string
     {
-        if (empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
 
         $attributes = ['name' => $key];
 
@@ -89,12 +93,14 @@ class MetaTags
      *
      * @param string $key
      * @param string|null $value
-     * @param boolean $prefixed
+     * @param bool $prefixed
      * @return string|null
      */
     public function og(string $key, ?string $value, bool $prefixed = true): ?string
     {
-        if (empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
 
         $key = $prefixed ? "og:{$key}" : $key;
         $tag = $this->createTag('meta', [
@@ -115,7 +121,9 @@ class MetaTags
      */
     public function jsonld(?array $schema): ?string
     {
-        if (empty($schema)) return null;
+        if (empty($schema)) {
+            return null;
+        }
 
         $json = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         $script = "<script type=\"application/ld+json\">\n" . $json . "\n</script>";
@@ -137,7 +145,9 @@ class MetaTags
      */
     public function title(?string $value): ?string
     {
-        if (empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
 
         $tag = "<title>{$this->escapeAll($value)}</title>";
         $this->tags['title'][] = $tag;
@@ -150,12 +160,14 @@ class MetaTags
      *
      * @param string $key
      * @param string|null $value
-     * @param boolean $prefixed
+     * @param bool $prefixed
      * @return string|null
      */
     public function twitter(string $key, ?string $value, bool $prefixed = true): ?string
     {
-        if (empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
 
         $key = $prefixed ? "twitter:{$key}" : $key;
         $tag = $this->createTag('meta', [
@@ -171,12 +183,12 @@ class MetaTags
     /**
      * Render all or a specific group of HTML meta tags
      *
-     * @param mixed $groups
+     * @param mixed|null $groups
      * @return string
      */
     public function render($groups = null): string
     {
-        $groups = $groups !== null ? (array) $groups : $this->order;
+        $groups = $groups !== null ? (array)$groups : $this->order;
         $html = [];
 
         foreach ($groups as $group) {
@@ -197,7 +209,9 @@ class MetaTags
      */
     protected function renderGroup(string $group): ?string
     {
-        if (!isset($this->tags[$group])) return null;
+        if (!isset($this->tags[$group])) {
+            return null;
+        }
 
         $html = [];
 
@@ -269,7 +283,10 @@ class MetaTags
      */
     protected function attributeElement(string $key, ?string $value): ?string
     {
-        if (is_null($value)) return null;
+        if (is_null($value)) {
+            return null;
+        }
+
         return $key . '="' . $this->escapeAll($value) . '"';
     }
 

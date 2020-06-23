@@ -1,9 +1,9 @@
 <?php
 
 use Kirby\Cms\Page;
+use KirbyExtended\Adapters\MetaTagsAdapter;
 use KirbyExtended\Env;
 use KirbyExtended\HigherOrderTapProxy;
-use KirbyExtended\Adapters\MetaTagsAdapter;
 
 if (!function_exists('env')) {
     /**

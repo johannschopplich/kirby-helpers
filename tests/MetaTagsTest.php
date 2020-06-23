@@ -5,9 +5,16 @@ use PHPUnit\Framework\TestCase;
 
 class MetaTagsTest extends TestCase
 {
+    /**
+     * Tags list
+     *
+     * @var object
+     */
+    protected object $head;
+
     public function setUp(): void
     {
-        $this->head = new MetaTags;
+        $this->head = new MetaTags();
     }
 
     public function testTitleTag()

@@ -3,7 +3,6 @@
 namespace KirbyExtended;
 
 use Dotenv\Dotenv;
-use KirbyExtended\Env;
 
 class EnvAdapter
 {
