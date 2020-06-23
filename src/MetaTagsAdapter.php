@@ -75,7 +75,7 @@ class MetaTagsAdapter
      * Return an existing instance or create a new one
      *
      * @param \Kirby\Cms\Page $page
-     * @return \KirbyExtended\MetaTagsAdapter
+     * @return self
      */
     public static function instance(Page $page)
     {
@@ -83,11 +83,12 @@ class MetaTagsAdapter
     }
 
     /**
+     * Render current tag list
      *
-     * @param mixed|null $groups
+     * @param array|string|null $groups
      * @return string
      */
-    public function render($groups = null): string
+    public function render(array $groups = null): string
     {
         return $this->tags->render($groups);
     }
@@ -201,6 +202,14 @@ class MetaTagsAdapter
         $this->tags->jsonld(array_reverse($schema, true));
     }
 
+    /**
+     * Calling magic
+     *
+     * @param mixed $method
+     * @param mixed $arguments
+     * @return mixed
+     * @throws Exception
+     */
     public function __call($method, $arguments)
     {
         if (method_exists($this->tags, $method)) {

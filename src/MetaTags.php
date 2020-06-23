@@ -183,7 +183,7 @@ class MetaTags
     /**
      * Render all or a specific group of HTML meta tags
      *
-     * @param mixed|null $groups
+     * @param array|string|null $groups
      * @return string
      */
     public function render($groups = null): string

@@ -18,7 +18,7 @@ class EnvAdapter
      *
      * @param string|null $path
      * @param string|null $filename
-     * @return array
+     * @return array|null
      */
     public static function load(string $path = null, string $filename = null): ?array
     {
