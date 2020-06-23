@@ -1,7 +1,6 @@
 <?php
 
-use Kirby\Cms\Page;
-use KirbyExtended\Adapters\MetaTagsAdapter;
+use KirbyExtended\MetaTagsAdapter;
 use KirbyExtended\Env;
 use KirbyExtended\HigherOrderTapProxy;
 
@@ -57,9 +56,9 @@ if (!function_exists('metaTags')) {
      * Generate meta tags for a given page
      *
      * @param \Kirby\Cms\Page $page
-     * @return \KirbyExtended\Adapters\MetaTagsAdapter
+     * @return \KirbyExtended\MetaTagsAdapter
      */
-    function metaTags(Page $page)
+    function metaTags(\Kirby\Cms\Page $page): MetaTagsAdapter
     {
         return MetaTagsAdapter::instance($page);
     }
