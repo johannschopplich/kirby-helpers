@@ -1,11 +1,15 @@
 {
   "name": "johannschopplich/kirby-extended",
   "description": "Kirby plugin for env variables & HTML meta tags generation",
-  "version": "1.0.0",
-  "keywords": [
-    "kirby", "env", "dotenv", "seo", "meta", "meta-tags"
-  ],
   "type": "kirby-plugin",
+  "keywords": [
+    "kirby",
+    "env",
+    "dotenv",
+    "seo",
+    "meta",
+    "meta-tags"
+  ],
   "license": "MIT",
   "authors": [
     {
