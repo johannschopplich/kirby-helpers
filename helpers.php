@@ -1,8 +1,9 @@
 <?php
 
-use KirbyExtended\MetaTagsAdapter;
+use Kirby\Cms\Page;
 use KirbyExtended\Env;
 use KirbyExtended\HigherOrderTapProxy;
+use KirbyExtended\MetaTagsAdapter;
 
 if (!function_exists('env')) {
     /**
@@ -28,7 +29,7 @@ if (!function_exists('tap')) {
      */
     function tap($value, ?callable $callback = null)
     {
-        if (is_null($callback)) {
+        if ($callback === null) {
             return new HigherOrderTapProxy($value);
         }
 
@@ -58,7 +59,7 @@ if (!function_exists('metaTags')) {
      * @param \Kirby\Cms\Page $page
      * @return \KirbyExtended\MetaTagsAdapter
      */
-    function metaTags(\Kirby\Cms\Page $page): MetaTagsAdapter
+    function metaTags(Page $page): MetaTagsAdapter
     {
         return MetaTagsAdapter::instance($page);
     }

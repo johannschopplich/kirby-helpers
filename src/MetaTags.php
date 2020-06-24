@@ -20,11 +20,11 @@ class MetaTags
     /**
      * Create a new instance
      *
-     * @param string $indentation
-     * @param array $order
+     * @param string|null $indentation
+     * @param array|null $order
      * @return void
      */
-    public function __construct(string $indentation = null, array $order = null)
+    public function __construct(?string $indentation = null, ?array $order = null)
     {
         $this->indentation = $indentation ?? '    ';
         $this->order = $order ?? ['title', 'meta', 'og', 'twitter', 'link', 'json-ld'];
@@ -205,7 +205,7 @@ class MetaTags
      * Render all HTML meta tags from a specific group
      *
      * @param string $group
-     * @return string
+     * @return string|null
      */
     protected function renderGroup(string $group): ?string
     {
@@ -281,9 +281,9 @@ class MetaTags
      * @param string|null $value
      * @return string|null
      */
-    protected function attributeElement(string $key, ?string $value): ?string
+    protected function attributeElement(string $key, ?string $value = null): ?string
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 

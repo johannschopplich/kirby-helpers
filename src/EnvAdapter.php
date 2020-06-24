@@ -20,13 +20,13 @@ class EnvAdapter
      * @param string|null $filename
      * @return array|null
      */
-    public static function load(string $path = null, string $filename = null): ?array
+    public static function load(?string $path = null, ?string $filename = null): ?array
     {
-        if (empty($path)) {
+        if ($path === null) {
             $path = option('kirby-extended.env.path', kirby()->roots()->base());
         }
 
-        if (empty($filename)) {
+        if ($filename === null) {
             $filename = option('kirby-extended.env.filename', '.env');
         }
 

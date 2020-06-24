@@ -88,7 +88,7 @@ class MetaTagsAdapter
      * @param array|string|null $groups
      * @return string
      */
-    public function render(array $groups = null): string
+    public function render($groups = null): string
     {
         return $this->tags->render($groups);
     }
