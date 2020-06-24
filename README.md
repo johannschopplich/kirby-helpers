@@ -22,6 +22,11 @@ This package extends Kirby's base capabilities. It is built mostly upon existing
 - Prevent same tags being repeated multiple times
 - Type hinting
 
+## Requirements
+
+- Kirby 3
+- PHP 7.4+
+
 ## Installation
 
 ### Download
@@ -39,11 +44,6 @@ git submodule add https://github.com/johannschopplich/kirby-extended.git site/pl
 ```
 composer require johannschopplich/kirby-extended
 ```
-
-## Requirements
-
-- Kirby 3
-- PHP 7.2+
 
 ## License
 
