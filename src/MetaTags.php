@@ -13,8 +13,25 @@ namespace KirbyExtended;
  */
 class MetaTags
 {
-    protected string $indentation;
-    protected array $order;
+    /**
+     * Default intendation for tags
+     *
+     * @var string
+     */
+    protected string $indentation = '  ';
+
+    /**
+     * Default tags order to render
+     *
+     * @var array
+     */
+    protected array $order = ['title', 'meta', 'og', 'twitter', 'link', 'json-ld'];
+
+    /**
+     * Array of tags to render
+     *
+     * @var array
+     */
     protected array $tags = [];
 
     /**
@@ -26,8 +43,13 @@ class MetaTags
      */
     public function __construct(?string $indentation = null, ?array $order = null)
     {
-        $this->indentation = $indentation ?? '    ';
-        $this->order = $order ?? ['title', 'meta', 'og', 'twitter', 'link', 'json-ld'];
+        if ($indentation !== null) {
+            $this->indentation = $indentation;
+        }
+
+        if ($order !== null) {
+            $this->order = $order;
+        }
     }
 
     /**
