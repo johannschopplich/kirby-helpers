@@ -58,9 +58,9 @@ if (!function_exists('schema')) {
      * Fluent builder for Schema.org types and ld+json generator
      *
      * @param string $type
-     * @return \Spatie\SchemaOrg\Schema
+     * @return mixed
      */
-    function schema(string $type): Schema
+    function schema(string $type)
     {
         return Schema::{$type}();
     }
