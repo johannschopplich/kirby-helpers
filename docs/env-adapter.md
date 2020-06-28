@@ -1,10 +1,18 @@
 # Env Adapter
 
-> Adapted from [kirby-env](https://github.com/beebmx/kirby-env) by Fernando Gutiérrez
+Loads environment variables from `.env` automatically. This helps to store project credentials or variables outside of your code or if you want to have development and production access in different locations.
+
+The `.env` file is generally kept out of version control since it can contain sensitive information. A separate `.env.example` file is created with all the required environment variables defined except for the sensitive ones, which are either user-supplied for their own development environments or are communicated elsewhere to project collaborators.
 
 The `EnvAdapter` class uses the `vlucas/phpdotenv` package and enables its features for Kirby.
 
-This package helps if you want to store project credentials or variables outside of your code or if you want to have development and production access in different locations.
+> Forked from [kirby-env](https://github.com/beebmx/kirby-env) by Fernando Gutiérrez
+
+**Notable Changes:**
+- Upgrade to `vlucas/phpdotenv` v5
+- Up-to-date Laravel `env` helper
+- Optional `putenv` support
+- Type hinting
 
 ## Usage
 

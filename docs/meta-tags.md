@@ -1,8 +1,14 @@
 # Meta Tags
 
-> Adapted from [meta-tags](https://github.com/pedroborges/meta-tags/) by Pedro Borges
+A HTML meta tags generator for PHP. Supports [Open Graph](http://ogp.me), [Twitter Cards](https://dev.twitter.com/cards/overview), and [JSON Linked Data](https://json-ld.org) out of the box.
 
-HTML meta tags generator for PHP. Supports [Open Graph](http://ogp.me), [Twitter Cards](https://dev.twitter.com/cards/overview), and [JSON Linked Data](https://json-ld.org) out of the box.
+> Forked from [meta-tags](https://github.com/pedroborges/meta-tags/) by Pedro Borges
+
+**Notable Changes:**
+- Cache one instance per page
+- Prevent same tags being renderes multiple times
+- Updated documentation
+- Type hinting
 
 ## Basic Usage
 
