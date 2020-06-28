@@ -171,6 +171,77 @@
         ]
     },
     {
+        "name": "spatie/schema-org",
+        "version": "2.14.1",
+        "version_normalized": "2.14.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/spatie/schema-org.git",
+            "reference": "a17c65150f97caf81cea490294b376fd37bee660"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/spatie/schema-org/zipball/a17c65150f97caf81cea490294b376fd37bee660",
+            "reference": "a17c65150f97caf81cea490294b376fd37bee660",
+            "shasum": ""
+        },
+        "require": {
+            "ext-json": "*",
+            "php": "^7.3"
+        },
+        "require-dev": {
+            "graham-campbell/analyzer": "^2.3",
+            "league/flysystem": "^1.0",
+            "phpunit/phpunit": "^8.0",
+            "symfony/console": "^3.2",
+            "symfony/css-selector": "^3.2",
+            "symfony/dom-crawler": "^3.2",
+            "twig/twig": "^1.28"
+        },
+        "time": "2020-06-10T17:06:18+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Spatie\\SchemaOrg\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Sebastian De Deyne",
+                "email": "sebastian@spatie.be",
+                "homepage": "https://spatie.be",
+                "role": "Developer"
+            },
+            {
+                "name": "Tom Witkowski",
+                "email": "dev.gummibeer@gmail.com",
+                "homepage": "https://gummibeer.de",
+                "role": "Developer"
+            }
+        ],
+        "description": "A fluent builder Schema.org types and ld+json generator",
+        "homepage": "https://github.com/spatie/schema-org",
+        "keywords": [
+            "schema-org",
+            "spatie"
+        ],
+        "funding": [
+            {
+                "url": "https://spatie.be/open-source/support-us",
+                "type": "custom"
+            },
+            {
+                "url": "https://www.patreon.com/spatie",
+                "type": "patreon"
+            }
+        ]
+    },
+    {
         "name": "symfony/polyfill-ctype",
         "version": "v1.17.1",
         "version_normalized": "1.17.1.0",

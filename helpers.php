@@ -4,6 +4,7 @@ use Kirby\Cms\Page;
 use KirbyExtended\Env;
 use KirbyExtended\HigherOrderTapProxy;
 use KirbyExtended\MetaTagsAdapter;
+use Spatie\SchemaOrg\Schema;
 
 if (!function_exists('env')) {
     /**
@@ -52,9 +53,22 @@ if (!function_exists('value')) {
     }
 }
 
+if (!function_exists('schema')) {
+    /**
+     * Fluent builder for Schema.org types and ld+json generator
+     *
+     * @param string $type
+     * @return \Spatie\SchemaOrg\Schema
+     */
+    function schema(string $type): Schema
+    {
+        return Schema::{$type}();
+    }
+}
+
 if (!function_exists('metaTags')) {
     /**
-     * Generate meta tags for a given page
+     * Generate meta tags for a given Kirby page
      *
      * @param \Kirby\Cms\Page $page
      * @return \KirbyExtended\MetaTagsAdapter

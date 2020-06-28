@@ -9,6 +9,7 @@ return array(
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
+    'Spatie\\SchemaOrg\\' => array($vendorDir . '/spatie/schema-org/src'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'Kirby\\' => array($vendorDir . '/getkirby/composer-installer/src'),
     'KirbyExtended\\' => array($baseDir . '/src'),
