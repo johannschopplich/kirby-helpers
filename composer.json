@@ -14,7 +14,8 @@
   "authors": [
     {
       "name": "Johann Schopplich",
-      "email": "mail@johannschopplich.com"
+      "email": "pkg@johannschopplich.com",
+      "homepage": "https://johannschopplich.com"
     }
   ],
   "require": {
