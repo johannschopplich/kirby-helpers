@@ -7,7 +7,7 @@ use Dotenv\Dotenv;
 class EnvAdapter
 {
     /**
-     * Indicates if dotenv has been loaded
+     * Indicates if `dotenv` has been loaded
      *
      * @var bool
      */
@@ -37,7 +37,7 @@ class EnvAdapter
     }
 
     /**
-     * Indicates if dotenv has been loaded
+     * Indicates if `dotenv` has been loaded
      *
      * @return bool
      */

@@ -2,15 +2,6 @@
 
 namespace KirbyExtended;
 
-/**
- * PHP Meta Tags
- *
- * @version 0.0.2
- * @author Pedro Borges <oi@pedroborg.es>
- * @copyright Pedro Borges <oi@pedroborg.es>
- * @link https://github.com/pedroborges/meta-tags
- * @license MIT
- */
 class MetaTags
 {
     /**
@@ -53,7 +44,7 @@ class MetaTags
     }
 
     /**
-     * Build an HTML link tag
+     * Build a HTML link tag
      *
      * @param string $key
      * @param array|string|null $value
@@ -82,7 +73,7 @@ class MetaTags
     }
 
     /**
-     * Build an HTML meta tag
+     * Build a HTML meta tag
      *
      * @param string $key
      * @param array|string|null $value
@@ -136,7 +127,7 @@ class MetaTags
     }
 
     /**
-     * Build an JSON linked data meta tag
+     * Build a JSON linked data meta tag
      *
      * @param array|null $schema
      * @return string|null
@@ -160,7 +151,7 @@ class MetaTags
     }
 
     /**
-     * Build a Title HTML tag
+     * Build a HTML Title tag
      *
      * @param string|null $value
      * @return string|null
@@ -253,7 +244,7 @@ class MetaTags
     }
 
     /**
-     * Add single HTML element to tags group
+     * Add a single HTML element to tags group
      *
      * @param string $group
      * @param string $key
@@ -276,7 +267,7 @@ class MetaTags
     }
 
     /**
-     * Build an HTML attribute string from an array
+     * Build a HTML attribute string from an array
      *
      * @param array $attributes
      * @return string
@@ -313,7 +304,7 @@ class MetaTags
     }
 
     /**
-     * Build an HTML tag
+     * Build a HTML tag
      *
      * @param string $tagName
      * @param array $attributes

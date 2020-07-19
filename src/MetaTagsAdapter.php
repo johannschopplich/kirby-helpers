@@ -25,7 +25,7 @@ class MetaTagsAdapter
     protected Page $page;
 
     /**
-     * Holds default and template meta data
+     * Holds the default and template meta data
      *
      * @var array
      */
@@ -95,7 +95,7 @@ class MetaTagsAdapter
     }
 
     /**
-     * Render current tag list
+     * Render the current tag list
      *
      * @param array|string|null $groups
      * @return string
