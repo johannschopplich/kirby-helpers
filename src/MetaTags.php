@@ -5,21 +5,21 @@ namespace KirbyExtended;
 class MetaTags
 {
     /**
-     * Default intendation for tags
+     * The default intendation for tags
      *
      * @var string
      */
     protected string $indentation = '  ';
 
     /**
-     * Default tags order to render
+     * The default tags render order
      *
      * @var array
      */
     protected array $order = ['title', 'meta', 'og', 'twitter', 'link', 'json-ld'];
 
     /**
-     * Array of tags to render
+     * The tags to render
      *
      * @var array
      */
@@ -44,7 +44,7 @@ class MetaTags
     }
 
     /**
-     * Build a HTML link tag
+     * Build a HTML `<link>` tag
      *
      * @param string $key
      * @param array|string|null $value
@@ -73,7 +73,7 @@ class MetaTags
     }
 
     /**
-     * Build a HTML meta tag
+     * Build a HTML `<meta>` tag
      *
      * @param string $key
      * @param array|string|null $value
@@ -102,7 +102,7 @@ class MetaTags
     }
 
     /**
-     * Build an Open Graph meta tag
+     * Build an Open Graph meta tags
      *
      * @param string $key
      * @param string|null $value
@@ -127,7 +127,7 @@ class MetaTags
     }
 
     /**
-     * Build a JSON linked data meta tag
+     * Build a JSON linked data meta tags
      *
      * @param array|null $schema
      * @return string|null
@@ -151,7 +151,7 @@ class MetaTags
     }
 
     /**
-     * Build a HTML Title tag
+     * Build a HTML `<title>` tag
      *
      * @param string|null $value
      * @return string|null
@@ -169,7 +169,7 @@ class MetaTags
     }
 
     /**
-     * Build a Twitter Card meta tag
+     * Build a Twitter Card `<meta>` tag
      *
      * @param string $key
      * @param string|null $value
@@ -244,7 +244,7 @@ class MetaTags
     }
 
     /**
-     * Add a single HTML element to tags group
+     * Add a single HTML element to the tags group
      *
      * @param string $group
      * @param string $key

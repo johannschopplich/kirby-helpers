@@ -14,7 +14,7 @@ class EnvAdapter
     protected static bool $loaded = false;
 
     /**
-     * Load the environment file in given directory
+     * Load the environment file from a given directory
      *
      * @param string|null $path
      * @param string|null $filename
