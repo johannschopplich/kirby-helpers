@@ -1,27 +1,27 @@
 [
     {
         "name": "getkirby/composer-installer",
-        "version": "1.1.4",
-        "version_normalized": "1.1.4.0",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/getkirby/composer-installer.git",
-            "reference": "2d6b8f5601a31caeeea45623e1643fbb437eb94e"
+            "reference": "240a8b2c275d61b66601feb58222b7d34bc6cf1e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/getkirby/composer-installer/zipball/2d6b8f5601a31caeeea45623e1643fbb437eb94e",
-            "reference": "2d6b8f5601a31caeeea45623e1643fbb437eb94e",
+            "url": "https://api.github.com/repos/getkirby/composer-installer/zipball/240a8b2c275d61b66601feb58222b7d34bc6cf1e",
+            "reference": "240a8b2c275d61b66601feb58222b7d34bc6cf1e",
             "shasum": ""
         },
         "require": {
-            "composer-plugin-api": "^1.0"
+            "composer-plugin-api": "^1.0 || ^2.0"
         },
         "require-dev": {
-            "composer/composer": "^1.8",
+            "composer/composer": "^1.8 || 2.0.*@dev",
             "phpunit/phpunit": "^7.0"
         },
-        "time": "2019-02-11T20:27:36+00:00",
+        "time": "2020-09-13T14:43:34+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Kirby\\ComposerInstaller\\Plugin"
@@ -481,17 +481,17 @@
     },
     {
         "name": "vlucas/phpdotenv",
-        "version": "v5.1.0",
-        "version_normalized": "5.1.0.0",
+        "version": "v5.2.0",
+        "version_normalized": "5.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/vlucas/phpdotenv.git",
-            "reference": "448c76d7a9e30c341ff5bc367a923af74ae18467"
+            "reference": "fba64139db67123c7a57072e5f8d3db10d160b66"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/448c76d7a9e30c341ff5bc367a923af74ae18467",
-            "reference": "448c76d7a9e30c341ff5bc367a923af74ae18467",
+            "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/fba64139db67123c7a57072e5f8d3db10d160b66",
+            "reference": "fba64139db67123c7a57072e5f8d3db10d160b66",
             "shasum": ""
         },
         "require": {
@@ -511,11 +511,11 @@
         "suggest": {
             "ext-filter": "Required to use the boolean validator."
         },
-        "time": "2020-07-14T19:26:25+00:00",
+        "time": "2020-09-14T15:57:31+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "5.1-dev"
+                "dev-master": "5.2-dev"
             }
         },
         "installation-source": "dist",

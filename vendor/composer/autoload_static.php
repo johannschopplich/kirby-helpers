@@ -67,7 +67,7 @@ class ComposerStaticInita07d1fc11db7d7ade980710f0c73f6b6
         ),
         'KirbyExtended\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/classes/KirbyExtended',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (
@@ -124,11 +124,11 @@ class ComposerStaticInita07d1fc11db7d7ade980710f0c73f6b6
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
-        'KirbyExtended\\Env' => __DIR__ . '/../..' . '/src/Env.php',
-        'KirbyExtended\\EnvAdapter' => __DIR__ . '/../..' . '/src/EnvAdapter.php',
-        'KirbyExtended\\HigherOrderTapProxy' => __DIR__ . '/../..' . '/src/HigherOrderTapProxy.php',
-        'KirbyExtended\\MetaTags' => __DIR__ . '/../..' . '/src/MetaTags.php',
-        'KirbyExtended\\MetaTagsAdapter' => __DIR__ . '/../..' . '/src/MetaTagsAdapter.php',
+        'KirbyExtended\\Env' => __DIR__ . '/../..' . '/classes/KirbyExtended/Env.php',
+        'KirbyExtended\\EnvAdapter' => __DIR__ . '/../..' . '/classes/KirbyExtended/EnvAdapter.php',
+        'KirbyExtended\\HigherOrderTapProxy' => __DIR__ . '/../..' . '/classes/KirbyExtended/HigherOrderTapProxy.php',
+        'KirbyExtended\\MetaTags' => __DIR__ . '/../..' . '/classes/KirbyExtended/MetaTags.php',
+        'KirbyExtended\\MetaTagsAdapter' => __DIR__ . '/../..' . '/classes/KirbyExtended/MetaTagsAdapter.php',
         'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',

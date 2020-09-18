@@ -12,7 +12,7 @@ return array(
     'Spatie\\SchemaOrg\\' => array($vendorDir . '/spatie/schema-org/src'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'Kirby\\' => array($vendorDir . '/getkirby/composer-installer/src'),
-    'KirbyExtended\\' => array($baseDir . '/src'),
+    'KirbyExtended\\' => array($baseDir . '/classes/KirbyExtended'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
 );
