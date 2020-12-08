@@ -1,5 +1,15 @@
 <?php
 
+
+
+
+
+
+
+
+
+
+
 namespace Composer;
 
 use Composer\Semver\VersionParser;
@@ -19,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'a0eb111339b9c2bbacc39ca9352aac7f57b4e838',
+    'reference' => '4ad146ff29e79b80a184ed3aa43bac6d8037b68f',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -49,7 +59,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'a0eb111339b9c2bbacc39ca9352aac7f57b4e838',
+      'reference' => '4ad146ff29e79b80a184ed3aa43bac6d8037b68f',
     ),
     'phpoption/phpoption' => 
     array (
