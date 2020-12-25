@@ -20,13 +20,12 @@
   ],
   "require": {
     "php": ">=7.4.0",
-    "getkirby/composer-installer": "^1.1",
+    "getkirby/composer-installer": "^1.2",
     "phpoption/phpoption": "^1.7",
     "vlucas/phpdotenv": "^5.0"
   },
   "require-dev": {
     "getkirby/cms": "^3.0",
-    "phpstan/phpstan": "^0.12",
     "phpunit/phpunit": "^9.0"
   },
   "config": {
