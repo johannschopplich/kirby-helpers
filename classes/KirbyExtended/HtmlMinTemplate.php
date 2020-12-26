@@ -12,7 +12,11 @@ class HtmlMinTemplate extends Template
     {
         $html = Tpl::load($this->file(), $data);
 
-        if ($this->type !== 'html') {
+        if ($this->type() !== 'html') {
+            return $html;
+        }
+
+        if (option('debug', false) === true) {
             return $html;
         }
 
