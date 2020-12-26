@@ -3,8 +3,8 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Cms\App as Kirby;
-use Kirby\Cms\Field;
 use KirbyExtended\EnvAdapter;
+use KirbyExtended\HtmlMinTemplate;
 
 Kirby::plugin('johannschopplich/kirby-extended', [
     'pageMethods' => [
@@ -17,6 +17,11 @@ Kirby::plugin('johannschopplich/kirby-extended', [
         },
         'metaTags' => function ($groups = null) {
             return metaTags($this)->render($groups);
+        }
+    ],
+    'components' => [
+        'template' => function (Kirby $kirby, string $name, string $type = 'html', string $defaultType = 'html') {
+            return new HtmlMinTemplate($name, $type, $defaultType);
         }
     ]
 ]);

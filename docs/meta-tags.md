@@ -2,14 +2,6 @@
 
 A HTML meta tags generator for PHP. Supports [Open Graph](http://ogp.me), [Twitter Cards](https://dev.twitter.com/cards/overview), and [JSON Linked Data](https://json-ld.org) out of the box.
 
-> Forked from [meta-tags](https://github.com/pedroborges/meta-tags/) by Pedro Borges
-
-**Notable Changes:**
-- Cache one instance per page
-- Prevent same tags being renderes multiple times
-- Updated documentation
-- Type hinting
-
 ## Basic Usage
 
 Create a new `MetaTags` instance then you are ready to start adding meta tags:
@@ -74,13 +66,13 @@ When you are ready to output them, use the `render` method inside your template 
 You can also render only one tag:
 
 ```php
-    <?= $tags->render('title') ?>
+<?= $tags->render('title') ?>
 ```
 
 Or specify which tags to render:
 
 ```php
-    <?= $tags->render(['og', 'twitter', 'json-ld']) ?>
+<?= $tags->render(['og', 'twitter', 'json-ld']) ?>
 ```
 
 By default Meta Tag will indent the tags with 4 spaces and use the following order:
@@ -99,3 +91,13 @@ use KirbyExtended\MetaTags;
 
 $tags = new MetaTags("\t", ['meta', 'title', 'link', 'og', 'twitter', 'json-ld']);
 ```
+
+## Credits
+
+> Forked from [meta-tags](https://github.com/pedroborges/meta-tags) by Pedro Borges
+
+**Notable Changes:**
+- Cache one instance per page
+- Prevent same tags being renderes multiple times
+- Updated documentation
+- Type hinting

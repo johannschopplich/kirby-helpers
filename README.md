@@ -1,6 +1,6 @@
 # Kirby Extended
 
-This package extends Kirby's base capabilities. It is built mostly upon existing packages, but unifies them under one namespace and further updates their original functionalities which includes fixing open issues.
+This package extends Kirby's base capabilities. It's built mostly upon existing packages, but unifies them under one namespace and further updates their original functionalities including fixing open issues.
 
 ## Included Adapters
 
@@ -18,11 +18,19 @@ The `EnvAdapter` class uses the `vlucas/phpdotenv` package and enables its featu
 
 ## Meta Tags
 
-> Forked from [kirby-meta-tags](https://github.com/pedroborges/kirby-meta-tags/) by Pedro Borges
+> Forked from [kirby-meta-tags](https://github.com/pedroborges/kirby-meta-tags) by Pedro Borges
 
 A HTML meta tags for Kirby. Supports [Open Graph](http://ogp.me), [Twitter Cards](https://dev.twitter.com/cards/overview), and [JSON Linked Data](https://json-ld.org) out of the box.
 
 [👉 Full documentation](docs/meta-tags-adapter.md)
+
+## HTML Minifier
+
+> Forked from [kirby-minify-html](https://github.com/afbora/kirby-minify-html) by Ahmet Bora
+
+Minifies rendered HTML templates when enabled in Kirby's configuration.
+
+[👉 Full documentation](docs/html-minify.md)
 
 ## Requirements
 

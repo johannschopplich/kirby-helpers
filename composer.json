@@ -1,6 +1,6 @@
 {
   "name": "johannschopplich/kirby-extended",
-  "description": "Kirby plugin for env variables & HTML meta tags generation",
+  "description": "Env variables, meta tags generation and more",
   "type": "kirby-plugin",
   "keywords": [
     "kirby",
@@ -22,7 +22,8 @@
     "php": ">=7.4.0",
     "getkirby/composer-installer": "^1.2",
     "phpoption/phpoption": "^1.7",
-    "vlucas/phpdotenv": "^5.0"
+    "vlucas/phpdotenv": "^5.0",
+    "voku/html-min": "^4.4"
   },
   "require-dev": {
     "getkirby/cms": "^3.0",

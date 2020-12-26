@@ -5,11 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 class MetaTagsTest extends TestCase
 {
-    /**
-     * Tags list
-     *
-     * @var object
-     */
     protected object $head;
 
     public function setUp(): void
@@ -38,11 +33,11 @@ class MetaTagsTest extends TestCase
 
         $html = $this->head->render();
 
-        $expectedHtml = <<<'EOD'
-<link rel="alternate" hreflang="pt-br" href="https://br.pedroborg.es">
-  <link rel="alternate" hreflang="en-us" href="https://en.pedroborg.es">
+        $expectedHtml = <<<EOD
+            <link rel="alternate" hreflang="pt-br" href="https://br.pedroborg.es">
+              <link rel="alternate" hreflang="en-us" href="https://en.pedroborg.es">
 
-EOD;
+            EOD;
 
         $this->assertEquals($expectedHtml, $html);
     }
@@ -126,15 +121,15 @@ EOD;
             'name' => 'Music album test'
         ]);
 
-        $expectedHtml = <<<'EOD'
-<script type="application/ld+json">
-{
-    "@context": "http://schema.org/",
-    "@type": "MusicAlbum",
-    "name": "Music album test"
-}
-</script>
-EOD;
+        $expectedHtml = <<<EOD
+            <script type="application/ld+json">
+            {
+                "@context": "http://schema.org/",
+                "@type": "MusicAlbum",
+                "name": "Music album test"
+            }
+            </script>
+            EOD;
 
         $this->assertEquals($expectedHtml, $tag);
     }
@@ -155,22 +150,22 @@ EOD;
 
         $html = $this->head->render();
 
-        $expectedHtml = <<<'EOD'
-<title>&lt;title&gt; tag test</title>
-  <meta name="description" content="&quot;Meta Tags&quot; test">
-  <meta property="og:title" content="Open Graph test">
-  <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://pedroborg.es">
-  <script type="application/ld+json">
-  {
-      "@context": "http://schema.org",
-      "@type": "Organization",
-      "name": "Example Co",
-      "url": "https://www.example.com"
-  }
-  </script>
+        $expectedHtml = <<<EOD
+            <title>&lt;title&gt; tag test</title>
+              <meta name="description" content="&quot;Meta Tags&quot; test">
+              <meta property="og:title" content="Open Graph test">
+              <meta name="twitter:card" content="summary">
+              <link rel="canonical" href="https://pedroborg.es">
+              <script type="application/ld+json">
+              {
+                  "@context": "http://schema.org",
+                  "@type": "Organization",
+                  "name": "Example Co",
+                  "url": "https://www.example.com"
+              }
+              </script>
 
-EOD;
+            EOD;
 
         $this->assertEquals($expectedHtml, $html);
     }
@@ -197,10 +192,10 @@ EOD;
         $html = $this->head->render(['og', 'meta']);
 
         $expectedHtml = <<<'EOD'
-<meta property="og:title" content="Open Graph test">
-  <meta name="description" content="&quot;Meta Tags&quot; test">
+            <meta property="og:title" content="Open Graph test">
+              <meta name="description" content="&quot;Meta Tags&quot; test">
 
-EOD;
+            EOD;
 
         $this->assertEquals($expectedHtml, $html);
     }

@@ -6,14 +6,6 @@ The `.env` file is generally kept out of version control since it can contain se
 
 The `EnvAdapter` class uses the `vlucas/phpdotenv` package and enables its features for Kirby.
 
-> Forked from [kirby-env](https://github.com/beebmx/kirby-env) by Fernando Gutiérrez
-
-**Notable Changes:**
-- Upgrade to `vlucas/phpdotenv` v5
-- Up-to-date Laravel `env` helper
-- Optional `putenv` support
-- Type hinting
-
 ## Usage
 
 > It is important to hide your `.env` from the public. Make sure to add it to your `.gitignore` file.
@@ -73,3 +65,13 @@ PUBLIC_KEY=my_public_key
 FOO=BAR
 BAZ=${FOO}
 ```
+
+## Credits
+
+> Forked from [kirby-env](https://github.com/beebmx/kirby-env) by Fernando Gutiérrez
+
+**Notable Changes:**
+- Upgrade to `vlucas/phpdotenv` v5
+- Up-to-date Laravel `env` helper
+- Optional `putenv` support
+- Type hinting

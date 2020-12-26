@@ -5,11 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 class EnvAdapterTest extends TestCase
 {
-    /**
-     * Path to `.env` file
-     *
-     * @var string
-     */
     protected string $resources;
 
     public function setUp(): void

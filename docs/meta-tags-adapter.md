@@ -2,8 +2,6 @@
 
 A HTML meta tags for Kirby. Supports [Open Graph](http://ogp.me), [Twitter Cards](https://dev.twitter.com/cards/overview), and [JSON Linked Data](https://json-ld.org) out of the box.
 
-> Forked from [kirby-meta-tags](https://github.com/pedroborges/kirby-meta-tags/) by Pedro Borges
-
 ## Basic Usage
 
 Add the following one-liner to the `head` section of your template or the `header.php` snippet:
@@ -35,24 +33,26 @@ The plugin ships with some default meta tags enabled for your convenience:
 ```php
 // `config.php`
 return [
-    'kirby-extended.meta-tags.default' => function ($page, $site) {
-        return [
-            'title' => $site->title()->value(),
-            'meta' => [
-                'description' => $site->description()->value()
-            ],
-            'link' => [
-                'canonical' => $page->url()
-            ],
-            'og' => [
-                'type' => 'website',
-                'url' => $page->url(),
-                'title' => $page->isHomePage()
-                    ? $site->title()->value()
-                    : $page->title()->value()
-            ]
-        ];
-    }
+    'kirby-extended.meta-tags' => [
+        'default' => function ($page, $site) {
+            return [
+                'title' => $site->title()->value(),
+                'meta' => [
+                    'description' => $site->description()->value()
+                ],
+                'link' => [
+                    'canonical' => $page->url()
+                ],
+                'og' => [
+                    'type' => 'website',
+                    'url' => $page->url(),
+                    'title' => $page->isHomePage()
+                        ? $site->title()->value()
+                        : $page->title()->value()
+                ]
+            ];
+        }
+    ]
 ]
 ```
 
@@ -65,20 +65,22 @@ Following the flexible spirit of Kirby, you also have the option to add template
 ```php
 // `config.php`
 return [
-    'kirby-extended.meta-tags.templates' => function ($page, $site) {
-        return [
-            'song' => [
-                'og' => [
-                    'type' => 'music.song',
-                    'namespace:music' => [
-                        'duration' => $page->duration()->value(),
-                        'album' => $page->parent()->url(),
-                        'musician' => $page->singer()->html()
+    'kirby-extended.meta-tags' => [
+        'templates' => function ($page, $site) {
+            return [
+                'song' => [
+                    'og' => [
+                        'type' => 'music.song',
+                        'namespace:music' => [
+                            'duration' => $page->duration()->value(),
+                            'album' => $page->parent()->url(),
+                            'musician' => $page->singer()->html()
+                        ]
                     ]
                 ]
-            ]
-        ];
-    }
+            ];
+        }
+    ]
 ]
 ```
 
@@ -101,16 +103,18 @@ It accepts an array containing any or all of the following keys: `title`, `meta`
 ```php
 // `config.php`
 return [
-    'kirby-extended.meta-tags.default' => function ($page, $site) {
-        return [
-            'title' => 'Site Name',
-            'meta' => [ /* meta tags */ ],
-            'link' => [ /* link tags */ ],
-            'og' => [ /* Open Graph tags */ ],
-            'twitter' => [ /* Twitter Card tags */ ],
-            'json-ld' => [ /* Schema markup */ ],
-        ];
-    }
+    'kirby-extended.meta-tags' => [
+        'default' => function ($page, $site) {
+            return [
+                'title' => 'Site Name',
+                'meta' => [ /* meta tags */ ],
+                'link' => [ /* link tags */ ],
+                'og' => [ /* Open Graph tags */ ],
+                'twitter' => [ /* Twitter Card tags */ ],
+                'json-ld' => [ /* Schema markup */ ],
+            ];
+        }
+    ]
 ]
 ```
 
@@ -121,13 +125,15 @@ This option allows you to define a template specific set of meta tags. It must r
 ```php
 // `config.php`
 return [
-    'kirby-extended.meta-tags.templates' => function ($page, $site) {
-        return [
-            'article' => [ /* tag groups */ ],
-            'about' => [ /* tag groups */ ],
-            'products' => [ /* tag groups */ ],
-        ];
-    }
+    'kirby-extended.meta-tags' => [
+        'templates' => function ($page, $site) {
+            return [
+                'article' => [ /* tag groups */ ],
+                'about' => [ /* tag groups */ ],
+                'products' => [ /* tag groups */ ],
+            ];
+        }
+    ]
 ]
 ```
 
@@ -180,7 +186,7 @@ This tag group is used to render HTML `<link>` elements. It takes an `array` of 
         $locales = [];
 
         foreach (kirby()->languages() as $language) {
-            if ($language->code() === kirby()->language()->code()) continue;
+            if ($language->code() === kirby()->languageCode()) continue;
 
             $locales[] = [
                 'hreflang' => $language->code(),
@@ -232,31 +238,33 @@ Of course you can use Open Graph [structured objects](http://ogp.me/#structured)
 ```php
 // `config.php`
 return [
-    'kirby-extended.meta-tags.templates' => function ($page, $site) {
-        return [
-            'article' => [ // template name
-                'og' => [  // tags group name
-                    'type' => 'article', // overrides the default
-                    'namespace:article' => [
-                        'author' => $page->author(),
-                        'published_time' => $page->date('Y-m-d'),
-                        'modified_time' => $page->modified('Y-m-d'),
-                        'tag' => ['tech', 'web']
-                    ],
-                    'namespace:image' => function(Page $page) {
-                        $image = $page->cover()->toFile();
-        
-                        return [
-                            'image' => $image->url(),
-                            'height' => $image->height(),
-                            'width' => $image->width(),
-                            'type' => $image->mime()
-                        ];
-                    }
+    'kirby-extended.meta-tags' => [
+        'templates' => function ($page, $site) {
+            return [
+                'article' => [ // template name
+                    'og' => [  // tags group name
+                        'type' => 'article', // overrides the default
+                        'namespace:article' => [
+                            'author' => $page->author(),
+                            'published_time' => $page->date('Y-m-d'),
+                            'modified_time' => $page->modified('Y-m-d'),
+                            'tag' => ['tech', 'web']
+                        ],
+                        'namespace:image' => function(Page $page) {
+                            $image = $page->cover()->toFile();
+            
+                            return [
+                                'image' => $image->url(),
+                                'height' => $image->height(),
+                                'width' => $image->width(),
+                                'type' => $image->mime()
+                            ];
+                        }
+                    ]
                 ]
-            ]
-        ];
-    }
+            ];
+        }
+    ]
 ]
 ```
 
@@ -363,3 +371,7 @@ Use this tag group to add [JSON Linked Data](https://json-ld.org) schemas to you
 ```
 
 </details>
+
+## Credits
+
+> Forked from [kirby-meta-tags](https://github.com/pedroborges/kirby-meta-tags/) by Pedro Borges
