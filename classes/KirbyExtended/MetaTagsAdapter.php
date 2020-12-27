@@ -48,17 +48,12 @@ class MetaTagsAdapter
         $site = site();
         $templates = option('kirby-extended.meta-tags.templates', []);
         $default = option('kirby-extended.meta-tags.default', [
-            'title' => $page->isHomePage() ? $site->title()->value() : $page->title()->value(),
+            'title' => $site->title()->value() . ' – ' . $page->title()->value(),
             'meta' => [
-                'description' => $site->description()
+                'description' => $site->description()->value()
             ],
             'link' => [
                 'canonical' => $page->url()
-            ],
-            'og' => [
-                'type' => 'website',
-                'url' => $page->url(),
-                'title' => $page->title()->value()
             ]
         ]);
 
@@ -217,15 +212,15 @@ class MetaTagsAdapter
     /**
      * Dynamically pass method calls to the target
      *
-     * @param mixed $method
-     * @param mixed $arguments
+     * @param string $method
+     * @param array $args
      * @return mixed
      * @throws Exception
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $args)
     {
         if (method_exists($this->tags, $method)) {
-            return call_user_func_array([$this->tags, $method], $arguments);
+            return $this->tags->{$method}(...$args);
         } else {
             throw new Exception('Invalid method: ' . $method);
         }
