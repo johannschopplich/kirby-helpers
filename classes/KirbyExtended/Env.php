@@ -4,34 +4,24 @@ namespace KirbyExtended;
 
 use Dotenv\Dotenv;
 use Dotenv\Repository\RepositoryBuilder;
+use Dotenv\Repository\RepositoryInterface;
 
 class Env
 {
-    /**
-     * The environment repository instance
-     *
-     * @var \Dotenv\Repository\RepositoryInterface|null
-     */
-    protected static $repository;
-
-    /**
-     * `true` if `Dotenv` is initialized
-     *
-     * @var bool
-     */
-    protected static $loaded = false;
+    protected static ?RepositoryInterface $repository;
+    protected static bool $loaded = false;
 
     /**
      * Load the environment file from a given directory
      *
      * @param string|null $path
-     * @param string|null $filename
+     * @param string $filename
      * @return array<string,string|null>
      */
-    public static function load(?string $path = null, ?string $filename = null): ?array
+    public static function load(?string $path = null, string $filename = '.env'): ?array
     {
         $path = $path ?? option('kirby-extended.env.path', kirby()->root('base'));
-        $filename = $filename ?? option('kirby-extended.env.filename', '.env');
+        $filename = option('kirby-extended.env.filename', $filename);
         $repository = Env::getRepository();
 
         static::$loaded = true;
