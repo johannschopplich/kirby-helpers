@@ -3,25 +3,54 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Cms\App as Kirby;
-use KirbyExtended\EnvAdapter;
+use Kirby\Cms\Template;
+use KirbyExtended\Env;
 use KirbyExtended\HtmlMinTemplate;
+use KirbyExtended\PageMeta;
+use KirbyExtended\SiteMeta;
 
 Kirby::plugin('johannschopplich/kirby-extended', [
+    'routes' => [
+        [
+            'pattern' => 'robots.txt',
+            'action' => function () {
+                if (option('kirby-extended.robots.enable', false)) {
+                    return SiteMeta::robots();
+                }
+
+                $this->next();
+            }
+        ],
+        [
+            'pattern' => 'sitemap.xml',
+            'action' => function () {
+                if (option('kirby-extended.sitemap.enable', false)) {
+                    return SiteMeta::sitemap();
+                }
+
+                $this->next();
+            }
+        ]
+    ],
     'pageMethods' => [
-        'env' => function ($value, $default = null) {
-            if (!EnvAdapter::isLoaded()) {
-                EnvAdapter::load();
+        'env' => function ($key, $default = null) {
+            if (!Env::isLoaded()) {
+                Env::load();
             }
 
-            return env($value, $default);
+            return Env::get($key, $default);
         },
-        'metaTags' => function ($groups = null) {
-            return metaTags($this)->render($groups);
-        }
+        'meta' => function () {
+            return new PageMeta($this);
+        },
     ],
     'components' => [
         'template' => function (Kirby $kirby, string $name, string $type = 'html', string $defaultType = 'html') {
-            return new HtmlMinTemplate($name, $type, $defaultType);
+            if ($type === 'html') {
+                return new HtmlMinTemplate($name, $type, $defaultType);
+            }
+
+            return new Template($name, $type, $defaultType);
         }
     ]
 ]);
