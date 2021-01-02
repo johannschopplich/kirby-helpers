@@ -55,9 +55,9 @@ Two optional arguments `path` and `filename` may be used to load an environment 
 
 ### Options
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `kirby-extended.env.filename` | `.env` | Default environment filename to load.
+| Option | Default | Values | Description |
+| --- | --- | --- | --- |
+| `kirby-extended.env.filename` | `.env` | string | Default environment filename to load.
 
 ### Example
 
@@ -88,6 +88,9 @@ return [
 
 ## Metadata
 
+> Forked from [getkirby.com meta plugin](https://github.com/getkirby/getkirby.com/tree/master/site/plugins/meta) by Bastian Allgeier
+> Licence: MIT
+
 This plugins handles the generation of meta tags for search engines, social networks, browsers and beyond.
 
 ### How it works
@@ -115,9 +118,9 @@ It's recommended to render the metadata in your `header.php` snippet. You can de
 
 The `kirby-extended.meta.defaults` option key may be populated by default metadata. It will be used as the base by the plugin. You can overwrite defaults with the `metadata()` method of page models per template.
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `kirby-extended.meta.defaults` | `[]` | Array or function. For the latter you can use `$kirby`, `$site` and `$page` (fixed order) within the closure arguments to refer to the given object.
+| Option | Default | Values | Description |
+| --- | --- | --- | --- |
+| `kirby-extended.meta.defaults` | `[]` | array or function | You can use `$kirby`, `$site` and `$page` (fixed order) within the closure arguments to refer to the given object.
 
 ```php
 // config.php
@@ -189,9 +192,45 @@ class ArticlePage extends \Kirby\Cms\Page
 
 **Changefreq:** Optional parameter, telling search engines how often a page changes. Possible values can be found in the [sitemaps protocol specification](https://www.sitemaps.org/protocol.html).
 
+## Redirects
+
+> Forked from [redirects plugin](https://github.com/getkirby/getkirby.com/pull/1131) by Nico Hoffmann
+> Licence: MIT
+
+Create redirect routes easily that only take over if no actual page/route has been matched. It uses the `go()` helper under the hood.
+
+Redirects have to be defined in the `kirby-extended.redirects` option key in an array with the old pattern as key and the target page/URL as value. Placeholders can be used in the key and referenced via `$1`, `$2` and so on in the target string.
+Instead of a target string, a callback function returning that string can also be used.
+
+| Option | Default | Values | Description |
+| --- | --- | --- | --- |
+| `kirby-extended.redirects` | `false` | array | List of redirects.
+
+```php
+// config.php
+return [
+    'kirby-extended.redirects' => [
+        // Simple redirects
+        'from/foo'                    => 'to/bar',
+        'blog/article-(:any)'         => 'blog/articles/$1',
+        'old/reference/(:all?)'       => 'new/reference/$1',
+
+        // Redirects with logic
+        'photography/(:any)/(:all)' => function ($category, $uid) {
+            if ($page = page('photography')->grandChildren()->listed()->findBy('uid', $uid)) {
+                return $page->url();
+            }
+
+            return 'error';
+        }
+    ]
+];
+```
+
 ## HTML Compressor and Minifier
 
 > Forked from [kirby-minify-html](https://github.com/afbora/kirby-minify-html) by Ahmet Bora
+> Licence: MIT
 
 Kirby HTML templates can be minified by removing extra whitespaces, comments and other unneeded characters without breaking the content structure. As a result pages become smaller in size and load faster. It will also prepare the HTML for better gzip results, by re-ranging (sort alphabetical) attributes and css-class-names.
 

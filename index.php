@@ -10,6 +10,9 @@ use KirbyExtended\PageMeta;
 use KirbyExtended\SiteMeta;
 
 Kirby::plugin('johannschopplich/kirby-extended', [
+    'hooks' => [
+        'route:after' => [SiteMeta::class, 'redirects']
+    ],
     'routes' => [
         [
             'pattern' => 'robots.txt',
