@@ -8,7 +8,7 @@ use Dotenv\Repository\RepositoryInterface;
 
 class Env
 {
-    protected static ?RepositoryInterface $repository;
+    protected static ?RepositoryInterface $repository = null;
     protected static bool $loaded = false;
 
     /**
@@ -22,7 +22,7 @@ class Env
     {
         $path = $path ?? option('kirby-extended.env.path', kirby()->root('base'));
         $filename = option('kirby-extended.env.filename', $filename);
-        $repository = Env::getRepository();
+        $repository = static::getRepository();
 
         static::$loaded = true;
         return Dotenv::create($repository, $path, $filename)->load();
