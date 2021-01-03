@@ -44,9 +44,16 @@ class SiteMeta
                     continue;
                 }
 
-                if (preg_match($ignorePattern, $item->id())) {
-                    continue;
+                if (preg_match($ignorePattern, $item->id())) continue;
+                if ($item->sitemapMode() === 'hide') continue;
+
+                $ignoreItem = false;
+                foreach ($item->parents() as $parent) {
+                    if ($parent->sitemapMode() === 'hide') {
+                        $ignoreItem = true;
+                    }
                 }
+                if ($ignoreItem) continue;
 
                 $meta = $item->meta();
 

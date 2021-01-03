@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '905e1572288580c9c3e9293d2f81d35bd351068d',
+    'reference' => 'ab035492ac54233bba52072aecd4f6534354b0b1',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -59,7 +59,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '905e1572288580c9c3e9293d2f81d35bd351068d',
+      'reference' => 'ab035492ac54233bba52072aecd4f6534354b0b1',
     ),
     'phpoption/phpoption' => 
     array (
