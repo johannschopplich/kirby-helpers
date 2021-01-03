@@ -72,16 +72,16 @@ class SiteMeta
     }
 
     public static function redirects($route, $path, $method, $result, $final) {
-        // Only if route didn't match anything and is final route
-        if (!$final) return $result;
-        if (!empty($result)) return $result;
+        // Redirect only if route didn't match anything and is final route
+        if (!$final) return;
+        if (!empty($result)) return;
 
         // Load redirects definitions
         $redirects = option('kirby-extended.redirects', []);
-        if (empty($redirects)) return $result;
+        if (empty($redirects)) return;
 
         // Make sure current path shall be redirected
-        if (!in_array($path, array_keys($redirects))) return $result;
+        if (!in_array($path, array_keys($redirects))) return;
 
         // Turn into routes array
         $routes = array_map(function($from, $to) {
