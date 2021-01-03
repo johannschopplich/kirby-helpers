@@ -11,7 +11,9 @@ use KirbyExtended\SiteMeta;
 
 Kirby::plugin('johannschopplich/kirby-extended', [
     'hooks' => [
-        'route:after' => [SiteMeta::class, 'redirects']
+        'route:after' => function ($route, $path, $method, $result, $final) {
+            SiteMeta::redirects(...func_get_args());
+        }
     ],
     'routes' => [
         [
