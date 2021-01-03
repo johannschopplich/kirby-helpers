@@ -29,7 +29,7 @@ class SiteMeta
 
         if (!$sitemap = $cache->get($cacheId)) {
             $sitemap[] = '<?xml version="1.0" encoding="UTF-8"?>';
-            $sitemap[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            $sitemap[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">';
 
             $allowTemplates = option('kirby-extended.sitemap.templatesInclude', []);
             $allowPages     = option('kirby-extended.sitemap.pagesInclude', []);
@@ -59,11 +59,20 @@ class SiteMeta
 
                 $sitemap[] = '<url>';
                 $sitemap[] = '  <loc>' . Xml::encode($item->url()) . '</loc>';
+                $sitemap[] = '  <mod>' . $item->modified('Y-m-d', 'date') . '</mod>';
                 $sitemap[] = '  <priority>' . number_format($meta->priority(), 1, '.', '') . '</priority>';
 
                 $changefreq = $meta->changefreq();
                 if ($changefreq->isNotEmpty()) {
                     $sitemap[] = '  <changefreq>' . $changefreq . '</changefreq>';
+                }
+
+                if (kirby()->multilang()) {
+                    foreach (kirby()->languages() as $lang) {
+                        $code = $lang->code();
+                        $sitemap[] = '  <xhtml:link rel="alternate" hreflang="' . $code . '" href="' . $item->url($code) . '" />';
+                    }
+                    $sitemap[] = '  <xhtml:link rel="alternate" hreflang="x-default" href="' . $item->url() . '" />';
                 }
 
                 $sitemap[] = '</url>';
