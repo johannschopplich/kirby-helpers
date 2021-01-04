@@ -47,9 +47,6 @@ Kirby::plugin('johannschopplich/kirby-extended', [
         },
         'meta' => function () {
             return new PageMeta($this);
-        },
-        'sitemapMode' => function () {
-            return $this->blueprint()->options()['sitemap'] ?? 'show';
         }
     ],
     'components' => [
