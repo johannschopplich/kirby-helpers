@@ -225,10 +225,22 @@ class PageMeta {
 
         // Generate OpenGraph tags
         foreach ($opengraph as $prop => $content) {
-            $html[] = Html::tag('meta', null, [
-                'property' => "og:{$prop}",
-                'content'  => $content,
-            ]);
+            if (is_array($content)) {
+                if (strpos($prop, 'type:') === 0) {
+                    $prop = str_replace('type:', '', $prop);
+                }
+
+                foreach ($content as $typeProp => $typeContent)
+                    $html[] = Html::tag('meta', null, [
+                        'property' => "{$prop}:{$typeProp}",
+                        'content'  => $typeContent,
+                    ]);
+            } else {
+                $html[] = Html::tag('meta', null, [
+                    'property' => str_contains($prop, ':') ? $prop : "og:{$prop}",
+                    'content'  => $content,
+                ]);
+            }
         }
 
         // Generate Twitter tags
