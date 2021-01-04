@@ -237,7 +237,7 @@ class PageMeta {
                     ]);
             } else {
                 $html[] = Html::tag('meta', null, [
-                    'property' => str_contains($prop, ':') ? $prop : "og:{$prop}",
+                    'property' => "og:{$prop}",
                     'content'  => $content,
                 ]);
             }
