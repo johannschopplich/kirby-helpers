@@ -226,8 +226,8 @@ class PageMeta {
         // Generate OpenGraph tags
         foreach ($opengraph as $prop => $content) {
             if (is_array($content)) {
-                if (strpos($prop, 'type:') === 0) {
-                    $prop = str_replace('type:', '', $prop);
+                if (strpos($prop, 'namespace:') === 0) {
+                    $prop = str_replace('namespace:', '', $prop);
                 }
 
                 foreach ($content as $typeProp => $typeContent)
