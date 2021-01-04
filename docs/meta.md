@@ -75,6 +75,13 @@ class ArticlePage extends \Kirby\Cms\Page
             },
             'opengraph' => [
                 'type' => 'article'
+                // Open Graph object types can be defined as array
+                // (with `type:` as prefix) or a string
+                'type:article' => [
+                    // 'author' => 'Kirby',
+                    'published_time' => $this->published()->toDate('Y-m-d')
+                ],
+                'article:author' => 'Kirby'
             ],
             'jsonld' => [
                 'BlogPosting' => [
