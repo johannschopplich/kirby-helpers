@@ -56,6 +56,7 @@ return array(
     'KirbyExtended\\HigherOrderTapProxy' => $baseDir . '/classes/KirbyExtended/HigherOrderTapProxy.php',
     'KirbyExtended\\HtmlMinTemplate' => $baseDir . '/classes/KirbyExtended/HtmlMinTemplate.php',
     'KirbyExtended\\PageMeta' => $baseDir . '/classes/KirbyExtended/PageMeta.php',
+    'KirbyExtended\\Redirects' => $baseDir . '/classes/KirbyExtended/Redirects.php',
     'KirbyExtended\\SiteMeta' => $baseDir . '/classes/KirbyExtended/SiteMeta.php',
     'Kirby\\ComposerInstaller\\CmsInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
     'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',

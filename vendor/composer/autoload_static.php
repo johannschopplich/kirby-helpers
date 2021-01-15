@@ -143,6 +143,7 @@ class ComposerStaticInit87ac086e0582aff779837a1930970fff
         'KirbyExtended\\HigherOrderTapProxy' => __DIR__ . '/../..' . '/classes/KirbyExtended/HigherOrderTapProxy.php',
         'KirbyExtended\\HtmlMinTemplate' => __DIR__ . '/../..' . '/classes/KirbyExtended/HtmlMinTemplate.php',
         'KirbyExtended\\PageMeta' => __DIR__ . '/../..' . '/classes/KirbyExtended/PageMeta.php',
+        'KirbyExtended\\Redirects' => __DIR__ . '/../..' . '/classes/KirbyExtended/Redirects.php',
         'KirbyExtended\\SiteMeta' => __DIR__ . '/../..' . '/classes/KirbyExtended/SiteMeta.php',
         'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
