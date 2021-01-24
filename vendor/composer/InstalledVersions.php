@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'ce54c468cb611a49862cf5e3fe38a4ca7ccd5731',
+    'reference' => 'faaa10100da8ecee94da88860e8cc23caf8781e5',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -59,7 +59,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'ce54c468cb611a49862cf5e3fe38a4ca7ccd5731',
+      'reference' => 'faaa10100da8ecee94da88860e8cc23caf8781e5',
     ),
     'phpoption/phpoption' => 
     array (
@@ -108,12 +108,12 @@ private static $installed = array (
     ),
     'vlucas/phpdotenv' => 
     array (
-      'pretty_version' => 'v5.2.0',
-      'version' => '5.2.0.0',
+      'pretty_version' => 'v5.3.0',
+      'version' => '5.3.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'fba64139db67123c7a57072e5f8d3db10d160b66',
+      'reference' => 'b3eac5c7ac896e52deab4a99068e3f4ab12d9e56',
     ),
     'voku/html-min' => 
     array (
