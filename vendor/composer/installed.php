@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '8774e1e79e6cb8f1f00bb1b65cc1d03abfdebdfa',
+    'reference' => '02b32d175568be60cf28fa06588394dc33e0183e',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -36,7 +36,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '8774e1e79e6cb8f1f00bb1b65cc1d03abfdebdfa',
+      'reference' => '02b32d175568be60cf28fa06588394dc33e0183e',
     ),
     'phpoption/phpoption' => 
     array (
@@ -49,12 +49,12 @@
     ),
     'symfony/css-selector' => 
     array (
-      'pretty_version' => 'v5.2.1',
-      'version' => '5.2.1.0',
+      'pretty_version' => 'v5.2.3',
+      'version' => '5.2.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f789e7ead4c79e04ca9a6d6162fc629c89bd8054',
+      'reference' => 'f65f217b3314504a1ec99c2d6ef69016bb13490f',
     ),
     'symfony/polyfill-ctype' => 
     array (

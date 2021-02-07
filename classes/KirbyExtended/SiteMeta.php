@@ -38,12 +38,12 @@ class SiteMeta
             $ignorePattern  = '/^(?:' . implode('|', $ignorePages) . ')$/i';
 
             foreach (site()->index() as $item) {
-                $sitemapBlueprintOption = $item->blueprint()->options()['sitemap'] ?? false;
+                $ignoreItem = $item->blueprint()->options()['sitemap'] ?? false;
 
                 if (
-                    in_array($item->intendedTemplate()->name(), $allowTemplates) === false &&
-                    in_array($item->id(), $allowPages) === false &&
-                    $sitemapBlueprintOption === false
+                    !in_array($item->intendedTemplate()->name(), $allowTemplates) &&
+                    !in_array($item->id(), $allowPages) &&
+                    $ignoreItem
                 ) {
                     continue;
                 }
