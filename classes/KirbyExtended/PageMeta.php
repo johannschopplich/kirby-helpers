@@ -249,7 +249,7 @@ class PageMeta
 
     public function priority(): float
     {
-        $priority = $this->get('priority', false)->or(0.5);
+        $priority = $this->get('priority', false)->or(0.5)->value();
         return (float)min(1, max(0, $priority));
     }
 }

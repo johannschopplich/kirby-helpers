@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'a1f9a0d6c4e9c02dc12c9ff8fd70d4a88965278f',
+    'reference' => '7a6380879386691d2d46ded8b56594943631e343',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -36,7 +36,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'a1f9a0d6c4e9c02dc12c9ff8fd70d4a88965278f',
+      'reference' => '7a6380879386691d2d46ded8b56594943631e343',
     ),
     'phpoption/phpoption' => 
     array (
