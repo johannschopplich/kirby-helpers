@@ -31,7 +31,7 @@ class PageMeta
         return $this->get(strtolower($name));
     }
 
-    public function get(string $key, bool $siteFallback = true): Field
+    public function get(string $key, bool $fallback = true): Field
     {
         $key = strtolower($key);
 
@@ -56,58 +56,15 @@ class PageMeta
             return $field;
         }
 
-        if ($siteFallback) {
+        if ($fallback) {
             $field = site()->content()->get($key);
+
             if ($field->exists() && $field->isNotEmpty()) {
                 return $field;
             }
         }
 
         return new Field($this->page, $key, null);
-    }
-
-    public function getFile(string $key, bool $siteFallback = true): ?File
-    {
-        $key = strtolower($key);
-
-        if (array_key_exists($key, $this->metadata)) {
-            $value = $this->metadata[$key];
-
-            if (is_callable($value) === true) {
-                $value = $value->call($this->page);
-            }
-
-            if (is_a($value, File::class)) {
-                return $value;
-            }
-
-            if (is_a($value, Field::class)) {
-                return $value->toFile();
-            }
-
-            if (is_string($value)) {
-                return $this->page->file($value);
-            }
-        }
-
-        $field = $this->page->content()->get($key);
-        if ($field->exists() && ($file = $field->toFile())) {
-            return $file;
-        }
-
-        if ($siteFallback) {
-            $field = site()->content()->get($key);
-            if ($field->exists() && ($file = $field->toFile())) {
-                return $file;
-            }
-        }
-
-        return null;
-    }
-
-    public function thumbnail(bool $fallback = true): ?File
-    {
-        return $this->getFile('thumbnail', $fallback);
     }
 
     public function jsonld(): string
@@ -186,7 +143,7 @@ class PageMeta
         }
 
         // OpenGraph and Twitter image
-        if ($thumbnail = $this->getFile('thumbnail')) {
+        if ($thumbnail = $this->get('thumbnail')->toFile()) {
             $opengraph['image'] ??= $thumbnail->resize(1200)->url();
             $twitter['image'] ??= $thumbnail->resize(1200)->url();
 
