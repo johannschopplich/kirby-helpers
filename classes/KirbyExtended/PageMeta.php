@@ -28,14 +28,7 @@ class PageMeta
 
     public function __call($name, $arguments)
     {
-        $name = strtolower($name);
-        $prefix = 'hasown';
-
-        if (str_starts_with($name, $prefix)) {
-            return $this->get(substr($name, strlen($prefix)), false)->isNotEmpty();
-        }
-
-        return $this->get($name);
+        return $this->get(strtolower($name));
     }
 
     public function get(string $key, bool $siteFallback = true): Field
@@ -110,11 +103,6 @@ class PageMeta
         }
 
         return null;
-    }
-
-    public function hasOwnThumbnail(): bool
-    {
-        return $this->getFile('thumbnail', false) !== null;
     }
 
     public function thumbnail(bool $fallback = true): ?File
@@ -261,12 +249,7 @@ class PageMeta
 
     public function priority(): float
     {
-        $priority = $this->get('priority', false)->value();
-
-        if (empty($priority)) {
-            $priority = 0.5;
-        }
-
-        return (float) min(1, max(0, $priority));
+        $priority = $this->get('priority', false)->or(0.5);
+        return (float)min(1, max(0, $priority));
     }
 }
