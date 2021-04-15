@@ -1,12 +1,12 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
     'aliases' => 
     array (
     ),
-    'reference' => '02b32d175568be60cf28fa06588394dc33e0183e',
+    'reference' => 'a1f9a0d6c4e9c02dc12c9ff8fd70d4a88965278f',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -31,12 +31,12 @@
     ),
     'johannschopplich/kirby-extended' => 
     array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
+      'pretty_version' => 'dev-main',
+      'version' => 'dev-main',
       'aliases' => 
       array (
       ),
-      'reference' => '02b32d175568be60cf28fa06588394dc33e0183e',
+      'reference' => 'a1f9a0d6c4e9c02dc12c9ff8fd70d4a88965278f',
     ),
     'phpoption/phpoption' => 
     array (
@@ -49,8 +49,8 @@
     ),
     'symfony/css-selector' => 
     array (
-      'pretty_version' => 'v5.2.3',
-      'version' => '5.2.3.0',
+      'pretty_version' => 'v5.2.4',
+      'version' => '5.2.4.0',
       'aliases' => 
       array (
       ),
@@ -58,8 +58,8 @@
     ),
     'symfony/polyfill-ctype' => 
     array (
-      'pretty_version' => 'v1.22.0',
-      'version' => '1.22.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
@@ -67,17 +67,17 @@
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.22.0',
-      'version' => '1.22.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f377a3dd1fde44d37b9831d68dc8dea3ffd28e13',
+      'reference' => '5232de97ee3b75b0360528dae24e73db49566ab1',
     ),
     'symfony/polyfill-php80' => 
     array (
-      'pretty_version' => 'v1.22.0',
-      'version' => '1.22.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
@@ -103,12 +103,12 @@
     ),
     'voku/simple_html_dom' => 
     array (
-      'pretty_version' => '4.7.28',
-      'version' => '4.7.28.0',
+      'pretty_version' => '4.7.29',
+      'version' => '4.7.29.0',
       'aliases' => 
       array (
       ),
-      'reference' => '78d5894c7f0facfb4fb6369af15b1a87baea958c',
+      'reference' => '079067c704b714b7c2813971297bb340307813e7',
     ),
   ),
 );
