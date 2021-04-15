@@ -12,7 +12,7 @@ All templates (and thus pages) are included in the final sitemap by default. You
 
 ### Control template visibility with blueprint options
 
-You can disable a specific templates on a blueprint-level as well. The `sitemap` option defines a template's visibility in the sitemap. It yields to `true` by default.
+You can disable templates on a blueprint-level as well. The `sitemap` option defines a template's visibility in the sitemap. It yields to `true` by default.
 
 ```yaml
 title: Article
