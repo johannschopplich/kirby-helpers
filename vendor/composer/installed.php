@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '70b76820a91b3febc6b2019440d073901647661a',
+    'reference' => 'fe785562d6676e13a4747be1feb283d01f5ada72',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -36,7 +36,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '70b76820a91b3febc6b2019440d073901647661a',
+      'reference' => 'fe785562d6676e13a4747be1feb283d01f5ada72',
     ),
     'phpoption/phpoption' => 
     array (
@@ -46,15 +46,6 @@
       array (
       ),
       'reference' => '994ecccd8f3283ecf5ac33254543eb0ac946d525',
-    ),
-    'symfony/css-selector' => 
-    array (
-      'pretty_version' => 'v5.2.4',
-      'version' => '5.2.4.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'f65f217b3314504a1ec99c2d6ef69016bb13490f',
     ),
     'symfony/polyfill-ctype' => 
     array (
@@ -91,24 +82,6 @@
       array (
       ),
       'reference' => 'b3eac5c7ac896e52deab4a99068e3f4ab12d9e56',
-    ),
-    'voku/html-min' => 
-    array (
-      'pretty_version' => '4.4.8',
-      'version' => '4.4.8.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '4f700584abd70b308b7d06b8e4cfcc31711faaf9',
-    ),
-    'voku/simple_html_dom' => 
-    array (
-      'pretty_version' => '4.7.29',
-      'version' => '4.7.29.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '079067c704b714b7c2813971297bb340307813e7',
     ),
   ),
 );
