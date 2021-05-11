@@ -20,6 +20,8 @@ use Composer\Semver\VersionParser;
 
 
 
+
+
 class InstalledVersions
 {
 private static $installed = array (
@@ -30,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'fe785562d6676e13a4747be1feb283d01f5ada72',
+    'reference' => '0d07f10e8cc254d13259c4b45d31f8ccbd856317',
     'name' => 'johannschopplich/kirby-extended',
   ),
   'versions' => 
@@ -60,7 +62,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'fe785562d6676e13a4747be1feb283d01f5ada72',
+      'reference' => '0d07f10e8cc254d13259c4b45d31f8ccbd856317',
     ),
     'phpoption/phpoption' => 
     array (
@@ -124,7 +126,6 @@ $packages = array();
 foreach (self::getInstalled() as $installed) {
 $packages[] = array_keys($installed['versions']);
 }
-
 
 if (1 === \count($packages)) {
 return $packages[0];
@@ -317,6 +318,7 @@ public static function reload($data)
 self::$installed = $data;
 self::$installedByVendor = array();
 }
+
 
 
 
