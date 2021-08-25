@@ -5,7 +5,7 @@
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '02e36f45557180ea707a91d2036598e4634618b1',
+        'reference' => 'a89eaf41842cec9a5156597fa350c041fd24c84c',
         'name' => 'johannschopplich/kirby-extended',
         'dev' => false,
     ),
@@ -34,7 +34,7 @@
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '02e36f45557180ea707a91d2036598e4634618b1',
+            'reference' => 'a89eaf41842cec9a5156597fa350c041fd24c84c',
             'dev_requirement' => false,
         ),
         'phpoption/phpoption' => array(
