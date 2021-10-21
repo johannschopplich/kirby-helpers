@@ -92,7 +92,7 @@ Custom configurations like default tags will be merged with the plugin internal 
 // config.php
 return [
     'kirby-extended.meta' => [
-        'defaults' => return function ($kirby, $page, $site) {
+        'defaults' => function (\Kirby\Cms\App $kirby, \Kirby\Cms\Site $site, \Kirby\Cms\Page $page) {
             $description = $page->description()->or($site->description())->value();
 
             // Available keys
