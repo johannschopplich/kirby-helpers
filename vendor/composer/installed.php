@@ -20,12 +20,12 @@
             'dev_requirement' => false,
         ),
         'graham-campbell/result-type' => array(
-            'pretty_version' => 'v1.0.3',
-            'version' => '1.0.3.0',
+            'pretty_version' => 'v1.0.4',
+            'version' => '1.0.4.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
-            'reference' => '296c015dc30ec4322168c5ad3ee5cc11dae827ac',
+            'reference' => '0690bde05318336c7221785f2a932467f98b64ca',
             'dev_requirement' => false,
         ),
         'johannschopplich/kirby-extended' => array(
