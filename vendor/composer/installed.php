@@ -1,7 +1,7 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '2.10.3',
-        'version' => '2.10.3.0',
+        'pretty_version' => '2.11.0',
+        'version' => '2.11.0.0',
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,8 +29,8 @@
             'dev_requirement' => false,
         ),
         'johannschopplich/kirby-extended' => array(
-            'pretty_version' => '2.10.3',
-            'version' => '2.10.3.0',
+            'pretty_version' => '2.11.0',
+            'version' => '2.11.0.0',
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
