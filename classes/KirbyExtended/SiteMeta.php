@@ -32,7 +32,7 @@ class SiteMeta
 
         if ($sitemap === null) {
             $sitemap[] = '<?xml version="1.0" encoding="UTF-8"?>';
-            $sitemap[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . $kirby->multilang() ? " {$xhtmlSchema}" : '' . '>';
+            $sitemap[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . ($kirby->multilang() ? " {$xhtmlSchema}" : '') . '>';
 
             $excludeTemplates = option('kirby-extended.sitemap.exclude.templates', []);
             $excludePages     = option('kirby-extended.sitemap.exclude.pages', []);
