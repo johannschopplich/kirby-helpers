@@ -1,6 +1,6 @@
 <?php
 
-namespace KirbyExtended;
+namespace KirbyHelpers;
 
 use Dotenv\Dotenv;
 use Dotenv\Repository\RepositoryBuilder;
@@ -17,8 +17,8 @@ class Env
      */
     public static function load(string|null $path = null, string $filename = '.env'): array|null
     {
-        $path ??= option('kirby-extended.env.path', kirby()->root('base'));
-        $filename = option('kirby-extended.env.filename', $filename);
+        $path ??= option('kirby-helpers.env.path', kirby()->root('base'));
+        $filename = option('kirby-helpers.env.filename', $filename);
         $repository = static::getRepository();
 
         static::$loaded = true;

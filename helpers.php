@@ -1,8 +1,8 @@
 <?php
 
-use KirbyExtended\Env;
-use KirbyExtended\HigherOrderTapProxy;
-use KirbyExtended\Vite;
+use KirbyHelpers\Env;
+use KirbyHelpers\HigherOrderTapProxy;
+use KirbyHelpers\Vite;
 
 if (!function_exists('env')) {
     /**

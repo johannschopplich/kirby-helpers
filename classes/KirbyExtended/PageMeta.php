@@ -1,6 +1,6 @@
 <?php
 
-namespace KirbyExtended;
+namespace KirbyHelpers;
 
 use Kirby\Cms\Field;
 use Kirby\Cms\Page;
@@ -15,7 +15,7 @@ class PageMeta
     public function __construct($page)
     {
         $this->page = $page;
-        $defaults = option('kirby-extended.meta.defaults', []);
+        $defaults = option('kirby-helpers.meta.defaults', []);
 
         if (!empty($defaults)) {
             $this->metadata = is_callable($defaults) ? $defaults(kirby(), site(), $this->page) : $defaults;

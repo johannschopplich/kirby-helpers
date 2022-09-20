@@ -78,7 +78,7 @@ Each meta name will be prefixed with `twitter:` in the rendered HTML automatical
 
 ### Default Tags
 
-The `kirby-extended.meta.defaults` option key may be populated by default metadata. It will be used as the base. Available array keys are:
+The `kirby-helpers.meta.defaults` option key may be populated by default metadata. It will be used as the base. Available array keys are:
 
 - `robots` (string)
 - `description` (string)
@@ -91,7 +91,7 @@ Custom configurations like default tags will be merged with the plugin internal 
 ```php
 // config.php
 return [
-    'kirby-extended.meta' => [
+    'kirby-helpers.meta' => [
         'defaults' => function (\Kirby\Cms\App $kirby, \Kirby\Cms\Site $site, \Kirby\Cms\Page $page) {
             $description = $page->description()->or($site->description())->value();
 
@@ -171,9 +171,9 @@ class ArticlePage extends \Kirby\Cms\Page
 
 ## Options
 
-| Option                         | Default | Values            | Description                                                                                                        |
-| ------------------------------ | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `kirby-extended.meta.defaults` | `[]`    | array or function | You can use `$kirby`, `$site` and `$page` (fixed order) within the closure arguments to refer to the given object. |
+| Option                        | Default | Values            | Description                                                                                                        |
+| ----------------------------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `kirby-helpers.meta.defaults` | `[]`    | array or function | You can use `$kirby`, `$site` and `$page` (fixed order) within the closure arguments to refer to the given object. |
 
 ## Credits
 

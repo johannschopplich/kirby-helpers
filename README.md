@@ -1,4 +1,4 @@
-# Kirby Extended
+# Kirby Helpers
 
 This package extends Kirby's base capabilities. It's built mostly upon existing packages, but unifies them under one namespace and further updates their original functionalities including fixes of open issues.
 
@@ -16,18 +16,18 @@ Click on one of the features to head to the docs.
 
 ### Download
 
-Download and copy this repository to `/site/plugins/kirby-extended`.
+Download and copy this repository to `/site/plugins/kirby-helpers`.
 
 ### Git submodule
 
 ```bash
-git submodule add https://github.com/johannschopplich/kirby-extended.git site/plugins/kirby-extended
+git submodule add https://github.com/johannschopplich/kirby-helpers.git site/plugins/kirby-helpers
 ```
 
 ### Composer
 
 ```bash
-composer require johannschopplich/kirby-extended
+composer require johannschopplich/kirby-helpers
 ```
 
 ## License

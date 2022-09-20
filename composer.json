@@ -1,5 +1,5 @@
 {
-  "name": "johannschopplich/kirby-extended",
+  "name": "johannschopplich/kirby-helpers",
   "description": "Dotenv support, meta tags generation and more for the Kirby CMS",
   "type": "kirby-plugin",
   "version": "2.12.1",
@@ -15,7 +15,7 @@
     "vite"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/johannschopplich/kirby-extended#readme",
+  "homepage": "https://github.com/johannschopplich/kirby-helpers#readme",
   "authors": [
     {
       "name": "Johann Schopplich",
@@ -37,7 +37,7 @@
       "helpers.php"
     ],
     "psr-4": {
-      "KirbyExtended\\": "classes/KirbyExtended/"
+      "KirbyHelpers\\": "classes/KirbyHelpers/"
     }
   },
   "scripts": {

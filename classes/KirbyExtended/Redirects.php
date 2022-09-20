@@ -1,6 +1,6 @@
 <?php
 
-namespace KirbyExtended;
+namespace KirbyHelpers;
 
 use Kirby\Http\Router;
 
@@ -8,7 +8,7 @@ class Redirects
 {
     public static function go($path, $method)
     {
-        $redirects = option('kirby-extended.redirects', []);
+        $redirects = option('kirby-helpers.redirects', []);
 
         if (empty($redirects)) {
             return;

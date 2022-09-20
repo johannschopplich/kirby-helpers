@@ -4,7 +4,7 @@ Auto-generates a XML sitemap to find and catalogue pages of your site. The plugi
 
 ## Configuration
 
-Enable the sitemap route for your Kirby instance by setting `kirby-extended.sitemap.enable` to `true`. The generated sitemap will be available visiting `example.com/sitemap.xml`. It will be cached if you have enabled Kirby's pages cache.
+Enable the sitemap route for your Kirby instance by setting `kirby-helpers.sitemap.enable` to `true`. The generated sitemap will be available visiting `example.com/sitemap.xml`. It will be cached if you have enabled Kirby's pages cache.
 
 ### Add Templates or Pages
 
@@ -22,18 +22,18 @@ options:
 
 ## Options
 
-| Option                                     | Default | Values | Description                                                   |
-| ------------------------------------------ | ------- | ------ | ------------------------------------------------------------- |
-| `kirby-extended.sitemap.enable`            | `[]`    | array  | List of template names to include in the generated sitemap.   |
-| `kirby-extended.sitemap.exclude.templates` | `[]`    | array  | List of template names to exclude from the generated sitemap. |
-| `kirby-extended.sitemap.exclude.pages`     | `[]`    | array  | List of page ids to exclude.                                  |
+| Option                                    | Default | Values | Description                                                   |
+| ----------------------------------------- | ------- | ------ | ------------------------------------------------------------- |
+| `kirby-helpers.sitemap.enable`            | `[]`    | array  | List of template names to include in the generated sitemap.   |
+| `kirby-helpers.sitemap.exclude.templates` | `[]`    | array  | List of template names to exclude from the generated sitemap. |
+| `kirby-helpers.sitemap.exclude.pages`     | `[]`    | array  | List of page ids to exclude.                                  |
 
 ## Example
 
 ```php
 // config.php
 return [
-    'kirby-extended.sitemap' => [
+    'kirby-helpers.sitemap' => [
         'enable' => true,
         'exclude' => [
             'templates' => [

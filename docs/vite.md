@@ -67,7 +67,7 @@ In your `config.php`, make sure you configure the plugin to match your `vite.con
 ```php
 // config.php
 return [
-    'kirby-extended.vite' => [
+    'kirby-helpers.vite' => [
         'server' => [
             'port' => 5173,
             'https' => false,

@@ -11,7 +11,7 @@ return array(
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'Kirby\\' => array($vendorDir . '/getkirby/composer-installer/src'),
-    'KirbyExtended\\' => array($baseDir . '/classes/KirbyExtended'),
+    'KirbyHelpers\\' => array($baseDir . '/classes/KirbyHelpers'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
 );

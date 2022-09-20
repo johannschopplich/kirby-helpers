@@ -10,7 +10,7 @@ class ComposerStaticInit87ac086e0582aff779837a1930970fff
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        '7f15a39b34659ec7c61fd4bc2f79c539' => __DIR__ . '/../..' . '/helpers.php',
+        'a14d633e3c7e6d2a0914d958e340f4fa' => __DIR__ . '/../..' . '/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -27,7 +27,7 @@ class ComposerStaticInit87ac086e0582aff779837a1930970fff
         'K' => 
         array (
             'Kirby\\' => 6,
-            'KirbyExtended\\' => 14,
+            'KirbyHelpers\\' => 13,
         ),
         'G' => 
         array (
@@ -60,9 +60,9 @@ class ComposerStaticInit87ac086e0582aff779837a1930970fff
         array (
             0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
         ),
-        'KirbyExtended\\' => 
+        'KirbyHelpers\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/classes/KirbyExtended',
+            0 => __DIR__ . '/../..' . '/classes/KirbyHelpers',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (
@@ -121,12 +121,6 @@ class ComposerStaticInit87ac086e0582aff779837a1930970fff
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
-        'KirbyExtended\\Env' => __DIR__ . '/../..' . '/classes/KirbyExtended/Env.php',
-        'KirbyExtended\\HigherOrderTapProxy' => __DIR__ . '/../..' . '/classes/KirbyExtended/HigherOrderTapProxy.php',
-        'KirbyExtended\\PageMeta' => __DIR__ . '/../..' . '/classes/KirbyExtended/PageMeta.php',
-        'KirbyExtended\\Redirects' => __DIR__ . '/../..' . '/classes/KirbyExtended/Redirects.php',
-        'KirbyExtended\\SiteMeta' => __DIR__ . '/../..' . '/classes/KirbyExtended/SiteMeta.php',
-        'KirbyExtended\\Vite' => __DIR__ . '/../..' . '/classes/KirbyExtended/Vite.php',
         'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',

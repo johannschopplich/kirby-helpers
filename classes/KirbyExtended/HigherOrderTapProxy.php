@@ -1,6 +1,6 @@
 <?php
 
-namespace KirbyExtended;
+namespace KirbyHelpers;
 
 class HigherOrderTapProxy
 {

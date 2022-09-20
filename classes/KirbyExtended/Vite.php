@@ -1,6 +1,6 @@
 <?php
 
-namespace KirbyExtended;
+namespace KirbyHelpers;
 
 use Kirby\Http\Environment;
 use Kirby\Http\Uri;
@@ -20,7 +20,7 @@ class Vite
     {
         $path = implode(DIRECTORY_SEPARATOR, array_filter([
             kirby()->root(),
-            option('kirby-extended.vite.build.outDir', 'dist'),
+            option('kirby-helpers.vite.build.outDir', 'dist'),
             'manifest.json'
         ], 'strlen'));
 
@@ -40,7 +40,7 @@ class Vite
     {
         return implode('/', array_filter([
             kirby()->url(),
-            option('kirby-extended.vite.build.outDir', 'dist'),
+            option('kirby-helpers.vite.build.outDir', 'dist'),
             $path
         ], 'strlen'));
     }
@@ -48,9 +48,9 @@ class Vite
     public function devUrl(string $path): string
     {
         $uri = new Uri([
-            'scheme' => option('kirby-extended.vite.server.https', false) ? 'https' : 'http',
-            'host'   => option('kirby-extended.vite.server.host', (new Environment())->host()),
-            'port'   => option('kirby-extended.vite.server.port', 5173),
+            'scheme' => option('kirby-helpers.vite.server.https', false) ? 'https' : 'http',
+            'host'   => option('kirby-helpers.vite.server.host', (new Environment())->host()),
+            'port'   => option('kirby-helpers.vite.server.port', 5173),
             'path'   => $path
         ]);
 

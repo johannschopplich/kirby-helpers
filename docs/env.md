@@ -4,7 +4,7 @@ Loads environment variables from a local `.env` file automatically. This helps t
 
 ## Configuration
 
-Create a `.env` file in Kirby's base directory. You can change the default filename to look for with the `kirby-extended.env.filename` option key.
+Create a `.env` file in Kirby's base directory. You can change the default filename to look for with the `kirby-helpers.env.filename` option key.
 
 > It is important to hide your `.env` from the public. Make sure to add it to your `.gitignore` file.
 
@@ -25,15 +25,15 @@ If you want to use variables in your `config.php` file, you have to call the `En
 THe first argument `path` is required. The second one (`filename`) is optional and may be used to load an environment file called something other than `.env`.
 
 ```php
-\KirbyExtended\Env::load('path/to/env', '.env');
+\KirbyHelpers\Env::load('path/to/env', '.env');
 ```
 
 ### Options
 
-| Option                        | Default                 | Values | Description                                |
-| ----------------------------- | ----------------------- | ------ | ------------------------------------------ |
-| `kirby-extended.env.path`     | `kirby()->root('base')` | string | Path from which the file should be loaded. |
-| `kirby-extended.env.filename` | `.env`                  | string | Environment filename to load.              |
+| Option                       | Default                 | Values | Description                                |
+| ---------------------------- | ----------------------- | ------ | ------------------------------------------ |
+| `kirby-helpers.env.path`     | `kirby()->root('base')` | string | Path from which the file should be loaded. |
+| `kirby-helpers.env.filename` | `.env`                  | string | Environment filename to load.              |
 
 ## Example
 
@@ -53,7 +53,7 @@ With a `.env` file inside the `$base` directory in place, you can access your se
 ```php
 // config.php
 $base = dirname(__DIR__, 2);
-\KirbyExtended\Env::load($base);
+\KirbyHelpers\Env::load($base);
 
 return [
     'debug' => env('KIRBY_DEBUG', false),
