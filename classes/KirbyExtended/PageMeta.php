@@ -12,7 +12,8 @@ class PageMeta
     protected Page $page;
     protected array $metadata = [];
 
-    public function __construct($page) {
+    public function __construct($page)
+    {
         $this->page = $page;
         $defaults = option('kirby-extended.meta.defaults', []);
 
@@ -169,11 +170,12 @@ class PageMeta
                     $prop = preg_replace('/^(namespace:)/', '', $prop);
                 }
 
-                foreach ($content as $typeProp => $typeContent)
+                foreach ($content as $typeProp => $typeContent) {
                     $html[] = Html::tag('meta', null, [
                         'property' => "{$prop}:{$typeProp}",
                         'content'  => $typeContent,
                     ]);
+                }
             } else {
                 $html[] = Html::tag('meta', null, [
                     'property' => "og:{$prop}",

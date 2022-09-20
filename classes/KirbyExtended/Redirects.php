@@ -3,13 +3,11 @@
 namespace KirbyExtended;
 
 use Kirby\Http\Router;
-use Throwable;
 
 class Redirects
 {
     public static function go($path, $method)
     {
-        // Load redirects definitions
         $redirects = option('kirby-extended.redirects', []);
 
         if (empty($redirects)) {
@@ -42,7 +40,7 @@ class Redirects
         try {
             $router = new Router($routes);
             return $router->call($path, $method);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return site()->errorPage();
         }
     }
