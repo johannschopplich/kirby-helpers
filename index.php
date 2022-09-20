@@ -48,6 +48,8 @@ Kirby::plugin('johannschopplich/kirby-extended', [
         }
     ],
     'pageMethods' => [
-        'meta' => fn () => new PageMeta($this)
+        'meta' => function () {
+            return new PageMeta($this);
+        }
     ]
 ]);

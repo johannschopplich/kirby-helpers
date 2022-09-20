@@ -57,6 +57,7 @@ return array(
     'KirbyExtended\\PageMeta' => $baseDir . '/classes/KirbyExtended/PageMeta.php',
     'KirbyExtended\\Redirects' => $baseDir . '/classes/KirbyExtended/Redirects.php',
     'KirbyExtended\\SiteMeta' => $baseDir . '/classes/KirbyExtended/SiteMeta.php',
+    'KirbyExtended\\Vite' => $baseDir . '/classes/KirbyExtended/Vite.php',
     'Kirby\\ComposerInstaller\\CmsInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
     'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
     'Kirby\\ComposerInstaller\\Plugin' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
