@@ -39,8 +39,10 @@ return [
 
 ## Credits
 
-Forked from [redirects plugin](https://github.com/getkirby/getkirby.com/pull/1131)
+Forked from [`redirects` plugin](https://github.com/getkirby/getkirby.com/pull/1131).
 
-Author: Nico Hoffmann
+## License
 
-Licence: MIT
+[MIT](../LICENSE) License © 2020-2022 [Nico Hoffmann](https://github.com/getkirby)
+
+[MIT](../LICENSE) License © 2020-2022 [Johann Schopplich](https://github.com/johannschopplich)

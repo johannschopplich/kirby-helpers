@@ -1,6 +1,6 @@
-# Env
+# Dotenv
 
-Loads environment variables from `.env` automatically. This helps to store project credentials or variables outside of your code or if you want to have development and production access in different locations.
+Loads environment variables from a local `.env` file automatically. This helps to store project credentials or variables outside of your code or if you want to have development and production access in different locations.
 
 ## Configuration
 
@@ -10,7 +10,7 @@ Create a `.env` file in Kirby's base directory. You can change the default filen
 
 ## Usage
 
-### Inside templates, snippets etc.
+### Inside Templates, Snippets and More
 
 You can use the `$site` method `$site->env()` to retrieve an environment variable from anywhere:
 
@@ -18,7 +18,7 @@ You can use the `$site` method `$site->env()` to retrieve an environment variabl
 $site->env('VARIABLE');
 ```
 
-### Within `config.php`
+### Within Kirby’s Configuration
 
 If you want to use variables in your `config.php` file, you have to call the `Env` class manually to load the environment object before Kirby finishes initializing.
 
@@ -61,3 +61,7 @@ return [
     'PUBLIC' => env('PUBLIC_KEY')
 ];
 ```
+
+## License
+
+[MIT](../LICENSE) License © 2020-2022 [Johann Schopplich](https://github.com/johannschopplich)
