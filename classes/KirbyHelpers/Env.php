@@ -12,9 +12,6 @@ class Env
     protected static RepositoryInterface $repository;
     protected static bool $loaded = false;
 
-    /**
-     * Load the environment file from a given directory
-     */
     public static function load(string $path, string $filename = '.env'): array|null
     {
         $repository = static::getRepository();
@@ -23,17 +20,11 @@ class Env
         return Dotenv::create($repository, $path, $filename)->load();
     }
 
-    /**
-     * Get the state of `Dotenv` initialization
-     */
     public static function isLoaded(): bool
     {
         return static::$loaded;
     }
 
-    /**
-     * Get the environment repository instance
-     */
     public static function getRepository(): \Dotenv\Repository\RepositoryInterface
     {
         if (!isset(static::$repository)) {
@@ -44,9 +35,6 @@ class Env
         return static::$repository;
     }
 
-    /**
-     * Get the value of an environment variable
-     */
     public static function get(string $key, $default = null)
     {
         return Option::fromValue(static::getRepository()->get($key))
