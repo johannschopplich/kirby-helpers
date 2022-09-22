@@ -15,10 +15,8 @@ class Env
     /**
      * Load the environment file from a given directory
      */
-    public static function load(string|null $path = null, string $filename = '.env'): array|null
+    public static function load(string $path, string $filename = '.env'): array|null
     {
-        $path ??= option('kirby-helpers.env.path', kirby()->root('base'));
-        $filename = option('kirby-helpers.env.filename', $filename);
         $repository = static::getRepository();
 
         static::$loaded = true;

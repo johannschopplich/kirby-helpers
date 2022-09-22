@@ -4,9 +4,9 @@
   "type": "kirby-plugin",
   "version": "3.0.2",
   "keywords": [
-    "kirby-cms",
     "getkirby",
     "kirby",
+    "kirby-cms",
     "env",
     "dotenv",
     "seo",
