@@ -120,7 +120,7 @@ return [
 
 ### Page Models for Template-Specific Meta Data
 
-You might not want to adapt meta data for specific templates. To do so, overwrite defaults with the `metadata()` method of page models per template.
+You might want to adapt meta data for specific templates. To do so, overwrite defaults with the `metadata()` method of page models per template.
 
 The following example adds a `metadata()` method to all article templates, that takes care of generating useful metadata, if an article issue is shared in a social network and also provides an automatically generated description for search engines. All keys returned by the `metadata()` method must be lowercase. Any array item can be a value of a closure, that will be called on the `$page` object, so you can use `$this` within the closure to refer to the current page.
 
