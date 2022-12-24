@@ -1,6 +1,6 @@
 # Redirects
 
-Create redirect routes easily that only take over if no actual page/route has been matched. It uses the `go()` helper under the hood.
+Create redirect routes easily that only take over if no actual page/route has been matched. It uses Kirby's `go()` helper under the hood.
 
 ## Configuration
 

@@ -2,17 +2,6 @@
 
 Handles the generation of meta tags for search engines, social networks, browsers and beyond.
 
-## How It Works
-
-In a nutshell: plugin internal defaults ➡️ option defaults ➡️ page model ➡️ page field ➡️ site field
-
-1. The plugin looks for meta data defaults, set in Kirby's global configuration.
-2. If the defaults don't contain the specific key, it looks in the pagel model if it provides a `metadata()` method that returns an array or metadata fields.
-3. If the page model doesn't contain the specific key, it will look for a field from a pages content file (e.g. `article.txt`) by the corrsponding key.
-4. If that also fails, it will fall back to default metadata, as stored in either the `site.txt` file at the top-level of the content directory or the plugin internal's.
-
-That way, every page will always be able to serve default values, even if the specific page or its model does not contain information like e.g. a thumbnail or a dedicated description.
-
 ## Usage
 
 Initialize the `meta()` class for the current page. Then echo the data you wish to render in a order of your choice in your `header.php` snippet.
@@ -26,6 +15,14 @@ Initialize the `meta()` class for the current page. Then echo the data you wish 
 // Meta description, OpenGraph and Twitter tags
 <?= $meta->social() ?>
 ```
+
+## Layers
+
+Meta data can be set in different places. On a per page basis, in the page model or in the global configuration. When meta data is set in multiple places, the plugin use the following order to determine which data to use (higher numbers override lower numbers):
+
+1. [Page model](#page-models) providing a `metadata()` method
+2. [Page content](#blueprint-field-keys) based on the blueprint field keys
+3. [Global defaults](#global-defaults) in Kirby's `config.php` file
 
 ## Defaults
 
@@ -76,7 +73,7 @@ Each meta name will be prefixed with `twitter:` in the rendered HTML automatical
 
 ## Configuration
 
-### Default Tags
+### Global Defaults
 
 The `kirby-helpers.meta.defaults` option key may be populated by default metadata. It will be used as the base. Available array keys are:
 
@@ -118,11 +115,13 @@ return [
 ];
 ```
 
-### Page Models for Template-Specific Meta Data
+### Page Models
 
 You might want to adapt meta data for specific templates. To do so, overwrite defaults with the `metadata()` method of page models per template.
 
-The following example adds a `metadata()` method to all article templates, that takes care of generating useful metadata, if an article issue is shared in a social network and also provides an automatically generated description for search engines. All keys returned by the `metadata()` method must be lowercase. Any array item can be a value of a closure, that will be called on the `$page` object, so you can use `$this` within the closure to refer to the current page.
+The following example adds a `metadata()` method to all article templates. It generates useful metadata if an article issue is shared on a social network and also provides a automatically generated description for search engines.
+
+All keys returned by the `metadata()` method must be lowercase. Any array item can be a value of a closure, that will be called on the `$page` object, so you can use `$this` within the closure to refer to the current page.
 
 ```php
 class ArticlePage extends \Kirby\Cms\Page
