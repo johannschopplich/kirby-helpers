@@ -11,8 +11,6 @@ class HigherOrderTapProxy
 
     /**
      * Create a new tap proxy instance
-     *
-     * @param mixed $target
      */
     public function __construct($target)
     {
@@ -21,9 +19,6 @@ class HigherOrderTapProxy
 
     /**
      * Dynamically pass method calls to the target
-     *
-     * @param string $method
-     * @param array $parameters
      */
     public function __call(string $method, array $parameters)
     {

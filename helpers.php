@@ -7,9 +7,6 @@ use KirbyHelpers\Vite;
 if (!function_exists('env')) {
     /**
      * Gets the value of an environment variable
-     *
-     * @param string $key
-     * @param null|mixed $default
      */
     function env(string $key, $default = null)
     {
@@ -20,9 +17,6 @@ if (!function_exists('env')) {
 if (!function_exists('tap')) {
     /**
      * Call the given Closure with the given value then return the value
-     *
-     * @param mixed $value
-     * @param null|callable|null $callback
      */
     function tap($value, callable|null $callback = null)
     {
@@ -39,8 +33,6 @@ if (!function_exists('tap')) {
 if (!function_exists('value')) {
     /**
      * Return the default value of the given value
-     *
-     * @param mixed $value
      */
     function value($value)
     {
