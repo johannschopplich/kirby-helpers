@@ -6,7 +6,7 @@ This will ease storing project credentials or variables outside of your code or 
 
 ## Configuration
 
-Create a `.env` file in Kirby's root directory. You can change the default filename to look for with the `kirby-helpers.env.filename` option key.
+Create a `.env` file in Kirby's root directory. You can change the default filename to look for with the `johannschopplich.helpers.env.filename` option key.
 
 > ⚠️ It is important to hide your `.env` from public access. Make sure to add it to your `.gitignore` file.
 
@@ -27,15 +27,15 @@ If you want to use variables in your `config.php` file, you have to call the `En
 THe first argument `path` is required. The second one (`filename`) is optional and may be used to load an environment file called something other than `.env`.
 
 ```php
-\KirbyHelpers\Env::load('path/to/env', '.env');
+\JohannSchopplich\Helpers\Env::load('path/to/env', '.env');
 ```
 
 ### Options
 
-| Option                       | Default                 | Values   | Description                                |
-| ---------------------------- | ----------------------- | -------- | ------------------------------------------ |
-| `kirby-helpers.env.path`     | `kirby()->root('base')` | `string` | Path from which the file should be loaded. |
-| `kirby-helpers.env.filename` | `.env`                  | `string` | Environment filename to load.              |
+| Option                                  | Default                 | Values   | Description                                |
+| --------------------------------------- | ----------------------- | -------- | ------------------------------------------ |
+| `johannschopplich.helpers.env.path`     | `kirby()->root('base')` | `string` | Path from which the file should be loaded. |
+| `johannschopplich.helpers.env.filename` | `.env`                  | `string` | Environment filename to load.              |
 
 ## Example
 
@@ -55,7 +55,7 @@ With a `.env` file inside the `$base` directory in place, you can access your se
 ```php
 // config.php
 $base = dirname(__DIR__, 2);
-\KirbyHelpers\Env::load($base);
+\JohannSchopplich\Helpers\Env::load($base);
 
 return [
     'debug' => env('KIRBY_DEBUG', false),
