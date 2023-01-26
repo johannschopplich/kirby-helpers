@@ -2,11 +2,11 @@
 
 @include_once __DIR__ . '/vendor/autoload.php';
 
-use Kirby\Cms\App as Kirby;
 use JohannSchopplich\Helpers\Env;
 use JohannSchopplich\Helpers\PageMeta;
 use JohannSchopplich\Helpers\Redirects;
 use JohannSchopplich\Helpers\SiteMeta;
+use Kirby\Cms\App as Kirby;
 
 Kirby::plugin('johannschopplich/helpers', [
     'hooks' => [
