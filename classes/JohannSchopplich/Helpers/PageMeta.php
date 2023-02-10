@@ -14,7 +14,10 @@ class PageMeta
     public function __construct(protected Page $page)
     {
         $defaults = option('johannschopplich.helpers.meta.defaults', []);
-        $this->metadata = is_callable($defaults) ? $defaults(kirby(), site(), $this->page) : $defaults;
+        $this->metadata = is_callable($defaults)
+            // TODO: Use named arguments
+            ? $defaults($page->kirby(), $page->site(), $this->page)
+            : $defaults;
 
         if (method_exists($this->page, 'metadata')) {
             $this->metadata = A::merge($this->metadata, $this->page->metadata());
@@ -34,7 +37,7 @@ class PageMeta
             $value = $this->metadata[$key];
 
             if (is_callable($value)) {
-                $result = $value->call($this->page);
+                $result = $value($this->page);
 
                 if ($result instanceof Field) {
                     return $result;
@@ -53,7 +56,7 @@ class PageMeta
         }
 
         if ($fallback) {
-            $field = site()->content()->get($key);
+            $field = $this->page->site()->content()->get($key);
 
             if ($field->exists() && $field->isNotEmpty() && $field->value() !== '[]') {
                 return $field;
@@ -118,10 +121,9 @@ class PageMeta
         $meta = $this->get('meta', false)->value() ?? [];
         $opengraph = $this->get('opengraph', false)->value() ?? [];
         $twitter = $this->get('twitter', false)->value() ?? [];
-        $site = site();
 
         // Basic OpenGraph and Twitter tags
-        $opengraph['site_name'] ??= $site->title()->value();
+        $opengraph['site_name'] ??= $this->page->site()->title()->value();
         $opengraph['url'] ??= $this->page->url();
         $opengraph['type'] ??= 'website';
         $opengraph['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
@@ -196,7 +198,7 @@ class PageMeta
         return Html::tag('link', null, [
             'rel' => 'search',
             'type' => 'application/opensearchdescription+xml',
-            'title' => site()->title(),
+            'title' => $this->page->site()->title(),
             'href' => url('open-search.xml'),
         ]) . PHP_EOL;
     }
