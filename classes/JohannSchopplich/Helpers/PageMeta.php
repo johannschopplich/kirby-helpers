@@ -110,7 +110,7 @@ class PageMeta
 
         $html[] = Html::tag('link', null, [
             'rel' => 'canonical',
-            'href' => $canonical->isEmpty() ? $this->page->url() : $canonical->value(),
+            'href' => $canonical->or($this->page->url())->value(),
         ]);
 
         return implode(PHP_EOL, $html) . PHP_EOL;
