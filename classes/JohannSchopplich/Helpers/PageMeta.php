@@ -99,6 +99,7 @@ class PageMeta
     {
         $html = [];
         $robots = $this->get('robots');
+        $canonical = $this->get('canonical');
 
         if ($robots->isNotEmpty()) {
             $html[] = Html::tag('meta', null, [
@@ -109,7 +110,7 @@ class PageMeta
 
         $html[] = Html::tag('link', null, [
             'rel' => 'canonical',
-            'href' => $this->page->url(),
+            'href' => $canonical->or($this->page->url())->value(),
         ]);
 
         return implode(PHP_EOL, $html) . PHP_EOL;
