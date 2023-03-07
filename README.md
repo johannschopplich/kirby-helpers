@@ -32,10 +32,10 @@ composer require johannschopplich/kirby-helpers
 
 ## License
 
+[MIT](./LICENSE) License © 2020-2023 [Johann Schopplich](https://github.com/johannschopplich)
+
 [MIT](./LICENSE) License © 2020-2022 [Bastian Allgeier](https://github.com/getkirby)
 
 [MIT](./LICENSE) License © 2020-2022 [Nico Hoffmann](https://github.com/getkirby)
 
 [MIT](./LICENSE) License © 2021-2022 [Oblik Studio](https://github.com/OblikStudio)
-
-[MIT](./LICENSE) License © 2020-2022 [Johann Schopplich](https://github.com/johannschopplich)

@@ -66,4 +66,4 @@ return [
 
 ## License
 
-[MIT](../LICENSE) License © 2020-2022 [Johann Schopplich](https://github.com/johannschopplich)
+[MIT](../LICENSE) License © 2020-2023 [Johann Schopplich](https://github.com/johannschopplich)

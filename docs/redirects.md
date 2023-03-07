@@ -43,6 +43,6 @@ Forked from [`redirects` plugin](https://github.com/getkirby/getkirby.com/pull/1
 
 ## License
 
-[MIT](../LICENSE) License © 2020-2022 [Nico Hoffmann](https://github.com/getkirby)
+[MIT](../LICENSE) License © 2020-2023 [Johann Schopplich](https://github.com/johannschopplich)
 
-[MIT](../LICENSE) License © 2020-2022 [Johann Schopplich](https://github.com/johannschopplich)
+[MIT](../LICENSE) License © 2020-2022 [Nico Hoffmann](https://github.com/getkirby)

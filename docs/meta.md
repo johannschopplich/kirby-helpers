@@ -180,6 +180,6 @@ Forked from [getkirby.com `meta` plugin](https://github.com/getkirby/getkirby.co
 
 ## License
 
-[MIT](../LICENSE) License © 2020-2022 [Bastian Allgeier](https://github.com/getkirby)
+[MIT](../LICENSE) License © 2020-2023 [Johann Schopplich](https://github.com/johannschopplich)
 
-[MIT](../LICENSE) License © 2020-2022 [Johann Schopplich](https://github.com/johannschopplich)
+[MIT](../LICENSE) License © 2020-2022 [Bastian Allgeier](https://github.com/getkirby)
