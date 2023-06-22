@@ -2,6 +2,7 @@
 
 namespace JohannSchopplich\Helpers;
 
+use Kirby\Cms\App;
 use Kirby\Cms\Responder;
 use Kirby\Http\Response;
 use Kirby\Toolkit\Str;
@@ -11,11 +12,12 @@ class SiteMeta
 {
     public static function robots(): Responder
     {
+        $kirby = App::instance();
         $robots = 'User-agent: *' . PHP_EOL;
         $robots .= 'Allow: /' . PHP_EOL;
         $robots .= 'Sitemap: ' . url('sitemap.xml');
 
-        return kirby()
+        return $kirby
             ->response()
             ->type('text')
             ->body($robots);
@@ -23,7 +25,7 @@ class SiteMeta
 
     public static function sitemap(): Response
     {
-        $kirby = kirby();
+        $kirby = App::instance();
         $sitemap = $kirby->cache('pages')->getOrSet(
             'sitemap.xml',
             function () use (&$kirby) {

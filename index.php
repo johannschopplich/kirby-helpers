@@ -6,9 +6,9 @@ use JohannSchopplich\Helpers\Env;
 use JohannSchopplich\Helpers\PageMeta;
 use JohannSchopplich\Helpers\Redirects;
 use JohannSchopplich\Helpers\SiteMeta;
-use Kirby\Cms\App as Kirby;
+use Kirby\Cms\App;
 
-Kirby::plugin('johannschopplich/helpers', [
+App::plugin('johannschopplich/helpers', [
     'hooks' => [
         'route:after' => function (\Kirby\Http\Route $route, string $path, string $method, $result, bool $final) {
             if ($final && empty($result)) {
@@ -41,7 +41,7 @@ Kirby::plugin('johannschopplich/helpers', [
     'siteMethods' => [
         'env' => function ($key, $default = null) {
             if (!Env::isLoaded()) {
-                $kirby = kirby();
+                $kirby = App::instance();
                 $path = $kirby->option('johannschopplich.helpers.env.path', $kirby->root('base'));
                 $file = $kirby->option('johannschopplich.helpers.env.filename', '.env');
                 Env::load($path, $file);

@@ -2,6 +2,7 @@
 
 namespace JohannSchopplich\Helpers;
 
+use Kirby\Cms\App;
 use Kirby\Data\Data;
 use Kirby\Http\Uri;
 
@@ -17,8 +18,9 @@ class Vite
 
     public function __construct()
     {
+        $kirby = App::instance();
         $path = implode(DIRECTORY_SEPARATOR, array_filter([
-            kirby()->root(),
+            $kirby->root(),
             option('johannschopplich.helpers.vite.build.outDir', 'dist'),
             'manifest.json'
         ], 'strlen'));
@@ -49,8 +51,9 @@ class Vite
 
     public function prodUrl(string $path): string
     {
+        $kirby = App::instance();
         return implode('/', array_filter([
-            kirby()->url(),
+            $kirby->url(),
             option('johannschopplich.helpers.vite.build.outDir', 'dist'),
             $path
         ], 'strlen'));
