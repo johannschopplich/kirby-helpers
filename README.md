@@ -14,8 +14,10 @@ Click on one of the features to head to the docs.
 
 ## Requirements
 
+- Kirby 3 or higher
+
 > [!NOTE]
-> This plugin is compatible with Kirby 3 and Kirby 4.
+> Yes, that includes Kirby 4!
 
 ## Installation
 
@@ -28,12 +30,6 @@ composer require johannschopplich/kirby-helpers
 ### Download
 
 Download and copy this repository to `/site/plugins/kirby-helpers`.
-
-### Git submodule
-
-```bash
-git submodule add https://github.com/johannschopplich/kirby-helpers.git site/plugins/kirby-helpers
-```
 
 ## License
 
