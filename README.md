@@ -12,7 +12,18 @@ A set of utility classes extending Kirby's base capabilities. It's built mostly 
 
 Click on one of the features to head to the docs.
 
+## Requirements
+
+> [!NOTE]
+> This plugin is compatible with Kirby 3 and Kirby 4.
+
 ## Installation
+
+### Composer
+
+```bash
+composer require johannschopplich/kirby-helpers
+```
 
 ### Download
 
@@ -22,12 +33,6 @@ Download and copy this repository to `/site/plugins/kirby-helpers`.
 
 ```bash
 git submodule add https://github.com/johannschopplich/kirby-helpers.git site/plugins/kirby-helpers
-```
-
-### Composer
-
-```bash
-composer require johannschopplich/kirby-helpers
 ```
 
 ## License

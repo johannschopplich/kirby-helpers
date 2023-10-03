@@ -2,8 +2,8 @@
 
 namespace JohannSchopplich\Helpers;
 
-use Kirby\Cms\Field;
 use Kirby\Cms\Page;
+use Kirby\Content\Field;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Html;
 

@@ -2,6 +2,11 @@
 
 @include_once __DIR__ . '/vendor/autoload.php';
 
+// Add backwards compatibility for Kirby 3
+if (!class_exists('Kirby\Content\Field')) {
+    class_alias('Kirby\Cms\Field', 'Kirby\Content\Field');
+}
+
 use JohannSchopplich\Helpers\Env;
 use JohannSchopplich\Helpers\PageMeta;
 use JohannSchopplich\Helpers\Redirects;
