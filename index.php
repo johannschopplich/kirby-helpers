@@ -15,7 +15,7 @@ if (!class_exists(\Kirby\Content\Field::class)) {
 
 App::plugin('johannschopplich/helpers', [
     'hooks' => [
-        'route:after' => function (\Kirby\Http\Route $route, string $path, string $method, $result, bool $final) {
+        'route:after' => function (\Kirby\Http\Route $route, string $path, string $method, mixed $result, bool $final) {
             if ($final && empty($result)) {
                 Redirects::go($path, $method);
             }

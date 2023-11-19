@@ -23,9 +23,10 @@ class Vite
     {
         $this->kirby = App::instance();
 
-        $path = implode(DIRECTORY_SEPARATOR, array_filter([
+        $path = implode('/', array_filter([
             $this->kirby->root(),
             $this->kirby->option('johannschopplich.helpers.vite.build.outDir', 'dist'),
+            '.vite',
             self::MANIFEST_FILE_NAME
         ], 'strlen'));
 

@@ -33,7 +33,7 @@ Download and copy this repository to `/site/plugins/kirby-helpers`.
 
 ## License
 
-[MIT](./LICENSE) License © 2020-2023 [Johann Schopplich](https://github.com/johannschopplich)
+[MIT](./LICENSE) License © 2020-PRESENT [Johann Schopplich](https://github.com/johannschopplich)
 
 [MIT](./LICENSE) License © 2020-2022 [Bastian Allgeier](https://github.com/getkirby)
 
