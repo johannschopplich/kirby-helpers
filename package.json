@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "4.2.1",
+  "version": "5.0.0",
   "scripts": {
     "release": "npx -y bumpp --all",
     "format": "prettier \"docs/**/*\" --write"
