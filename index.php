@@ -8,11 +8,6 @@ use JohannSchopplich\Helpers\Redirects;
 use JohannSchopplich\Helpers\SiteMeta;
 use Kirby\Cms\App;
 
-// Add backwards compatibility for Kirby 3
-if (!class_exists(\Kirby\Content\Field::class)) {
-    class_alias(\Kirby\Cms\Field::class, \Kirby\Content\Field::class);
-}
-
 App::plugin('johannschopplich/helpers', [
     'hooks' => [
         'route:after' => function (\Kirby\Http\Route $route, string $path, string $method, mixed $result, bool $final) {

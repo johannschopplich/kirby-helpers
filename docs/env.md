@@ -8,7 +8,8 @@ This will ease storing project credentials or variables outside of your code or 
 
 Create a `.env` file in Kirby's root directory. You can change the default filename to look for with the `johannschopplich.helpers.env.filename` option key.
 
-> ⚠️ It is important to hide your `.env` from public access. Make sure to add it to your `.gitignore` file.
+> [!WARNING]
+> It is important to hide your `.env` from public access. Make sure to add it to your `.gitignore` file.
 
 ## Usage
 
@@ -66,4 +67,4 @@ return [
 
 ## License
 
-[MIT](../LICENSE) License © 2020-2023 [Johann Schopplich](https://github.com/johannschopplich)
+[MIT](../LICENSE) License © 2020-PRESENT [Johann Schopplich](https://github.com/johannschopplich)

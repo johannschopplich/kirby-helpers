@@ -6,7 +6,6 @@ use Closure;
 use Dotenv\Dotenv;
 use Dotenv\Repository\RepositoryBuilder;
 use Dotenv\Repository\RepositoryInterface;
-use PhpOption\Option;
 
 class Env
 {
@@ -36,29 +35,18 @@ class Env
 
     public static function get(string $key, $default = null): mixed
     {
-        return Option::fromValue(static::getRepository()->get($key))
-            ->map(function ($value) {
-                switch (strtolower($value)) {
-                    case 'true':
-                    case '(true)':
-                        return true;
-                    case 'false':
-                    case '(false)':
-                        return false;
-                    case 'empty':
-                    case '(empty)':
-                        return '';
-                    case 'null':
-                    case '(null)':
-                        return;
-                }
+        $value = static::getRepository()->get($key);
 
-                if (preg_match('/\A([\'"])(.*)\1\z/', $value, $matches)) {
-                    return $matches[2];
-                }
+        if ($value === null) {
+            return $default instanceof Closure ? $default() : $default;
+        }
 
-                return $value;
-            })
-            ->getOrCall(fn () => $default instanceof Closure ? $default() : $default);
+        return match (strtolower($value)) {
+            'true', '(true)' => true,
+            'false', '(false)' => false,
+            'empty', '(empty)' => '',
+            'null', '(null)' => null,
+            default => preg_match('/\A([\'"])(.*)\1\z/', $value, $matches) ? $matches[2] : $value,
+        };
     }
 }

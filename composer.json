@@ -1,6 +1,6 @@
 {
   "name": "johannschopplich/kirby-helpers",
-  "description": "Dotenv support, meta tags generation and more for the Kirby CMS",
+  "description": "Dotenv support, meta tag generation and more for the Kirby CMS",
   "type": "kirby-plugin",
   "version": "5.0.0",
   "keywords": [
@@ -25,11 +25,11 @@
   ],
   "require": {
     "getkirby/composer-installer": "^1.2",
-    "vlucas/phpdotenv": "^5.0"
+    "vlucas/phpdotenv": "^5.6"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "@stable",
-    "getkirby/cms": "^3.9"
+    "getkirby/cms": "^4"
   },
   "autoload": {
     "files": [

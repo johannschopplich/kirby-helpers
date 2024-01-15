@@ -1,6 +1,6 @@
 # Kirby Helpers
 
-A set of utility classes extending Kirby's base capabilities. It's built mostly upon existing packages, but unifies them under one namespace.
+A set of utility classes that extend Kirby's basic functionality. It's mostly based on existing packages, but unifies them under one namespace.
 
 ## Key Features
 
@@ -10,14 +10,11 @@ A set of utility classes extending Kirby's base capabilities. It's built mostly 
 - 🔀 [Route redirects](./docs/redirects.md)
 - ⚡️ [Vite support](./docs/vite.md)
 
-Click on one of the features to head to the docs.
+Head over to the [documentation](./docs) to learn more about the individual features.
 
 ## Requirements
 
-- Kirby 3 or higher
-
-> [!NOTE]
-> Yes, that includes Kirby 4!
+- Kirby 4
 
 ## Installation
 
