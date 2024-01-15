@@ -20,7 +20,9 @@ App::plugin('johannschopplich/helpers', [
         [
             'pattern' => 'robots.txt',
             'action' => function () {
-                if (option('johannschopplich.helpers.robots.enable', false)) {
+                $kirby = App::instance();
+
+                if ($kirby->option('johannschopplich.helpers.robots.enable', false)) {
                     return SiteMeta::robots();
                 }
 
@@ -30,7 +32,9 @@ App::plugin('johannschopplich/helpers', [
         [
             'pattern' => 'sitemap.xml',
             'action' => function () {
-                if (option('johannschopplich.helpers.sitemap.enable', false)) {
+                $kirby = App::instance();
+
+                if ($kirby->option('johannschopplich.helpers.sitemap.enable', false)) {
                     return SiteMeta::sitemap();
                 }
 
