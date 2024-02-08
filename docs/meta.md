@@ -30,6 +30,7 @@ Meta data can be set in different places. On a per page basis, in the page model
 
 The canonical link should be present on every page. Therefore it's recommended to always include at least `$meta->robots()`. A robots tag will only be generated if you have defined content for it (see [configuration](#configuration)).
 
+> [!NOTE]
 > A canonical tag is a way of telling search engines that a specific URL represents the master copy of a page. Using the canonical tag prevents problems caused by identical or "duplicate" content appearing on multiple URLs like paginated pages. Practically speaking, the canonical tag tells search engines which version of a URL you want to appear in search results.
 
 ### Social

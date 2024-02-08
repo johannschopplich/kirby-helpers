@@ -6,6 +6,7 @@ use Kirby\Cms\Page;
 use Kirby\Content\Field;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Html;
+use Kirby\Cms\Url;
 
 class PageMeta
 {
@@ -13,10 +14,11 @@ class PageMeta
 
     public function __construct(protected Page $page)
     {
-        $defaults = option('johannschopplich.helpers.meta.defaults', []);
+        $kirby = $page->kirby();
+        $defaults = $kirby->option('johannschopplich.helpers.meta.defaults', []);
         $this->metadata = is_callable($defaults)
             // TODO: Use named arguments
-            ? $defaults($page->kirby(), $page->site(), $this->page)
+            ? $defaults($kirby, $kirby->site(), $this->page)
             : $defaults;
 
         if (method_exists($this->page, 'metadata')) {
@@ -85,7 +87,7 @@ class PageMeta
 
                 $schema = array_reverse($schema, true);
                 $html[] = '<script type="application/ld+json">';
-                $html[] = option('debug', false)
+                $html[] = $this->kirby()->option('debug', false)
                     ? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
                     : json_encode($schema, JSON_UNESCAPED_SLASHES);
                 $html[] = '</script>';
@@ -200,7 +202,7 @@ class PageMeta
             'rel' => 'search',
             'type' => 'application/opensearchdescription+xml',
             'title' => $this->page->site()->title(),
-            'href' => url('open-search.xml'),
+            'href' => Url::to('open-search.xml'),
         ]) . PHP_EOL;
     }
 

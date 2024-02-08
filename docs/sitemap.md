@@ -4,7 +4,7 @@ Auto-generates a XML sitemap to find and catalogue pages of your site. The plugi
 
 ## Configuration
 
-Enable the sitemap route for your Kirby instance by setting `johannschopplich.helpers.sitemap.enable` to `true`. The generated sitemap will be available visiting `example.com/sitemap.xml`. It will be cached if you have enabled Kirby's pages cache.
+Enable the sitemap route for your Kirby instance by setting `johannschopplich.helpers.sitemap.enabled` to `true`. The generated sitemap will be available visiting `example.com/sitemap.xml`. It will be cached if you have enabled Kirby's pages cache.
 
 ### Add Templates or Pages
 
@@ -24,7 +24,7 @@ options:
 
 | Option                                               | Default | Values | Description                                                   |
 | ---------------------------------------------------- | ------- | ------ | ------------------------------------------------------------- |
-| `johannschopplich.helpers.sitemap.enable`            | `[]`    | array  | List of template names to include in the generated sitemap.   |
+| `johannschopplich.helpers.sitemap.enabled`           | `[]`    | array  | List of template names to include in the generated sitemap.   |
 | `johannschopplich.helpers.sitemap.exclude.templates` | `[]`    | array  | List of template names to exclude from the generated sitemap. |
 | `johannschopplich.helpers.sitemap.exclude.pages`     | `[]`    | array  | List of page ids to exclude.                                  |
 
@@ -34,7 +34,7 @@ options:
 // config.php
 return [
     'johannschopplich.helpers.sitemap' => [
-        'enable' => true,
+        'enabled' => true,
         'exclude' => [
             'templates' => [
                 'archive',

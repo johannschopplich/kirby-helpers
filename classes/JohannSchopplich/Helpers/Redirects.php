@@ -2,13 +2,16 @@
 
 namespace JohannSchopplich\Helpers;
 
+use Kirby\Cms\App;
 use Kirby\Http\Router;
+use Throwable;
 
 class Redirects
 {
     public static function go(string|null $path, string $method = 'GET')
     {
-        $redirects = option('johannschopplich.helpers.redirects', []);
+        $kirby = App::instance();
+        $redirects = $kirby->option('johannschopplich.helpers.redirects', []);
 
         if (empty($redirects)) {
             return;
@@ -37,11 +40,12 @@ class Redirects
         );
 
         // Run router on redirects routes
+        $router = new Router($routes);
+
         try {
-            $router = new Router($routes);
             return $router->call($path, $method);
-        } catch (\Throwable $e) {
-            return site()->errorPage();
+        } catch (Throwable) {
+            return $kirby->site()->errorPage();
         }
     }
 }
