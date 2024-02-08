@@ -1,6 +1,6 @@
 {
   "name": "johannschopplich/kirby-helpers",
-  "description": "Dotenv support, meta tag generation and more for the Kirby CMS",
+  "description": "Dotenv support, meta tag generation and more for Kirby CMS",
   "type": "kirby-plugin",
   "version": "6.1.0",
   "keywords": [
