@@ -22,7 +22,7 @@ App::plugin('johannschopplich/helpers', [
             'action' => function () {
                 $kirby = App::instance();
 
-                if ($kirby->option('johannschopplich.helpers.robots.enable', false)) {
+                if ($kirby->option('johannschopplich.helpers.robots.enabled', false)) {
                     return SiteMeta::robots();
                 }
 
@@ -34,7 +34,7 @@ App::plugin('johannschopplich/helpers', [
             'action' => function () {
                 $kirby = App::instance();
 
-                if ($kirby->option('johannschopplich.helpers.sitemap.enable', false)) {
+                if ($kirby->option('johannschopplich.helpers.sitemap.enabled', false)) {
                     return SiteMeta::sitemap();
                 }
 
@@ -43,7 +43,7 @@ App::plugin('johannschopplich/helpers', [
         ]
     ],
     'siteMethods' => [
-        'env' => function ($key, $default = null) {
+        'env' => function (string $key, $default = null) {
             if (!Env::isLoaded()) {
                 $kirby = App::instance();
                 $path = $kirby->option('johannschopplich.helpers.env.path', $kirby->root('base'));
@@ -55,6 +55,8 @@ App::plugin('johannschopplich/helpers', [
         }
     ],
     'pageMethods' => [
-        'meta' => fn () => new PageMeta($this)
+        'meta' => function () {
+            return new PageMeta($this);
+        }
     ]
 ]);
