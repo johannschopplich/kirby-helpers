@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'johannschopplich/kirby-helpers',
-        'pretty_version' => '6.0.0',
-        'version' => '6.0.0.0',
+        'pretty_version' => '6.1.0',
+        'version' => '6.1.0.0',
         'reference' => NULL,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -29,8 +29,8 @@
             'dev_requirement' => false,
         ),
         'johannschopplich/kirby-helpers' => array(
-            'pretty_version' => '6.0.0',
-            'version' => '6.0.0.0',
+            'pretty_version' => '6.1.0',
+            'version' => '6.1.0.0',
             'reference' => NULL,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
@@ -47,9 +47,9 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
-            'pretty_version' => 'v1.28.0',
-            'version' => '1.28.0.0',
-            'reference' => 'ea208ce43cbb04af6867b4fdddb1bdbf84cc28cb',
+            'pretty_version' => 'v1.29.0',
+            'version' => '1.29.0.0',
+            'reference' => 'ef4d7e442ca910c4764bce785146269b30cb5fc4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-ctype',
             'aliases' => array(),
@@ -65,9 +65,9 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-php80' => array(
-            'pretty_version' => 'v1.28.0',
-            'version' => '1.28.0.0',
-            'reference' => '6caa57379c4aec19c0a12a38b59b26487dcfe4b5',
+            'pretty_version' => 'v1.29.0',
+            'version' => '1.29.0.0',
+            'reference' => '87b68208d5c1188808dd7839ee1e6c8ec3b02f1b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
             'aliases' => array(),
