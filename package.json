@@ -1,13 +1,14 @@
 {
   "type": "module",
-  "version": "6.1.1",
+  "version": "6.1.2",
   "private": true,
   "packageManager": "pnpm@9.15.2",
   "scripts": {
-    "release": "npx -y bumpp --all",
+    "release": "bumpp --all",
     "format": "prettier \"docs/**/*\" --write"
   },
   "devDependencies": {
+    "bumpp": "^9.9.2",
     "prettier": "^3.4.2"
   }
 }
