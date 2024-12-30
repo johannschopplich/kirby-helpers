@@ -4,10 +4,10 @@ namespace JohannSchopplich\Helpers;
 
 use Kirby\Cms\App;
 use Kirby\Cms\Responder;
+use Kirby\Cms\Url;
 use Kirby\Http\Response;
 use Kirby\Toolkit\Str;
 use Kirby\Toolkit\Xml;
-use Kirby\Cms\Url;
 
 class SiteMeta
 {

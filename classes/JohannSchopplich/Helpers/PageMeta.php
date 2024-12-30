@@ -3,10 +3,10 @@
 namespace JohannSchopplich\Helpers;
 
 use Kirby\Cms\Page;
+use Kirby\Cms\Url;
 use Kirby\Content\Field;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Html;
-use Kirby\Cms\Url;
 
 class PageMeta
 {
