@@ -10,16 +10,17 @@ use Kirby\Toolkit\Html;
 
 class PageMeta
 {
-    protected array $metadata = [];
-
-    public function __construct(protected Page $page)
-    {
+    public function __construct(
+        protected readonly Page $page,
+        protected array $metadata = []
+    ) {
         $kirby = $page->kirby();
         $defaults = $kirby->option('johannschopplich.helpers.meta.defaults', []);
-        $this->metadata = is_callable($defaults)
-            // TODO: Use named arguments
-            ? $defaults($kirby, $kirby->site(), $this->page)
-            : $defaults;
+        $this->metadata = match(true) {
+            is_callable($defaults) => $defaults($kirby, $kirby->site(), $this->page),
+            is_array($defaults) => $defaults,
+            default => []
+        };
 
         if (method_exists($this->page, 'metadata')) {
             $this->metadata = A::merge($this->metadata, $this->page->metadata());
@@ -53,14 +54,14 @@ class PageMeta
 
         $field = $this->page->content()->get($key);
 
-        if ($field->exists() && $field->isNotEmpty() && $field->value() !== '[]') {
+        if ($field->exists() && $field->isNotEmpty()) {
             return $field;
         }
 
         if ($fallback) {
             $field = $this->page->site()->content()->get($key);
 
-            if ($field->exists() && $field->isNotEmpty() && $field->value() !== '[]') {
+            if ($field->exists() && $field->isNotEmpty()) {
                 return $field;
             }
         }
