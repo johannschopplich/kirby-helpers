@@ -1,57 +1,43 @@
-# Dotenv
+# Environment Variables
 
-Load environment variables from a local `.env` file automatically and access them with the global `env()` method.
+Securely manage environment-specific configuration through `.env` files. Load environment variables automatically and access them with a global `env()` helper function, perfect for storing API keys, database credentials, and other sensitive data outside your codebase.
 
-This will ease storing project credentials or variables outside of your code or if you want to have development and production access in different locations.
+## Why Use Environment Variables?
 
-## Configuration
+Environment variables keep sensitive configuration separate from your code, making it safer to commit your project to version control. They also make it easy to have different settings for development, staging, and production environments.
 
-Create a `.env` file in Kirby's root directory. You can change the default filename to look for with the `johannschopplich.helpers.env.filename` option key.
+## Setup
 
-> [!WARNING]
-> It is important to hide your `.env` from public access. Make sure to add it to your `.gitignore` file.
+Create a `.env` file in your project root directory:
+
+```ini
+# .env
+KIRBY_DEBUG=true
+API_SECRET_KEY=your-secret-key-here
+DATABASE_URL=mysql://user:pass@localhost/mydb
+MAIL_FROM=noreply@example.com
+```
+
+> **Important**: Add `.env` to your `.gitignore` file to prevent committing sensitive data to your repository.
 
 ## Usage
 
-### Inside Templates, Snippets and More
+### In Templates and Snippets
 
-You can use the `$site` method `$site->env()` to retrieve an environment variable in your snippets and templates:
-
-```php
-$site->env('VARIABLE');
-```
-
-### Within Kirby's Configuration
-
-If you want to use variables in your `config.php` file, you have to call the `Env` class manually to load the environment object before Kirby initializes.
-
-THe first argument `path` is required. The second one (`filename`) is optional and may be used to load an environment file called something other than `.env`.
+Use the global `env()` function or the site method:
 
 ```php
-\JohannSchopplich\Helpers\Env::load('path/to/env', '.env');
+// Global helper function
+$apiKey = env('API_SECRET_KEY');
+$debugMode = env('KIRBY_DEBUG', false); // with fallback
+
+// Site method
+$mailFrom = $site->env('MAIL_FROM', 'default@example.com');
 ```
 
-### Options
+### In Configuration Files
 
-| Option                                  | Default                 | Values   | Description                                |
-| --------------------------------------- | ----------------------- | -------- | ------------------------------------------ |
-| `johannschopplich.helpers.env.path`     | `kirby()->root('base')` | `string` | Path from which the file should be loaded. |
-| `johannschopplich.helpers.env.filename` | `.env`                  | `string` | Environment filename to load.              |
-
-## Example
-
-```
-# .env
-KIRBY_DEBUG=false
-
-SECRET_KEY=my_secret_key
-PUBLIC_KEY=my_public_key
-
-FOO=BAR
-BAZ=${FOO}
-```
-
-With a `.env` file inside the `$base` directory in place, you can access your securely stored credentials and variables:
+For use in `config.php`, manually load the environment before Kirby initializes:
 
 ```php
 // config.php
@@ -60,8 +46,40 @@ $base = dirname(__DIR__, 2);
 
 return [
     'debug' => env('KIRBY_DEBUG', false),
-    'SECRET' => env('SECRET_KEY'),
-    'PUBLIC' => env('PUBLIC_KEY')
+    'email' => [
+        'from' => env('MAIL_FROM')
+    ],
+    'api' => [
+        'secret' => env('API_SECRET_KEY')
+    ]
+];
+```
+
+## Value Parsing
+
+The helper automatically converts common values:
+
+- `true`, `(true)` → `true` (boolean)
+- `false`, `(false)` → `false` (boolean)
+- `null`, `(null)` → `null`
+- `empty`, `(empty)` → `""` (empty string)
+- `"quoted strings"` → removes surrounding quotes
+
+## Configuration Options
+
+| Option                                  | Default                 | Description                               |
+| --------------------------------------- | ----------------------- | ----------------------------------------- |
+| `johannschopplich.helpers.env.path`     | `kirby()->root('base')` | Directory path containing the `.env` file |
+| `johannschopplich.helpers.env.filename` | `.env`                  | Environment filename to load              |
+
+## Example: Custom Environment File
+
+```php
+// config.php - Load from a custom location
+\JohannSchopplich\Helpers\Env::load('/custom/path', '.env.production');
+
+return [
+    'debug' => env('KIRBY_DEBUG', false)
 ];
 ```
 

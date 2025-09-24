@@ -1,45 +1,140 @@
-# Redirects
+# URL Redirects
 
-Create redirect routes easily that only take over if no actual page/route has been matched. It uses Kirby's `go()` helper under the hood.
+Create flexible redirect rules that automatically handle URL changes, site restructures, and legacy URL support. Redirects only activate when no actual page or route matches the requested URL, ensuring they never interfere with existing content.
 
-## Configuration
+## Why Use Redirects?
 
-Redirects have to be defined in the `johannschopplich.helpers.redirects` option key in an array with the old pattern as key and the target page/URL as value. Placeholders can be used in the key and referenced via `$1`, `$2` and so on in the target string.
+Redirects maintain SEO value when restructuring your site, provide backward compatibility for old URLs, and help visitors find the content they're looking for even when URLs change.
 
-Instead of a target string, a callback function returning that string may also be used.
+## Setup
 
-## Options
-
-| Option                               | Default | Values | Description        |
-| ------------------------------------ | ------- | ------ | ------------------ |
-| `johannschopplich.helpers.redirects` | `false` | array  | List of redirects. |
-
-## Example
+Define redirect rules in your configuration:
 
 ```php
 // config.php
 return [
     'johannschopplich.helpers.redirects' => [
         // Simple redirects
-        'from/foo'                  => 'to/bar',
-        'blog/article-(:any)'       => 'blog/articles/$1',
-        'old/reference/(:all?)'     => 'new/reference/$1',
+        'old-page' => 'new-page',
+        'blog/article' => 'news/article',
 
-        // Redirects with logic
-        'photography/(:any)/(:all)' => function ($category, $uid) {
-            if ($page = page('photography')->grandChildren()->listed()->findBy('uid', $uid)) {
+        // Pattern matching with placeholders
+        'old/blog/(:any)' => 'news/$1',
+        'products/(:any)/details' => 'shop/$1',
+        'category/(:any)/page/(:num)' => 'archive/$1?page=$2',
+
+        // Advanced redirects with custom logic
+        'legacy/(:any)' => function ($slug) {
+            // Find page by custom field
+            if ($page = site()->index()->filterBy('oldSlug', $slug)->first()) {
                 return $page->url();
             }
-
-            return 'error';
+            return 'not-found';
         }
     ]
 ];
 ```
 
-## Credits
+## Pattern Matching
 
-Forked from [`redirects` plugin](https://github.com/getkirby/getkirby.com/pull/1131).
+Use Kirby's route patterns to create flexible redirect rules:
+
+- `(:any)` - Matches any string (letters, numbers, hyphens, underscores)
+- `(:num)` - Matches numbers only
+- `(:all)` - Matches everything including slashes
+- `(:alpha)` - Matches letters only
+
+### Pattern Examples
+
+```php
+'johannschopplich.helpers.redirects' => [
+    // Redirect with single parameter
+    'user/(:any)' => 'profile/$1',
+
+    // Multiple parameters
+    'archive/(:num)/(:any)' => 'blog/$2?year=$1',
+
+    // Optional parameters
+    'docs/(:all?)' => 'documentation/$1',
+
+    // Exact matches (no patterns)
+    'about-us' => 'about',
+    'contact-form' => 'contact'
+]
+```
+
+## Advanced Redirects
+
+Use callback functions for complex redirect logic:
+
+```php
+'johannschopplich.helpers.redirects' => [
+    // Redirect based on page lookup
+    'project/(:any)' => function ($uid) {
+        if ($project = page('portfolio')->children()->findBy('uid', $uid)) {
+            return $project->url();
+        }
+        return 'portfolio'; // Fallback to portfolio overview
+    },
+
+    // Conditional redirects
+    'temp/(:any)' => function ($path) {
+        $kirby = kirby();
+        if ($kirby->environment()->isLocal()) {
+            return 'dev/' . $path;
+        }
+        return 'maintenance';
+    },
+
+    // Complex URL transformations
+    'api/v1/(:all)' => function ($endpoint) {
+        // Redirect old API calls to new structure
+        return 'api/v2/' . str_replace('-', '_', $endpoint);
+    }
+]
+```
+
+## How It Works
+
+1. **Non-Interfering**: Redirects only trigger when no existing page or route matches
+2. **Pattern Matching**: Uses Kirby's powerful route pattern system
+3. **Placeholder Support**: Reference matched segments with `$1`, `$2`, etc.
+4. **Callback Support**: Use functions for complex redirect logic
+5. **Error Handling**: Failed redirects fall back to the error page
+
+## Configuration Options
+
+| Option                               | Default | Description                            |
+| ------------------------------------ | ------- | -------------------------------------- |
+| `johannschopplich.helpers.redirects` | `[]`    | Array of redirect patterns and targets |
+
+## Migration Example
+
+Here's how you might handle a site restructure:
+
+```php
+// config.php - Migrating from old site structure
+return [
+    'johannschopplich.helpers.redirects' => [
+        // Blog moved to news section
+        'blog' => 'news',
+        'blog/(:all)' => 'news/$1',
+
+        // Products became shop
+        'products' => 'shop',
+        'products/(:any)' => 'shop/$1',
+
+        // Services merged into about
+        'services' => 'about/services',
+        'services/(:any)' => 'about/services#$1',
+
+        // Handle old pagination
+        'archive/page/(:num)' => function ($page) {
+            return url('archive', ['params' => ['page' => $page]]);
+        }
+    ]
+];
+```
 
 ## License
 

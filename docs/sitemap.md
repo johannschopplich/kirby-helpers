@@ -1,34 +1,31 @@
-# Sitemap
+# XML Sitemaps
 
-Auto-generates a XML sitemap to find and catalogue pages of your site. The plugin maps pages correctly in single-language as well as in multi-language sites.
+Auto-generate XML sitemaps that help search engines discover and index your website pages. Features full multilingual support with automatic hreflang attributes and flexible page filtering options.
 
-## Configuration
+## Why Use XML Sitemaps?
 
-Enable the sitemap route for your Kirby instance by setting `johannschopplich.helpers.sitemap.enabled` to `true`. The generated sitemap will be available visiting `example.com/sitemap.xml`. It will be cached if you have enabled Kirby's pages cache.
+XML sitemaps help search engines understand your site structure and find all your important pages. They're especially valuable for large sites, new sites, or sites with complex navigation structures.
 
-### Add Templates or Pages
+## Setup
 
-All templates (and thus pages) are included in the final sitemap by default. You can opt-out templates and pages – head over to the [options](#options) to find out how.
+Enable the sitemap in your configuration:
 
-### Control Template Visibility With Blueprint Options
-
-You can disable templates on a blueprint-level as well. The `sitemap` option defines a template's visibility in the sitemap. It yields to `true` by default.
-
-```yaml
-title: Article
-options:
-  sitemap: false
+```php
+// config.php
+return [
+    'johannschopplich.helpers.sitemap' => [
+        'enabled' => true
+    ]
+];
 ```
 
-## Options
+Your sitemap will be automatically available at `/sitemap.xml` and will be cached using Kirby's page cache for better performance.
 
-| Option                                               | Default | Values | Description                                                   |
-| ---------------------------------------------------- | ------- | ------ | ------------------------------------------------------------- |
-| `johannschopplich.helpers.sitemap.enabled`           | `[]`    | array  | List of template names to include in the generated sitemap.   |
-| `johannschopplich.helpers.sitemap.exclude.templates` | `[]`    | array  | List of template names to exclude from the generated sitemap. |
-| `johannschopplich.helpers.sitemap.exclude.pages`     | `[]`    | array  | List of page ids to exclude.                                  |
+## Page Control
 
-## Example
+### Exclude by Template
+
+Exclude entire templates from the sitemap:
 
 ```php
 // config.php
@@ -37,7 +34,8 @@ return [
         'enabled' => true,
         'exclude' => [
             'templates' => [
-                'archive',
+                'error',
+                'admin',
                 'internal'
             ]
         ]
@@ -45,9 +43,112 @@ return [
 ];
 ```
 
-## Credits
+### Exclude by Page ID
 
-Forked from [getkirby.com `meta` plugin](https://github.com/getkirby/getkirby.com/tree/master/site/plugins/meta).
+Exclude specific pages using their page IDs:
+
+```php
+// config.php
+return [
+    'johannschopplich.helpers.sitemap' => [
+        'enabled' => true,
+        'exclude' => [
+            'pages' => [
+                'legal/privacy',
+                'admin',
+                'temp-.*'  // Regex patterns supported
+            ]
+        ]
+    ]
+];
+```
+
+### Blueprint-Level Control
+
+Disable sitemap inclusion directly in page blueprints:
+
+```yaml
+# site/blueprints/pages/private.yml
+title: Private Page
+options:
+  sitemap: false
+```
+
+## Multilingual Support
+
+For multilingual sites, the plugin automatically generates:
+
+- Separate URLs for each language version
+- `hreflang` attributes for each language
+- `x-default` hreflang pointing to the default language
+
+Example multilingual sitemap output:
+
+```xml
+<url>
+  <loc>https://example.com/en/about</loc>
+  <xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/about" />
+  <xhtml:link rel="alternate" hreflang="de" href="https://example.com/de/uber-uns" />
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/about" />
+</url>
+```
+
+## SEO Fields
+
+Control sitemap properties using page fields:
+
+```yaml
+# site/blueprints/pages/default.yml
+fields:
+  priority:
+    label: Search Priority
+    type: range
+    min: 0
+    max: 1
+    step: 0.1
+    default: 0.5
+  changefreq:
+    label: Change Frequency
+    type: select
+    options:
+      always: Always
+      hourly: Hourly
+      daily: Daily
+      weekly: Weekly
+      monthly: Monthly
+      yearly: Yearly
+      never: Never
+```
+
+## Configuration Options
+
+| Option                                               | Default | Description                                   |
+| ---------------------------------------------------- | ------- | --------------------------------------------- |
+| `johannschopplich.helpers.sitemap.enabled`           | `false` | Enable the sitemap route                      |
+| `johannschopplich.helpers.sitemap.exclude.templates` | `[]`    | Array of template names to exclude            |
+| `johannschopplich.helpers.sitemap.exclude.pages`     | `[]`    | Array of page IDs to exclude (supports regex) |
+
+## Example Configuration
+
+```php
+// config.php
+return [
+    'johannschopplich.helpers.sitemap' => [
+        'enabled' => true,
+        'exclude' => [
+            'templates' => [
+                'error',
+                'search',
+                'contact-form'
+            ],
+            'pages' => function() {
+                // Dynamic exclusion - exclude all unlisted pages
+                return site()->index()->filter(fn($p) => !$p->isListed())->pluck('id');
+            }
+        ]
+    ]
+];
+```
 
 ## License
 
