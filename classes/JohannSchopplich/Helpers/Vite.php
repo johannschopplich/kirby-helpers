@@ -66,13 +66,15 @@ class Vite
     /**
      * Returns `<link>` tags for each CSS file of an entry point
      */
-    public function css(string $entry)
+    public function css(string $entry): string|null
     {
         if (is_array($this->manifest)) {
             foreach ($this->manifest[$entry]['css'] as $file) {
                 return css($this->prodUrl($file));
             }
         }
+
+        return null;
     }
 
     /**
@@ -97,5 +99,7 @@ class Vite
         if (is_array($this->manifest)) {
             return $this->prodUrl($this->manifest[$entry]['file']);
         }
+
+        return null;
     }
 }
