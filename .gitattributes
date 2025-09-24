@@ -5,8 +5,12 @@
 
 # Source files
 scripts/ export-ignore
+src/assets/ export-ignore
 src/panel/ export-ignore
 kirbyup.config.js export-ignore
+postcss.config.cjs export-ignore
+prettier.config.mjs export-ignore
+tailwind.config.cjs export-ignore
 
 # Development files
 .vscode/ export-ignore
@@ -17,6 +21,7 @@ eslint.config.mjs export-ignore
 index.dev.mjs export-ignore
 package.json export-ignore
 pnpm-lock.yaml export-ignore
+pnpm-workspace.yaml export-ignore
 
 # Tests
 .codecov.yml export-ignore
