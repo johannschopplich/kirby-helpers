@@ -3,6 +3,7 @@
 namespace JohannSchopplich\Helpers;
 
 use Kirby\Cms\App;
+use Kirby\Cms\Html;
 use Kirby\Data\Data;
 use Kirby\Http\Uri;
 
@@ -70,7 +71,7 @@ class Vite
     {
         if (is_array($this->manifest)) {
             foreach ($this->manifest[$entry]['css'] as $file) {
-                return css($this->prodUrl($file));
+                return Html::css($this->prodUrl($file));
             }
         }
 
@@ -88,7 +89,7 @@ class Vite
             $url = $this->devUrl($entry);
         }
 
-        return js($url, ['type' => 'module']);
+        return Html::js($url, ['type' => 'module']);
     }
 
     /**
