@@ -65,6 +65,18 @@ class Vite
     }
 
     /**
+     * Returns the file path for an entry from the manifest
+     */
+    public function getEntryFile(string $entry): string|null
+    {
+        if (is_array($this->manifest)) {
+            return $this->manifest[$entry]['file'] ?? null;
+        }
+
+        return null;
+    }
+
+    /**
      * Returns `<link>` tags for each CSS file of an entry point
      */
     public function css(string $entry): string|null
@@ -84,7 +96,7 @@ class Vite
     public function js(string $entry): string
     {
         if (is_array($this->manifest)) {
-            $url = $this->prodUrl($this->manifest[$entry]['file']);
+            $url = $this->prodUrl($this->getEntryFile($entry));
         } else {
             $url = $this->devUrl($entry);
         }
@@ -98,7 +110,7 @@ class Vite
     public function file(string $entry): string|null
     {
         if (is_array($this->manifest)) {
-            return $this->prodUrl($this->manifest[$entry]['file']);
+            return $this->prodUrl($this->getEntryFile($entry));
         }
 
         return null;
