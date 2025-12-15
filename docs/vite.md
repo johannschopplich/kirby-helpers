@@ -60,19 +60,34 @@ Remove the build directory when starting development to ensure proper detection:
 
 ### Load JavaScript
 
+The `js()` method automatically injects the Vite client (`@vite/client`) in development mode for HMR support:
+
 ```php
-<!-- In your template -->
 <?= vite()->js('src/main.js') ?>
+```
+
+In development, this outputs:
+
+```html
+<script type="module" src="http://localhost:5173/@vite/client"></script>
+<script type="module" src="http://localhost:5173/src/main.js"></script>
+```
+
+In production:
+
+```html
+<script type="module" src="/dist/assets/main-BxE4l5kw.js"></script>
 ```
 
 ### Load CSS
 
+The `css()` method outputs CSS files in production, including CSS from imported modules:
+
 ```php
-<!-- CSS imported by your main JS file -->
 <?= vite()->css('src/main.js') ?>
 ```
 
-> **Note**: In development mode, `css()` does nothing since Vite handles CSS through the JavaScript import. In production, it outputs the built CSS files.
+> **Note**: In development mode, `css()` returns `null` since Vite handles CSS injection through JavaScript. In production, it outputs `<link>` tags for all CSS files, including those from imported modules.
 
 ### Asset Files
 
@@ -83,11 +98,28 @@ Get URLs to processed assets:
 <img src="<?= $assetUrl ?>" alt="Logo">
 ```
 
+### Kirby Panel Customization
+
+Use `panelJs()` and `panelCss()` to integrate Vite-built assets with Kirby's Panel:
+
+```php
+// config.php
+return [
+    'panel' => [
+        'js' => vite()->panelJs('src/panel.js'),
+        'css' => vite()->panelCss('src/panel.js')
+    ]
+];
+```
+
+These methods return arrays of file paths (not HTML tags) as required by Kirby's Panel configuration. The `panelJs()` method automatically includes the Vite client in development mode.
+
 ## How It Works
 
 ### Development Mode
 
 - Plugin detects missing `manifest.json` file
+- Vite client (`@vite/client`) is automatically injected for HMR
 - Assets loaded directly from Vite's development server
 - Hot Module Replacement works automatically
 - CSS is handled by Vite through JS imports
@@ -96,29 +128,25 @@ Get URLs to processed assets:
 
 - Plugin reads `manifest.json` for asset mappings
 - Assets served as static files with cache-friendly filenames
-- CSS files extracted and linked separately
+- CSS files extracted and linked separately (including CSS from imported modules)
 - Optimal loading performance
 
 ## Example Template Integration
 
-```php
+```html
 <!-- site/snippets/header.php -->
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title><?= $page->title() ?></title>
 
-    <?php if (vite()->isDev()): ?>
-        <!-- Development: Vite handles everything -->
-        <?= vite()->js('src/main.js') ?>
-    <?php else: ?>
-        <!-- Production: Separate CSS and JS -->
-        <?= vite()->css('src/main.js') ?>
-        <?= vite()->js('src/main.js') ?>
-    <?php endif ?>
-</head>
+    <?= vite()->css('src/main.js') ?> <?= vite()->js('src/main.js') ?>
+  </head>
+</html>
 ```
+
+The `css()` method returns `null` in development (Vite handles it), so you can safely include it in your template without conditional checks. The `js()` method automatically includes the Vite client in development mode.
 
 ## Configuration Options
 
@@ -129,6 +157,17 @@ Get URLs to processed assets:
 | `johannschopplich.helpers.vite.server.https` | `false`     | Use HTTPS for development server |
 | `johannschopplich.helpers.vite.build.outDir` | `dist`      | Build output directory           |
 
+## API Reference
+
+| Method                             | Returns        | Description                                                 |
+| ---------------------------------- | -------------- | ----------------------------------------------------------- |
+| `js(string $entry)`                | `string`       | Returns `<script>` tag(s), includes Vite client in dev mode |
+| `css(string $entry)`               | `string\|null` | Returns `<link>` tag(s) for CSS, `null` in dev mode         |
+| `file(string $entry)`              | `string\|null` | Returns the processed asset URL                             |
+| `panelJs(string\|array $entries)`  | `array\|null`  | Returns file paths for Panel JS config                      |
+| `panelCss(string\|array $entries)` | `array\|null`  | Returns file paths for Panel CSS config                     |
+| `isDev()`                          | `bool`         | Returns `true` if in development mode                       |
+
 ## Development Workflow
 
 1. **Start Development**: `npm run dev` - Vite server starts, assets load from localhost
@@ -138,7 +177,5 @@ Get URLs to processed assets:
 The plugin automatically detects which mode you're in based on the presence of the manifest file, so no manual switching is required.
 
 ## License
-
-[MIT](../LICENSE) License © 2021-2022 [Oblik Studio](https://github.com/OblikStudio)
 
 [MIT](../LICENSE) License © 2022-PRESENT [Johann Schopplich](https://github.com/johannschopplich)
