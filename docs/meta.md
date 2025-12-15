@@ -145,6 +145,39 @@ Meta data is merged in this order (later overrides earlier):
 2. Page content fields (blueprint fields)
 3. Page model metadata() method
 
+## Additional Methods
+
+### OpenSearch Discovery
+
+Add OpenSearch support so browsers can discover your site's search functionality:
+
+```php
+<?= $page->meta()->opensearch() ?>
+```
+
+This generates a `<link>` tag pointing to `/open-search.xml`.
+
+### Sitemap Priority
+
+Get the sitemap priority for a page (used internally by the sitemap generator):
+
+```php
+$priority = $page->meta()->priority(); // Returns float 0.0-1.0
+```
+
+The priority is read from the page's `priority` field, defaulting to `0.5`.
+
+## API Reference
+
+| Method                                    | Returns  | Description                                    |
+| ----------------------------------------- | -------- | ---------------------------------------------- |
+| `robots()`                                | `string` | Canonical link + robots meta tag               |
+| `social()`                                | `string` | Meta, OpenGraph, and Twitter tags              |
+| `jsonld()`                                | `string` | JSON-LD structured data scripts                |
+| `opensearch()`                            | `string` | OpenSearch discovery link                      |
+| `priority()`                              | `float`  | Sitemap priority (0.0-1.0)                     |
+| `get(string $key, bool $fallback = true)` | `Field`  | Get any meta field with optional site fallback |
+
 ## Configuration Options
 
 | Option                                   | Default | Description                                  |

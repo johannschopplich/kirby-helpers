@@ -8,18 +8,19 @@ XML sitemaps help search engines understand your site structure and find all you
 
 ## Setup
 
-Enable the sitemap in your configuration:
+Enable the sitemap and robots.txt in your configuration:
 
 ```php
 // config.php
 return [
-    'johannschopplich.helpers.sitemap' => [
-        'enabled' => true
+    'johannschopplich.helpers' => [
+        'sitemap' => ['enabled' => true],
+        'robots' => ['enabled' => true]
     ]
 ];
 ```
 
-Your sitemap will be automatically available at `/sitemap.xml` and will be cached using Kirby's page cache for better performance.
+Your sitemap will be available at `/sitemap.xml` and `robots.txt` at `/robots.txt`. Results are cached using Kirby's page cache for better performance.
 
 ## Page Control
 
@@ -30,13 +31,10 @@ Exclude entire templates from the sitemap:
 ```php
 // config.php
 return [
-    'johannschopplich.helpers.sitemap' => [
-        'enabled' => true,
-        'exclude' => [
-            'templates' => [
-                'error',
-                'admin',
-                'internal'
+    'johannschopplich.helpers' => [
+        'sitemap' => [
+            'exclude' => [
+                'templates' => ['error', 'admin', 'internal']
             ]
         ]
     ]
@@ -50,13 +48,14 @@ Exclude specific pages using their page IDs:
 ```php
 // config.php
 return [
-    'johannschopplich.helpers.sitemap' => [
-        'enabled' => true,
-        'exclude' => [
-            'pages' => [
-                'legal/privacy',
-                'admin',
-                'temp-.*'  // Regex patterns supported
+    'johannschopplich.helpers' => [
+        'sitemap' => [
+            'exclude' => [
+                'pages' => [
+                    'legal/privacy',
+                    'admin',
+                    'temp-.*'  // Regex patterns supported
+                ]
             ]
         ]
     ]
@@ -122,30 +121,30 @@ fields:
 
 ## Configuration Options
 
-| Option                                               | Default | Description                                   |
-| ---------------------------------------------------- | ------- | --------------------------------------------- |
-| `johannschopplich.helpers.sitemap.enabled`           | `false` | Enable the sitemap route                      |
-| `johannschopplich.helpers.sitemap.exclude.templates` | `[]`    | Array of template names to exclude            |
-| `johannschopplich.helpers.sitemap.exclude.pages`     | `[]`    | Array of page IDs to exclude (supports regex) |
+| Option                                               | Default | Description                                            |
+| ---------------------------------------------------- | ------- | ------------------------------------------------------ |
+| `johannschopplich.helpers.sitemap.enabled`           | `false` | Enable the sitemap route                               |
+| `johannschopplich.helpers.robots.enabled`            | `false` | Enable the robots.txt route                            |
+| `johannschopplich.helpers.sitemap.exclude.templates` | `[]`    | Array of template names to exclude                     |
+| `johannschopplich.helpers.sitemap.exclude.pages`     | `[]`    | Array or callback returning page IDs (regex supported) |
 
 ## Example Configuration
 
 ```php
 // config.php
 return [
-    'johannschopplich.helpers.sitemap' => [
-        'enabled' => true,
-        'exclude' => [
-            'templates' => [
-                'error',
-                'search',
-                'contact-form'
-            ],
-            'pages' => function() {
-                // Dynamic exclusion - exclude all unlisted pages
-                return site()->index()->filter(fn($p) => !$p->isListed())->pluck('id');
-            }
-        ]
+    'johannschopplich.helpers' => [
+        'sitemap' => [
+            'enabled' => true,
+            'exclude' => [
+                'templates' => ['error', 'search', 'contact-form'],
+                'pages' => function () {
+                    // Dynamic exclusion - exclude all unlisted pages
+                    return site()->index()->filter(fn ($p) => !$p->isListed())->pluck('id');
+                }
+            ]
+        ],
+        'robots' => ['enabled' => true]
     ]
 ];
 ```

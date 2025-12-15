@@ -99,7 +99,7 @@ Use callback functions for complex redirect logic:
 1. **Non-Interfering**: Redirects only trigger when no existing page or route matches
 2. **Pattern Matching**: Uses Kirby's powerful route pattern system
 3. **Placeholder Support**: Reference matched segments with `$1`, `$2`, etc.
-4. **Callback Support**: Use functions for complex redirect logic
+4. **Callback Support**: Matched segments are passed as individual arguments to callback functions
 5. **Error Handling**: Failed redirects fall back to the error page
 
 ## Configuration Options
