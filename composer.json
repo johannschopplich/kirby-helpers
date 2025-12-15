@@ -2,7 +2,7 @@
   "name": "johannschopplich/kirby-helpers",
   "description": "Environment, SEO, and build utilities for Kirby CMS",
   "type": "kirby-plugin",
-  "version": "6.4.0",
+  "version": "6.5.0",
   "keywords": [
     "getkirby",
     "kirby",
