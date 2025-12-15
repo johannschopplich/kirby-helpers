@@ -111,5 +111,3 @@ Detailed documentation for each feature is available in the [`docs`](./docs) dir
 [MIT](./LICENSE) License © 2020-2022 [Bastian Allgeier](https://github.com/getkirby)
 
 [MIT](./LICENSE) License © 2020-2022 [Nico Hoffmann](https://github.com/getkirby)
-
-[MIT](./LICENSE) License © 2021-2022 [Oblik Studio](https://github.com/OblikStudio)

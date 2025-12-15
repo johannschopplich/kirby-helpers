@@ -2,14 +2,14 @@
   "type": "module",
   "version": "6.4.0",
   "private": true,
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@10.25.0",
   "scripts": {
     "release": "bumpp --all --execute \"npx zx scripts/pre-release.mjs\" ",
     "format": "prettier \"{docs,scripts}/**/*\" --write"
   },
   "devDependencies": {
-    "bumpp": "^10.2.3",
-    "prettier": "^3.6.2",
-    "zx": "^8.8.3"
+    "bumpp": "^10.3.2",
+    "prettier": "^3.7.4",
+    "zx": "^8.8.5"
   }
 }
