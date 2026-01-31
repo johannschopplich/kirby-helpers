@@ -97,6 +97,12 @@ class PageMeta
         return $this->get('thumbnail')->toFile();
     }
 
+    public function priority(): float
+    {
+        $priority = $this->get('priority', false)->or(0.5)->value();
+        return (float)min(1, max(0, $priority));
+    }
+
     public function jsonld(): string
     {
         $html = [];
@@ -291,11 +297,5 @@ class PageMeta
             'title' => $this->page->site()->title(),
             'href' => Url::to('open-search.xml'),
         ]) . PHP_EOL;
-    }
-
-    public function priority(): float
-    {
-        $priority = $this->get('priority', false)->or(0.5)->value();
-        return (float)min(1, max(0, $priority));
     }
 }
