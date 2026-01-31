@@ -7,7 +7,6 @@ use Kirby\Cms\App;
 use Kirby\Cms\Responder;
 use Kirby\Cms\Url;
 use Kirby\Http\Response;
-use Kirby\Toolkit\Str;
 use Kirby\Toolkit\Xml;
 
 class SiteMeta
@@ -71,14 +70,8 @@ class SiteMeta
 
                     if ($kirby->multilang()) {
                         foreach ($kirby->languages() as $lang) {
-                            $code = $lang->code();
-                            // Support ISO 3166-1 Alpha 2 and ISO 639-1
-                            $lang = Str::slug(preg_replace(
-                                '/\.utf-?8$/i',
-                                '',
-                                $lang->locale(LC_ALL) ?? $lang->code()
-                            ));
-                            $sitemap[] = '  <xhtml:link rel="alternate" hreflang="' . $lang . '" href="' . $item->url($code) . '" />';
+                            $hreflang = Util::languageToHreflang($lang);
+                            $sitemap[] = '  <xhtml:link rel="alternate" hreflang="' . $hreflang . '" href="' . $item->url($lang->code()) . '" />';
                         }
                         $sitemap[] = '  <xhtml:link rel="alternate" hreflang="x-default" href="' . $item->url() . '" />';
                     }

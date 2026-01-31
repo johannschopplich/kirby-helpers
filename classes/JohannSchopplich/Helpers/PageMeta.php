@@ -185,23 +185,6 @@ class PageMeta
             $twitter['card'] = 'summary';
         }
 
-        // OpenGraph locale for multilang
-        if ($kirby->multilang()) {
-            if ($locale = $kirby->language()?->locale(LC_ALL) ?? $kirby->language()?->code()) {
-                $opengraph['locale'] ??= str_replace('-', '_', $locale);
-            }
-
-            $alternateLocales = [];
-            foreach ($kirby->languages() as $lang) {
-                if ($lang->code() !== $kirby->languageCode()) {
-                    $alternateLocales[] = str_replace('-', '_', $lang->locale(LC_ALL) ?? $lang->code());
-                }
-            }
-            if ($alternateLocales) {
-                $opengraph['locale:alternate'] ??= $alternateLocales;
-            }
-        }
-
         // Generate meta tags
         foreach ($meta as $name => $content) {
             if ($content === null) {
