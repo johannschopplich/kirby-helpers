@@ -56,6 +56,7 @@ return array(
     'JohannSchopplich\\Helpers\\PageMeta' => $baseDir . '/classes/JohannSchopplich/Helpers/PageMeta.php',
     'JohannSchopplich\\Helpers\\Redirects' => $baseDir . '/classes/JohannSchopplich/Helpers/Redirects.php',
     'JohannSchopplich\\Helpers\\SiteMeta' => $baseDir . '/classes/JohannSchopplich/Helpers/SiteMeta.php',
+    'JohannSchopplich\\Helpers\\Util' => $baseDir . '/classes/JohannSchopplich/Helpers/Util.php',
     'JohannSchopplich\\Helpers\\Vite' => $baseDir . '/classes/JohannSchopplich/Helpers/Vite.php',
     'Kirby\\ComposerInstaller\\CmsInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
     'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',

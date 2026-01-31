@@ -128,6 +128,7 @@ class ComposerStaticInit87ac086e0582aff779837a1930970fff
         'JohannSchopplich\\Helpers\\PageMeta' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/PageMeta.php',
         'JohannSchopplich\\Helpers\\Redirects' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Redirects.php',
         'JohannSchopplich\\Helpers\\SiteMeta' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/SiteMeta.php',
+        'JohannSchopplich\\Helpers\\Util' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Util.php',
         'JohannSchopplich\\Helpers\\Vite' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Vite.php',
         'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
