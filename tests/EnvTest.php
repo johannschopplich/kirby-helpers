@@ -6,7 +6,7 @@ use JohannSchopplich\Helpers\Env;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class EnvTest extends TestCase
+final class EnvTest extends TestCase
 {
     private string $fixturesPath;
 

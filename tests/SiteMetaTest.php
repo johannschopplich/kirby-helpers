@@ -8,7 +8,7 @@ use Kirby\Cms\App;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class SiteMetaTest extends TestCase
+final class SiteMetaTest extends TestCase
 {
     protected function tearDown(): void
     {
