@@ -2,6 +2,7 @@
 
 namespace JohannSchopplich\Helpers;
 
+use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\Responder;
 use Kirby\Cms\Url;
@@ -38,7 +39,7 @@ class SiteMeta
                 $excludeTemplates = $kirby->option('johannschopplich.helpers.sitemap.exclude.templates', []);
                 $excludePages = $kirby->option('johannschopplich.helpers.sitemap.exclude.pages', []);
 
-                if (is_callable($excludePages)) {
+                if ($excludePages instanceof Closure) {
                     $excludePages = $excludePages();
                 }
 

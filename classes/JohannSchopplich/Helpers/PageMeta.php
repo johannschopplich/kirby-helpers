@@ -2,7 +2,7 @@
 
 namespace JohannSchopplich\Helpers;
 
-use Kirby\Cms\File;
+use Closure;
 use Kirby\Cms\Page;
 use Kirby\Cms\Url;
 use Kirby\Content\Field;
@@ -18,7 +18,7 @@ class PageMeta
         $kirby = $page->kirby();
         $defaults = $kirby->option('johannschopplich.helpers.meta.defaults', []);
         $this->metadata = match (true) {
-            is_callable($defaults) => $defaults($kirby, $kirby->site(), $this->page),
+            $defaults instanceof Closure => $defaults($kirby, $kirby->site(), $this->page),
             is_array($defaults) => $defaults,
             default => []
         };
@@ -40,7 +40,7 @@ class PageMeta
         if (array_key_exists($key, $this->metadata)) {
             $value = $this->metadata[$key];
 
-            if (is_callable($value)) {
+            if ($value instanceof Closure) {
                 $result = $value($this->page);
 
                 if ($result instanceof Field) {
@@ -68,33 +68,6 @@ class PageMeta
         }
 
         return new Field($this->page, $key, null);
-    }
-
-    public function title(): string
-    {
-        $title = $this->get('title', false);
-
-        if ($title->isNotEmpty()) {
-            return $title->value();
-        }
-
-        $customTitle = $this->page->content()->get('customTitle');
-        if ($customTitle->isNotEmpty()) {
-            return $customTitle->value();
-        }
-
-        return $this->page->title()->value();
-    }
-
-    public function description(): string|null
-    {
-        $description = $this->get('description');
-        return $description->isNotEmpty() ? $description->value() : null;
-    }
-
-    public function thumbnail(): File|null
-    {
-        return $this->get('thumbnail')->toFile();
     }
 
     public function priority(): float
@@ -163,19 +136,18 @@ class PageMeta
         $twitter = is_array($twitterValue) ? $twitterValue : [];
 
         $kirby = $this->page->kirby();
-        $title = $this->title();
-        $description = $this->description();
-        $thumbnail = $this->thumbnail();
+        $description = $this->get('description');
+        $thumbnail = $this->get('thumbnail')->toFile();
 
         // Basic OpenGraph tags
         $opengraph['site_name'] ??= $this->page->site()->title()->value();
         $opengraph['url'] ??= $this->page->url();
         $opengraph['type'] ??= 'website';
-        $opengraph['title'] ??= $title;
+        $opengraph['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
 
         // Basic Twitter tags
         $twitter['card'] ??= 'summary_large_image';
-        $twitter['title'] ??= $title;
+        $twitter['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
 
         // Twitter site/creator from config
         $twitterSite = $kirby->option('johannschopplich.helpers.meta.twitter.site');
@@ -188,10 +160,10 @@ class PageMeta
         }
 
         // Meta, OpenGraph and Twitter description
-        if ($description) {
-            $meta['description'] ??= $description;
-            $opengraph['description'] ??= $description;
-            $twitter['description'] ??= $description;
+        if ($description->isNotEmpty()) {
+            $meta['description'] ??= $description->value();
+            $opengraph['description'] ??= $description->value();
+            $twitter['description'] ??= $description->value();
         }
 
         // OpenGraph and Twitter image with dimensions

@@ -2,6 +2,7 @@
 
 namespace JohannSchopplich\Helpers;
 
+use Closure;
 use Kirby\Cms\App;
 use Kirby\Http\Router;
 use Throwable;
@@ -23,7 +24,7 @@ class Redirects
                 'pattern' => $from,
                 'action'  => function (...$parameters) use ($to) {
                     // Resolve callback
-                    if (is_callable($to)) {
+                    if ($to instanceof Closure) {
                         $to = $to(...$parameters);
                     }
 
