@@ -128,6 +128,9 @@ The plugin provides smart defaults that work out of the box:
 - `title`: Page title or custom title
 - `description`: From description field
 - `image`: From thumbnail field (resized to 1200px)
+- `image:width` / `image:height`: Automatic dimensions from thumbnail
+- `locale`: Current language locale (multilingual sites)
+- `locale:alternate`: All other language locales (multilingual sites)
 
 ### Twitter Cards
 
@@ -169,20 +172,25 @@ The priority is read from the page's `priority` field, defaulting to `0.5`.
 
 ## API Reference
 
-| Method                                    | Returns  | Description                                    |
-| ----------------------------------------- | -------- | ---------------------------------------------- |
-| `robots()`                                | `string` | Canonical link + robots meta tag               |
-| `social()`                                | `string` | Meta, OpenGraph, and Twitter tags              |
-| `jsonld()`                                | `string` | JSON-LD structured data scripts                |
-| `opensearch()`                            | `string` | OpenSearch discovery link                      |
-| `priority()`                              | `float`  | Sitemap priority (0.0-1.0)                     |
-| `get(string $key, bool $fallback = true)` | `Field`  | Get any meta field with optional site fallback |
+| Method                                    | Returns   | Description                                      |
+| ----------------------------------------- | --------- | ------------------------------------------------ |
+| `title()`                                 | `string`  | SEO title (customTitle → page title)             |
+| `description()`                           | `?string` | Meta description or null                         |
+| `thumbnail()`                             | `?File`   | Thumbnail file for social sharing                |
+| `robots()`                                | `string`  | Canonical link + robots meta tag                 |
+| `social()`                                | `string`  | Meta, OpenGraph, and Twitter tags                |
+| `jsonld()`                                | `string`  | JSON-LD structured data scripts                  |
+| `opensearch()`                            | `string`  | OpenSearch discovery link                        |
+| `priority()`                              | `float`   | Sitemap priority (0.0-1.0)                       |
+| `get(string $key, bool $fallback = true)` | `Field`   | Get any meta field with optional site fallback   |
 
 ## Configuration Options
 
-| Option                                   | Default | Description                                  |
-| ---------------------------------------- | ------- | -------------------------------------------- |
-| `johannschopplich.helpers.meta.defaults` | `[]`    | Global meta tag defaults (array or function) |
+| Option                                          | Default | Description                                  |
+| ----------------------------------------------- | ------- | -------------------------------------------- |
+| `johannschopplich.helpers.meta.defaults`        | `[]`    | Global meta tag defaults (array or function) |
+| `johannschopplich.helpers.meta.twitter.site`    | `null`  | Twitter @username for the site               |
+| `johannschopplich.helpers.meta.twitter.creator` | `null`  | Twitter @username for the content creator    |
 
 ## License
 

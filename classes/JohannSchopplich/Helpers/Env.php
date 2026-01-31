@@ -33,7 +33,7 @@ class Env
         )->load();
     }
 
-    public static function get(string $key, $default = null): mixed
+    public static function get(string $key, mixed $default = null): mixed
     {
         $value = static::getRepository()->get($key);
 

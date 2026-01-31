@@ -43,7 +43,7 @@ class SiteMeta
                 }
 
                 foreach ($kirby->site()->index() as $item) {
-                    if (in_array($item->intendedTemplate()->name(), $excludeTemplates)) {
+                    if (in_array($item->intendedTemplate()->name(), $excludeTemplates, true)) {
                         continue;
                     }
 
@@ -65,7 +65,7 @@ class SiteMeta
 
                     $changefreq = $meta->changefreq();
                     if ($changefreq->isNotEmpty()) {
-                        $sitemap[] = '  <changefreq>' . $changefreq . '</changefreq>';
+                        $sitemap[] = '  <changefreq>' . Xml::encode($changefreq->value()) . '</changefreq>';
                     }
 
                     if ($kirby->multilang()) {

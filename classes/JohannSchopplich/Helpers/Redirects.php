@@ -8,13 +8,13 @@ use Throwable;
 
 class Redirects
 {
-    public static function go(string|null $path, string $method = 'GET')
+    public static function go(string|null $path, string $method = 'GET'): mixed
     {
         $kirby = App::instance();
         $redirects = $kirby->option('johannschopplich.helpers.redirects', []);
 
         if (empty($redirects)) {
-            return;
+            return null;
         }
 
         // Turn into routes array

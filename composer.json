@@ -28,7 +28,8 @@
     "vlucas/phpdotenv": "^5"
   },
   "require-dev": {
-    "getkirby/cms": "^5"
+    "getkirby/cms": "^5",
+    "phpunit/phpunit": "^12"
   },
   "autoload": {
     "files": [
@@ -40,6 +41,7 @@
   },
   "scripts": {
     "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
+    "test": "phpunit",
     "dist": "composer install --no-dev --optimize-autoloader"
   },
   "config": {

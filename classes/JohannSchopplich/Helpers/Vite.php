@@ -11,8 +11,8 @@ use Kirby\Toolkit\A;
 class Vite
 {
     protected static Vite|null $instance = null;
-    protected App $kirby;
-    protected bool $isDev;
+    protected readonly App $kirby;
+    protected readonly bool $isDev;
     protected bool $hasInjectedClient = false;
 
     public const MANIFEST_FILE_NAME = 'manifest.json';
@@ -32,7 +32,7 @@ class Vite
             $this->kirby->option('johannschopplich.helpers.vite.build.outDir', 'dist'),
             '.vite',
             self::MANIFEST_FILE_NAME
-        ], 'strlen'));
+        ], strlen(...)));
 
         try {
             $this->manifest = Data::read($path);
@@ -66,7 +66,7 @@ class Vite
             $this->kirby->url(),
             $this->kirby->option('johannschopplich.helpers.vite.build.outDir', 'dist'),
             $path
-        ], 'strlen'));
+        ], strlen(...)));
     }
 
     /**

@@ -66,7 +66,7 @@ return [
 
 ## Requirements
 
-- Kirby 4+
+- Kirby 5+
 - PHP 8.1+
 
 ## Support

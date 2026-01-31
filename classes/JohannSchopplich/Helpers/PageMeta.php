@@ -2,6 +2,7 @@
 
 namespace JohannSchopplich\Helpers;
 
+use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Cms\Url;
 use Kirby\Content\Field;
@@ -16,7 +17,7 @@ class PageMeta
     ) {
         $kirby = $page->kirby();
         $defaults = $kirby->option('johannschopplich.helpers.meta.defaults', []);
-        $this->metadata = match(true) {
+        $this->metadata = match (true) {
             is_callable($defaults) => $defaults($kirby, $kirby->site(), $this->page),
             is_array($defaults) => $defaults,
             default => []
@@ -27,7 +28,7 @@ class PageMeta
         }
     }
 
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments): mixed
     {
         return $this->get(strtolower($name));
     }
@@ -69,30 +70,55 @@ class PageMeta
         return new Field($this->page, $key, null);
     }
 
+    public function title(): string
+    {
+        $title = $this->get('title', false);
+
+        if ($title->isNotEmpty()) {
+            return $title->value();
+        }
+
+        $customTitle = $this->page->content()->get('customTitle');
+        if ($customTitle->isNotEmpty()) {
+            return $customTitle->value();
+        }
+
+        return $this->page->title()->value();
+    }
+
+    public function description(): ?string
+    {
+        $description = $this->get('description');
+        return $description->isNotEmpty() ? $description->value() : null;
+    }
+
+    public function thumbnail(): ?File
+    {
+        return $this->get('thumbnail')->toFile();
+    }
+
     public function jsonld(): string
     {
         $html = [];
-        $jsonld = $this->get('jsonld', false);
+        $jsonldValue = $this->get('jsonld', false)->value();
+        $jsonld = is_array($jsonldValue) ? $jsonldValue : [];
 
-        if ($jsonld->isNotEmpty()) {
-            foreach ($jsonld->value() as $type => $schema) {
-                $schema = array_reverse($schema, true);
-
-                if (!isset($schema['@type'])) {
-                    $schema['@type'] = ucfirst($type);
-                }
-
-                if (!isset($schema['@context'])) {
-                    $schema['@context'] = 'http://schema.org';
-                }
-
-                $schema = array_reverse($schema, true);
-                $html[] = '<script type="application/ld+json">';
-                $html[] = $this->kirby()->option('debug', false)
-                    ? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-                    : json_encode($schema, JSON_UNESCAPED_SLASHES);
-                $html[] = '</script>';
+        foreach ($jsonld as $type => $schema) {
+            if (!is_array($schema)) {
+                continue;
             }
+
+            $schema = [
+                '@context' => $schema['@context'] ?? 'https://schema.org',
+                '@type' => $schema['@type'] ?? ucfirst($type),
+                ...array_filter($schema, fn ($key) => !str_starts_with($key, '@'), ARRAY_FILTER_USE_KEY)
+            ];
+
+            $html[] = '<script type="application/ld+json">';
+            $html[] = $this->page->kirby()->option('debug', false)
+                ? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+                : json_encode($schema, JSON_UNESCAPED_SLASHES);
+            $html[] = '</script>';
         }
 
         return implode(PHP_EOL, $html) . PHP_EOL;
@@ -122,32 +148,56 @@ class PageMeta
     public function social(): string
     {
         $html = [];
-        $meta = $this->get('meta', false)->value() ?? [];
-        $opengraph = $this->get('opengraph', false)->value() ?? [];
-        $twitter = $this->get('twitter', false)->value() ?? [];
+        $metaValue = $this->get('meta', false)->value();
+        $ogValue = $this->get('opengraph', false)->value();
+        $twitterValue = $this->get('twitter', false)->value();
 
-        // Basic OpenGraph and Twitter tags
+        $meta = is_array($metaValue) ? $metaValue : [];
+        $opengraph = is_array($ogValue) ? $ogValue : [];
+        $twitter = is_array($twitterValue) ? $twitterValue : [];
+
+        $kirby = $this->page->kirby();
+        $title = $this->title();
+        $description = $this->description();
+        $thumbnail = $this->thumbnail();
+
+        // Basic OpenGraph tags
         $opengraph['site_name'] ??= $this->page->site()->title()->value();
         $opengraph['url'] ??= $this->page->url();
         $opengraph['type'] ??= 'website';
-        $opengraph['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
+        $opengraph['title'] ??= $title;
 
-        $twitter['url'] ??= $this->page->url();
+        // Basic Twitter tags
         $twitter['card'] ??= 'summary_large_image';
-        $twitter['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
+        $twitter['title'] ??= $title;
 
-        // Meta, OpenGraph and Twitter description
-        $description = $this->get('description');
-        if ($description->isNotEmpty()) {
-            $meta['description'] ??= $description->value();
-            $opengraph['description'] ??= $description->value();
-            $twitter['description'] ??= $description->value();
+        // Twitter site/creator from config
+        $twitterSite = $kirby->option('johannschopplich.helpers.meta.twitter.site');
+        $twitterCreator = $kirby->option('johannschopplich.helpers.meta.twitter.creator');
+        if ($twitterSite) {
+            $twitter['site'] ??= $twitterSite;
+        }
+        if ($twitterCreator) {
+            $twitter['creator'] ??= $twitterCreator;
         }
 
-        // OpenGraph and Twitter image
-        if ($thumbnail = $this->get('thumbnail')->toFile()) {
-            $opengraph['image'] ??= $thumbnail->resize(1200)->url();
-            $twitter['image'] ??= $thumbnail->resize(1200)->url();
+        // Meta, OpenGraph and Twitter description
+        if ($description) {
+            $meta['description'] ??= $description;
+            $opengraph['description'] ??= $description;
+            $twitter['description'] ??= $description;
+        }
+
+        // OpenGraph and Twitter image with dimensions
+        if ($thumbnail) {
+            $resized = $thumbnail->resize(1200);
+            $imageUrl = $resized->url();
+
+            $opengraph['image'] ??= $imageUrl;
+            $opengraph['image:width'] ??= $resized->width();
+            $opengraph['image:height'] ??= $resized->height();
+
+            $twitter['image'] ??= $imageUrl;
 
             if ($thumbnail->alt()->isNotEmpty()) {
                 $opengraph['image:alt'] ??= $thumbnail->alt()->value();
@@ -157,8 +207,29 @@ class PageMeta
             $twitter['card'] = 'summary';
         }
 
+        // OpenGraph locale for multilang
+        if ($kirby->multilang()) {
+            if ($locale = $kirby->language()?->locale(LC_ALL) ?? $kirby->language()?->code()) {
+                $opengraph['locale'] ??= str_replace('-', '_', $locale);
+            }
+
+            $alternateLocales = [];
+            foreach ($kirby->languages() as $lang) {
+                if ($lang->code() !== $kirby->languageCode()) {
+                    $alternateLocales[] = str_replace('-', '_', $lang->locale(LC_ALL) ?? $lang->code());
+                }
+            }
+            if ($alternateLocales) {
+                $opengraph['locale:alternate'] ??= $alternateLocales;
+            }
+        }
+
         // Generate meta tags
         foreach ($meta as $name => $content) {
+            if ($content === null) {
+                continue;
+            }
+
             $html[] = Html::tag('meta', null, [
                 'name' => $name,
                 'content' => $content,
@@ -167,15 +238,26 @@ class PageMeta
 
         // Generate OpenGraph tags
         foreach ($opengraph as $prop => $content) {
+            if ($content === null) {
+                continue;
+            }
+
             if (is_array($content)) {
+                // Handle namespace prefix (e.g., "namespace:article" → "article:")
                 if (str_starts_with($prop, 'namespace:')) {
-                    $prop = substr($prop, 10);
+                    $prefix = substr($prop, 10);
+                } else {
+                    $prefix = "og:{$prop}";
                 }
 
-                foreach ($content as $typeProp => $typeContent) {
+                foreach ($content as $subProp => $subContent) {
+                    if ($subContent === null) {
+                        continue;
+                    }
+
                     $html[] = Html::tag('meta', null, [
-                        'property' => "{$prop}:{$typeProp}",
-                        'content'  => $typeContent,
+                        'property' => "{$prefix}:{$subProp}",
+                        'content'  => $subContent,
                     ]);
                 }
             } else {
@@ -188,6 +270,10 @@ class PageMeta
 
         // Generate Twitter tags
         foreach ($twitter as $name => $content) {
+            if ($content === null) {
+                continue;
+            }
+
             $html[] = Html::tag('meta', null, [
                 'name' => "twitter:{$name}",
                 'content' => $content,
