@@ -86,13 +86,13 @@ class PageMeta
         return $this->page->title()->value();
     }
 
-    public function description(): ?string
+    public function description(): string|null
     {
         $description = $this->get('description');
         return $description->isNotEmpty() ? $description->value() : null;
     }
 
-    public function thumbnail(): ?File
+    public function thumbnail(): File|null
     {
         return $this->get('thumbnail')->toFile();
     }

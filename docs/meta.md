@@ -175,8 +175,8 @@ The priority is read from the page's `priority` field, defaulting to `0.5`.
 | Method                                    | Returns   | Description                                      |
 | ----------------------------------------- | --------- | ------------------------------------------------ |
 | `title()`                                 | `string`  | SEO title (customTitle → page title)             |
-| `description()`                           | `?string` | Meta description or null                         |
-| `thumbnail()`                             | `?File`   | Thumbnail file for social sharing                |
+| `description()`                           | `string\|null` | Meta description or null                         |
+| `thumbnail()`                             | `File\|null`   | Thumbnail file for social sharing                |
 | `robots()`                                | `string`  | Canonical link + robots meta tag                 |
 | `social()`                                | `string`  | Meta, OpenGraph, and Twitter tags                |
 | `jsonld()`                                | `string`  | JSON-LD structured data scripts                  |
