@@ -7,10 +7,11 @@ use JohannSchopplich\Helpers\PageMeta;
 use JohannSchopplich\Helpers\Redirects;
 use JohannSchopplich\Helpers\SiteMeta;
 use Kirby\Cms\App;
+use Kirby\Http\Route;
 
 App::plugin('johannschopplich/helpers', [
     'hooks' => [
-        'route:after' => function (\Kirby\Http\Route $route, string $path, string $method, mixed $result, bool $final) {
+        'route:after' => function (string $path, string $method, mixed $result, bool $final) {
             if ($final && empty($result)) {
                 Redirects::go($path, $method);
             }
@@ -20,30 +21,26 @@ App::plugin('johannschopplich/helpers', [
         [
             'pattern' => 'robots.txt',
             'action' => function () {
-                $kirby = App::instance();
-
-                if ($kirby->option('johannschopplich.helpers.robots.enabled', false)) {
+                if (option('johannschopplich.helpers.robots.enabled', false)) {
                     return SiteMeta::robots();
                 }
 
-                $this->next();
+                Route::next();
             }
         ],
         [
             'pattern' => 'sitemap.xml',
             'action' => function () {
-                $kirby = App::instance();
-
-                if ($kirby->option('johannschopplich.helpers.sitemap.enabled', false)) {
+                if (option('johannschopplich.helpers.sitemap.enabled', false)) {
                     return SiteMeta::sitemap();
                 }
 
-                $this->next();
+                Route::next();
             }
         ]
     ],
     'siteMethods' => [
-        'env' => function (string $key, $default = null) {
+        'env' => function (string $key, mixed $default = null) {
             if (!Env::isLoaded()) {
                 $kirby = App::instance();
                 $path = $kirby->option('johannschopplich.helpers.env.path', $kirby->root('base'));

@@ -24,6 +24,7 @@
     }
   ],
   "require": {
+    "php": ">=8.3",
     "getkirby/composer-installer": "^1",
     "vlucas/phpdotenv": "^5"
   },
