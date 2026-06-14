@@ -111,9 +111,6 @@ final class Vite
             $this->hasInjectedClient = true;
         }
 
-        // `file()` resolves the dev URL or the manifest entry; it returns
-        // `null` in production when the entry is missing, so skip the tag
-        // instead of passing `null` to `prodUrl()` and crashing the render.
         $url = $this->file($entry);
         if ($url !== null) {
             $tags[] = Html::js($url, ['type' => 'module']);
