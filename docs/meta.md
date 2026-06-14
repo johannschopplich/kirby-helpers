@@ -130,10 +130,10 @@ An array value expands into `og:<property>:<key>` tags. A `namespace:` prefix dr
 ```
 
 ```html
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="article:published_time" content="…">
-<meta property="article:author" content="Johann Schopplich">
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="article:published_time" content="…" />
+<meta property="article:author" content="Johann Schopplich" />
 ```
 
 ## Default Values
@@ -194,14 +194,14 @@ The priority is read from the page's `priority` field, defaulting to `0.5`.
 
 ## API Reference
 
-| Method                                    | Returns | Description                                     |
-| ----------------------------------------- | ------- | ---------------------------------------------- |
-| `robots()`                                | `string` | Canonical link + robots meta tag              |
-| `social()`                                | `string` | Meta, OpenGraph, and Twitter tags             |
-| `jsonld()`                                | `string` | JSON-LD structured data scripts               |
-| `opensearch()`                            | `string` | OpenSearch discovery link                     |
-| `priority()`                              | `float`  | Sitemap priority (0.0–1.0)                    |
-| `get(string $key, bool $fallback = true)` | `Field`  | Any meta field, with optional site fallback   |
+| Method                                    | Returns  | Description                                 |
+| ----------------------------------------- | -------- | ------------------------------------------- |
+| `robots()`                                | `string` | Canonical link + robots meta tag            |
+| `social()`                                | `string` | Meta, OpenGraph, and Twitter tags           |
+| `jsonld()`                                | `string` | JSON-LD structured data scripts             |
+| `opensearch()`                            | `string` | OpenSearch discovery link                   |
+| `priority()`                              | `float`  | Sitemap priority (0.0–1.0)                  |
+| `get(string $key, bool $fallback = true)` | `Field`  | Any meta field, with optional site fallback |
 
 Any other method call is proxied to `get()` and returns a `Field`, so `$meta->description()` resolves the `description` field (with site fallback) and `$meta->thumbnail()->toFile()` resolves the thumbnail.
 
