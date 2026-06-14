@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 use JohannSchopplich\Helpers\SiteMeta;
 use Kirby\Cms\App;
+use Kirby\Cms\Page;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -165,5 +166,34 @@ final class SiteMetaTest extends TestCase
         $this->assertStringContainsString('hreflang="en-us"', $body);
         $this->assertStringContainsString('hreflang="de-de"', $body);
         $this->assertStringContainsString('hreflang="x-default"', $body);
+    }
+
+    #[Test]
+    public function omits_lastmod_when_the_modification_date_is_null(): void
+    {
+        $this->createApp([
+            'pageModels' => ['no-mod' => PageWithoutModified::class],
+            'site' => [
+                'children' => [
+                    ['slug' => 'no-mod', 'template' => 'no-mod', 'content' => ['title' => 'No Mod']],
+                ],
+            ],
+        ]);
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('<loc>https://example.com/no-mod</loc>', $body);
+        $this->assertStringNotContainsString('<lastmod>', $body);
+    }
+}
+
+class PageWithoutModified extends Page
+{
+    // Force a null modification date so the sitemap must omit `<lastmod>` entirely
+    public function modified(
+        string|null $format = null,
+        string|null $handler = null,
+        string|null $languageCode = null
+    ): int|string|false|null {
+        return null;
     }
 }
