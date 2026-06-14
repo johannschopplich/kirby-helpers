@@ -1,10 +1,6 @@
 # Vite Integration
 
-Seamlessly integrate Vite with your Kirby project for modern frontend tooling. Automatically switches between development server (with Hot Module Replacement) and production assets, making the transition from development to production effortless.
-
-## Why Use Vite?
-
-Vite provides lightning-fast development with Hot Module Replacement, modern build optimizations, and excellent developer experience. This integration handles the complexity of switching between development and production modes automatically.
+Integrate Vite with Kirby. The plugin detects whether `manifest.json` exists and serves either the dev server (with HMR) or the built assets.
 
 ## Setup
 
@@ -173,8 +169,6 @@ The `css()` method returns `null` in development (Vite handles it), so you can s
 1. **Start Development**: `npm run dev` - Vite server starts, assets load from localhost
 2. **Build for Production**: `npm run build` - Generates optimized assets and manifest
 3. **Deploy**: Upload built assets, Kirby automatically uses production files
-
-The plugin automatically detects which mode you're in based on the presence of the manifest file, so no manual switching is required.
 
 ## License
 

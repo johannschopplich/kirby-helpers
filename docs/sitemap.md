@@ -1,10 +1,6 @@
 # XML Sitemaps
 
-Auto-generate XML sitemaps that help search engines discover and index your website pages. Features full multilingual support with automatic hreflang attributes and flexible page filtering options.
-
-## Why Use XML Sitemaps?
-
-XML sitemaps help search engines understand your site structure and find all your important pages. They're especially valuable for large sites, new sites, or sites with complex navigation structures.
+Auto-generate XML sitemaps with multilingual `hreflang` attributes and flexible page filtering.
 
 ## Setup
 

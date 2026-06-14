@@ -1,10 +1,6 @@
 # Environment Variables
 
-Securely manage environment-specific configuration through `.env` files. Load environment variables automatically and access them with a global `env()` helper function, perfect for storing API keys, database credentials, and other sensitive data outside your codebase.
-
-## Why Use Environment Variables?
-
-Environment variables keep sensitive configuration separate from your code, making it safer to commit your project to version control. They also make it easy to have different settings for development, staging, and production environments.
+Load `.env` files and read their values through a global `env()` helper, with type coercion and fallbacks.
 
 ## Setup
 
@@ -34,6 +30,8 @@ $debugMode = env('KIRBY_DEBUG', false); // with fallback
 // Site method
 $mailFrom = $site->env('MAIL_FROM', 'default@example.com');
 ```
+
+> **Note**: The global `env()` helper only reads variables that are already loaded – it does not read the `.env` file itself. The `$site->env()` method loads the file on its first call. In `config.php`, load it manually with `Env::load()` (see below) before relying on the global `env()`.
 
 ### In Configuration Files
 

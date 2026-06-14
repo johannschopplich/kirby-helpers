@@ -1,10 +1,6 @@
 # URL Redirects
 
-Create flexible redirect rules that automatically handle URL changes, site restructures, and legacy URL support. Redirects only activate when no actual page or route matches the requested URL, ensuring they never interfere with existing content.
-
-## Why Use Redirects?
-
-Redirects maintain SEO value when restructuring your site, provide backward compatibility for old URLs, and help visitors find the content they're looking for even when URLs change.
+Define redirect rules that only fire when no page or route matches the requested URL, so they never interfere with existing content. Supports route patterns, placeholders, and callback targets.
 
 ## Setup
 

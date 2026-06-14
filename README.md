@@ -1,16 +1,12 @@
 # Kirby Helpers
 
-A comprehensive toolkit that extends Kirby CMS with essential development utilities. This plugin consolidates commonly needed functionality into a single, well-integrated package, eliminating the need for multiple separate plugins.
-
-## Why Kirby Helpers?
-
-Building modern Kirby websites often requires the same set of tools: environment variable management, SEO meta tags, XML sitemaps, URL redirects, and modern build tool integration. Instead of installing and configuring multiple plugins, Kirby Helpers provides these essential features in one cohesive package, designed to work seamlessly together.
+Environment variables, SEO meta tags, XML sitemaps, URL redirects, and Vite integration for Kirby – the utilities most projects re-implement, in one plugin.
 
 ## Features
 
 ### ⚡️ Environment Variables
 
-Load `.env` files automatically and access variables through a global `env()` helper function. Perfect for managing API keys, database credentials, and environment-specific settings securely.
+Load `.env` files and read variables through a global `env()` helper, with type coercion and fallbacks.
 
 ```php
 // .env file support with fallbacks
@@ -21,7 +17,7 @@ $apiKey = env('STRIPE_SECRET_KEY', 'fallback-key');
 
 ### 🗂 SEO Meta Tags
 
-Generate comprehensive meta tags for search engines and social media automatically. Supports OpenGraph, Twitter Cards, JSON-LD structured data, and canonical URLs with smart defaults and easy customization.
+Generate meta description, OpenGraph, Twitter Card, JSON-LD, and canonical tags from page fields, page models, and global defaults.
 
 ```php
 // Complete meta tag generation
@@ -33,7 +29,7 @@ Generate comprehensive meta tags for search engines and social media automatical
 
 ### 🧭 XML Sitemaps
 
-Auto-generate XML sitemaps with full multilingual support. Automatically excludes unwanted pages and templates while providing fine-grained control over what gets included.
+Auto-generate XML sitemaps with multilingual `hreflang`, template and page exclusion, and per-page control via blueprints.
 
 ```php
 // Automatically available at /sitemap.xml
@@ -44,7 +40,7 @@ Auto-generate XML sitemaps with full multilingual support. Automatically exclude
 
 ### 🔀 Smart Redirects
 
-Create flexible redirect rules that only activate when no existing page matches the URL. Supports pattern matching, placeholders, and custom logic through callbacks.
+Pattern-based redirect rules that only fire when no existing page or route matches the URL, with placeholders and callback targets.
 
 ```php
 // Pattern-based redirects with placeholders
@@ -55,7 +51,7 @@ Create flexible redirect rules that only activate when no existing page matches 
 
 ### ⚡️ Vite Integration
 
-Seamless Vite integration for modern frontend tooling. Automatically switches between development server and production assets, with support for Hot Module Replacement during development.
+Switch between the Vite dev server (with HMR) and built `manifest.json` assets automatically, including Panel asset integration.
 
 ```php
 // Load Vite assets with automatic dev/production switching
@@ -67,8 +63,8 @@ Seamless Vite integration for modern frontend tooling. Automatically switches be
 
 ## Requirements
 
-- Kirby 4+
-- PHP 8.1+
+- Kirby 5
+- PHP 8.3+
 
 ## Installation
 
@@ -84,25 +80,11 @@ Download and copy this repository to `/site/plugins/kirby-helpers`.
 
 ## Quick Start
 
-1. **Environment Variables**: Create a `.env` file in your project root and start using `env('VARIABLE_NAME')`
-
+1. **Environment Variables**: Create a `.env` file in your project root and use `env('VARIABLE_NAME')`
 2. **Meta Tags**: Add `<?= $page->meta()->social() ?>` to your header snippet
-
-3. **Sitemap**: Enable in your config with `'johannschopplich.helpers.sitemap.enabled' => true`
-
-4. **Redirects**: Define redirect rules in your config under `'johannschopplich.helpers.redirects'`
-
-5. **Vite**: Configure your Vite setup and use `vite()->js()` and `vite()->css()` helpers
-
-## Documentation
-
-Detailed documentation for each feature is available in the [`docs`](./docs) directory:
-
-- [Environment Variables](./docs/env.md)
-- [Meta Tags](./docs/meta.md)
-- [XML Sitemaps](./docs/sitemap.md)
-- [Redirects](./docs/redirects.md)
-- [Vite Integration](./docs/vite.md)
+3. **Sitemap**: Enable it with `'johannschopplich.helpers.sitemap.enabled' => true`
+4. **Redirects**: Define rules under `'johannschopplich.helpers.redirects'`
+5. **Vite**: Use `vite()->js()` and `vite()->css()` in your templates
 
 ## License
 

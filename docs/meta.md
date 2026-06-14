@@ -1,10 +1,6 @@
 # SEO Meta Tags
 
-Generate comprehensive meta tags for search engines and social media automatically. Supports meta descriptions, OpenGraph, Twitter Cards, JSON-LD structured data, and canonical URLs with smart defaults and flexible customization.
-
-## Why Use Meta Tags?
-
-Proper meta tags improve your site's SEO ranking and control how your content appears when shared on social media. This plugin automates the generation of these tags while providing sensible defaults and easy customization options.
+Generate meta description, OpenGraph, Twitter Card, JSON-LD, and canonical tags from page fields, page models, and global defaults.
 
 ## Basic Usage
 
@@ -116,9 +112,33 @@ return [
 ];
 ```
 
+### Nested and Namespaced OpenGraph Tags
+
+An array value expands into `og:<property>:<key>` tags. A `namespace:` prefix drops the `og:` part entirely, which is the only way to emit `article:*`, `product:*`, and similar namespaced tags:
+
+```php
+'opengraph' => [
+    'image' => [
+        'width' => 1200,
+        'height' => 630
+    ],
+    'namespace:article' => [
+        'published_time' => $page->published()->toDate('c'),
+        'author' => 'Johann Schopplich'
+    ]
+]
+```
+
+```html
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="…">
+<meta property="article:author" content="Johann Schopplich">
+```
+
 ## Default Values
 
-The plugin provides smart defaults that work out of the box:
+The plugin provides sensible defaults that work out of the box:
 
 ### OpenGraph
 
@@ -129,16 +149,15 @@ The plugin provides smart defaults that work out of the box:
 - `description`: From description field
 - `image`: From thumbnail field (resized to 1200px)
 - `image:width` / `image:height`: Automatic dimensions from thumbnail
-- `locale`: Current language locale (multilingual sites)
-- `locale:alternate`: All other language locales (multilingual sites)
+- `image:alt`: Thumbnail alt text (if set)
 
 ### Twitter Cards
 
 - `card`: "summary_large_image" (or "summary" if no image)
-- `url`: Current page URL
 - `title`: Page title or custom title
 - `description`: From description field
 - `image`: From thumbnail field
+- `image:alt`: Thumbnail alt text (if set)
 
 ## Configuration Priority
 
@@ -172,17 +191,16 @@ The priority is read from the page's `priority` field, defaulting to `0.5`.
 
 ## API Reference
 
-| Method                                    | Returns   | Description                                      |
-| ----------------------------------------- | --------- | ------------------------------------------------ |
-| `title()`                                 | `string`  | SEO title (customTitle → page title)             |
-| `description()`                           | `string\|null` | Meta description or null                         |
-| `thumbnail()`                             | `File\|null`   | Thumbnail file for social sharing                |
-| `robots()`                                | `string`  | Canonical link + robots meta tag                 |
-| `social()`                                | `string`  | Meta, OpenGraph, and Twitter tags                |
-| `jsonld()`                                | `string`  | JSON-LD structured data scripts                  |
-| `opensearch()`                            | `string`  | OpenSearch discovery link                        |
-| `priority()`                              | `float`   | Sitemap priority (0.0-1.0)                       |
-| `get(string $key, bool $fallback = true)` | `Field`   | Get any meta field with optional site fallback   |
+| Method                                    | Returns | Description                                     |
+| ----------------------------------------- | ------- | ---------------------------------------------- |
+| `robots()`                                | `string` | Canonical link + robots meta tag              |
+| `social()`                                | `string` | Meta, OpenGraph, and Twitter tags             |
+| `jsonld()`                                | `string` | JSON-LD structured data scripts               |
+| `opensearch()`                            | `string` | OpenSearch discovery link                     |
+| `priority()`                              | `float`  | Sitemap priority (0.0–1.0)                    |
+| `get(string $key, bool $fallback = true)` | `Field`  | Any meta field, with optional site fallback   |
+
+Any other method call is proxied to `get()` and returns a `Field`, so `$meta->description()` resolves the `description` field (with site fallback) and `$meta->thumbnail()->toFile()` resolves the thumbnail.
 
 ## Configuration Options
 
