@@ -161,11 +161,14 @@ The plugin provides sensible defaults that work out of the box:
 
 ## Configuration Priority
 
-Meta data is merged in this order (later overrides earlier):
+Each meta value is resolved in this order (later overrides earlier):
 
-1. Global defaults (config.php)
-2. Page content fields (blueprint fields)
-3. Page model metadata() method
+1. Site content field (fallback)
+2. Page content field (blueprint field)
+3. Global defaults (`config.php`)
+4. Page model `metadata()` method
+
+Global defaults and `metadata()` are merged into a single map (with `metadata()` winning) that is consulted _before_ any content field. So a key set in the global defaults shadows the page's own blueprint field unless `metadata()` overrides it.
 
 ## Additional Methods
 

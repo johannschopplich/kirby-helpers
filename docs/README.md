@@ -4,11 +4,11 @@ Complete documentation for all features included in the Kirby Helpers plugin. Ea
 
 ## Features Overview
 
-### ⚡️ [Environment Variables](./env.md)
+### 🔑 [Environment Variables](./env.md)
 
 Securely manage environment-specific configuration through `.env` files. Load variables automatically with a global `env()` helper function for API keys, database credentials, and sensitive settings.
 
-### 🗂 [SEO Meta Tags](./meta.md)
+### 🏷️ [SEO Meta Tags](./meta.md)
 
 Generate comprehensive meta tags for search engines and social media. Includes meta descriptions, OpenGraph, Twitter Cards, JSON-LD structured data, and canonical URLs with smart defaults.
 
@@ -66,8 +66,8 @@ return [
 
 ## Requirements
 
-- Kirby 5+
-- PHP 8.1+
+- Kirby 5
+- PHP 8.3+
 
 ## Support
 

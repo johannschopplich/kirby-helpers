@@ -14,7 +14,8 @@ DATABASE_URL=mysql://user:pass@localhost/mydb
 MAIL_FROM=noreply@example.com
 ```
 
-> **Important**: Add `.env` to your `.gitignore` file to prevent committing sensitive data to your repository.
+> [!IMPORTANT]
+> Add `.env` to your `.gitignore` file to prevent committing sensitive data to your repository.
 
 ## Usage
 
@@ -31,7 +32,8 @@ $debugMode = env('KIRBY_DEBUG', false); // with fallback
 $mailFrom = $site->env('MAIL_FROM', 'default@example.com');
 ```
 
-> **Note**: The global `env()` helper only reads variables that are already loaded – it does not read the `.env` file itself. The `$site->env()` method loads the file on its first call. In `config.php`, load it manually with `Env::load()` (see below) before relying on the global `env()`.
+> [!NOTE]
+> The global `env()` helper only reads variables that are already loaded – it does not read the `.env` file itself. The `$site->env()` method loads the file on its first call. In `config.php`, load it manually with `Env::load()` (see below) before relying on the global `env()`.
 
 ### In Configuration Files
 

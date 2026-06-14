@@ -83,7 +83,8 @@ The `css()` method outputs CSS files in production, including CSS from imported 
 <?= vite()->css('src/main.js') ?>
 ```
 
-> **Note**: In development mode, `css()` returns `null` since Vite handles CSS injection through JavaScript. In production, it outputs `<link>` tags for all CSS files, including those from imported modules.
+> [!NOTE]
+> In development mode, `css()` returns `null` since Vite handles CSS injection through JavaScript. In production, it outputs `<link>` tags for all CSS files, including those from imported modules.
 
 ### Asset Files
 
@@ -122,7 +123,7 @@ These methods return arrays of file paths (not HTML tags) as required by Kirby's
 
 ### Production Mode
 
-- Plugin reads `manifest.json` for asset mappings
+- Plugin reads the manifest from `<outDir>/.vite/manifest.json` (Vite's default location)
 - Assets served as static files with cache-friendly filenames
 - CSS files extracted and linked separately (including CSS from imported modules)
 - Optimal loading performance
