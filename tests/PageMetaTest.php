@@ -5,9 +5,15 @@ declare(strict_types = 1);
 use JohannSchopplich\Helpers\PageMeta;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Content\Field;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[RunTestsInSeparateProcesses]
+#[PreserveGlobalState(false)]
 final class PageMetaTest extends TestCase
 {
     protected function tearDown(): void
@@ -18,330 +24,235 @@ final class PageMetaTest extends TestCase
     private function createApp(array $options = []): App
     {
         return new App(array_merge([
-            'roots' => [
-                'index' => __DIR__
-            ],
+            'roots' => ['index' => __DIR__],
+            'urls' => ['index' => 'https://example.com'],
             'site' => [
-                'content' => [
-                    'title' => 'Test Site',
-                    'description' => 'Site description'
-                ],
+                'content' => ['title' => 'Test Site', 'description' => 'Site description'],
                 'children' => [
                     [
                         'slug' => 'test',
                         'content' => [
                             'title' => 'Test Page',
                             'description' => 'Page description',
-                            'customTitle' => 'Custom Title'
-                        ]
+                            'customTitle' => 'Custom Title',
+                        ],
                     ],
-                    [
-                        'slug' => 'empty',
-                        'content' => [
-                            'title' => 'Empty Page'
-                        ]
-                    ]
-                ]
-            ]
+                    ['slug' => 'empty', 'content' => ['title' => 'Empty Page']],
+                ],
+            ],
         ], $options));
     }
 
-    // --- Constructor ---
+    private function appWithMetaDefaults(array $defaults): App
+    {
+        return $this->createApp([
+            'options' => ['johannschopplich.helpers.meta.defaults' => $defaults],
+        ]);
+    }
+
+    private function metaForTestPage(array $defaults): PageMeta
+    {
+        return new PageMeta($this->appWithMetaDefaults($defaults)->page('test'));
+    }
 
     #[Test]
-    public function constructorMergesPageMetadataWithDefaults(): void
+    public function merges_page_metadata_over_defaults(): void
     {
         $kirby = $this->createApp([
             'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'author' => 'Default Author',
-                    'keywords' => 'default'
-                ]
+                'johannschopplich.helpers.meta.defaults' => ['author' => 'Default Author', 'keywords' => 'default'],
             ],
-            'pageModels' => [
-                'with-metadata' => PageWithMetadata::class
-            ],
+            'pageModels' => ['with-metadata' => PageWithMetadata::class],
             'site' => [
                 'children' => [
-                    [
-                        'slug' => 'with-metadata',
-                        'template' => 'with-metadata',
-                        'content' => ['title' => 'Page With Metadata']
-                    ]
-                ]
-            ]
+                    ['slug' => 'with-metadata', 'template' => 'with-metadata', 'content' => ['title' => 'Page With Metadata']],
+                ],
+            ],
         ]);
 
         $meta = new PageMeta($kirby->page('with-metadata'));
 
-        // Page metadata overrides defaults
-        $this->assertEquals('Page Author', $meta->get('author')->value());
-        // Defaults are preserved when not overridden
-        $this->assertEquals('default', $meta->get('keywords')->value());
-        // Page-specific metadata is included
-        $this->assertEquals('page-specific', $meta->get('custom')->value());
+        $this->assertSame('Page Author', $meta->get('author')->value());
+        $this->assertSame('default', $meta->get('keywords')->value());
+        $this->assertSame('page-specific', $meta->get('custom')->value());
     }
 
-    // --- get() method ---
-
     #[Test]
-    public function getReturnsMetadataFromConfig(): void
+    public function returns_metadata_from_the_config_defaults(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'author' => 'Johann'
-                ]
-            ]
-        ]);
+        $meta = $this->metaForTestPage(['author' => 'Johann']);
 
-        $meta = new PageMeta($kirby->page('test'));
-
-        $this->assertEquals('Johann', $meta->get('author')->value());
+        $this->assertSame('Johann', $meta->get('author')->value());
     }
 
     #[Test]
-    public function getExecutesCallableConfig(): void
+    public function executes_a_callable_default_config(): void
     {
         $kirby = $this->createApp([
             'options' => [
                 'johannschopplich.helpers.meta.defaults' => fn ($kirby, $site, $page) => [
-                    'computed' => fn ($p) => 'Computed: ' . $p->title()->value()
-                ]
-            ]
+                    'computed' => fn ($p) => 'Computed: ' . $p->title()->value(),
+                ],
+            ],
         ]);
 
-        $meta = new PageMeta($kirby->page('test'));
-
-        $this->assertEquals('Computed: Test Page', $meta->get('computed')->value());
+        $this->assertSame('Computed: Test Page', (new PageMeta($kirby->page('test')))->get('computed')->value());
     }
 
     #[Test]
-    public function getFallsBackToPageContent(): void
+    public function falls_back_to_page_content(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
+        $meta = new PageMeta($this->createApp()->page('test'));
 
-        $this->assertEquals('Page description', $meta->get('description')->value());
+        $this->assertSame('Page description', $meta->get('description')->value());
     }
 
     #[Test]
-    public function getFallsBackToSiteContent(): void
+    public function falls_back_to_site_content(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('empty'));
+        $meta = new PageMeta($this->createApp()->page('empty'));
 
-        $this->assertEquals('Site description', $meta->get('description')->value());
+        $this->assertSame('Site description', $meta->get('description')->value());
     }
 
     #[Test]
-    public function getReturnsEmptyFieldWhenNoMatch(): void
+    public function returns_an_empty_field_when_nothing_matches(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
+        $meta = new PageMeta($this->createApp()->page('test'));
 
         $this->assertTrue($meta->get('nonexistent')->isEmpty());
     }
 
     #[Test]
-    public function getSkipsSiteContentWhenFallbackDisabled(): void
+    public function skips_site_content_when_the_fallback_is_disabled(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('empty'));
+        $meta = new PageMeta($this->createApp()->page('empty'));
 
         $this->assertTrue($meta->get('description', false)->isEmpty());
     }
 
-    // --- Magic __call ---
-
     #[Test]
-    public function magicCallProxiesToGet(): void
+    public function magic_call_returns_a_field(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'author' => 'Johann'
-                ]
-            ]
-        ]);
+        $field = $this->metaForTestPage(['author' => 'Johann'])->author();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $field = $meta->author();
-
-        $this->assertInstanceOf(\Kirby\Content\Field::class, $field);
-        $this->assertEquals('Johann', $field->value());
+        $this->assertInstanceOf(Field::class, $field);
+        $this->assertSame('Johann', $field->value());
     }
 
-    // --- jsonld() method ---
+    #[Test]
+    public function magic_call_lowercases_the_name_and_ignores_arguments(): void
+    {
+        $meta = $this->metaForTestPage(['author' => 'Johann']);
+
+        $this->assertSame('Johann', $meta->Author('ignored-argument')->value());
+    }
 
     #[Test]
-    public function jsonldGeneratesScriptTag(): void
+    public function jsonld_renders_a_schema_org_article_by_default(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'jsonld' => [
-                        'article' => [
-                            'headline' => 'Test Article'
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->jsonld();
+        $html = $this->metaForTestPage(['jsonld' => ['article' => ['headline' => 'Test Article']]])->jsonld();
 
         $this->assertStringContainsString('<script type="application/ld+json">', $html);
         $this->assertStringContainsString('</script>', $html);
+        $this->assertStringContainsString('"@context":"https://schema.org"', $html);
+        $this->assertStringContainsString('"@type":"Article"', $html);
         $this->assertStringContainsString('"headline":"Test Article"', $html);
     }
 
-    #[Test]
-    public function jsonldUsesSchemaOrgContextByDefault(): void
+    /** @return array<string, array{0: array<string, mixed>, 1: string, 2: string}> */
+    public static function jsonldOverrides(): array
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'jsonld' => [
-                        'article' => ['headline' => 'Test']
-                    ]
-                ]
-            ]
-        ]);
-
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->jsonld();
-
-        $this->assertStringContainsString('"@context":"https://schema.org"', $html);
+        return [
+            'custom context' => [
+                ['product' => ['@context' => 'https://example.org/custom', 'name' => 'Test Product']],
+                '"@context":"https://example.org/custom"',
+                '"@context":"https://schema.org"',
+            ],
+            'custom type' => [
+                ['article' => ['@type' => 'BlogPosting', 'headline' => 'Test']],
+                '"@type":"BlogPosting"',
+                '"@type":"Article"',
+            ],
+        ];
     }
 
     #[Test]
-    public function jsonldInfersTypeFromKey(): void
+    #[DataProvider('jsonldOverrides')]
+    public function jsonld_respects_an_explicit_context_and_type(array $jsonld, string $expected, string $forbidden): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'jsonld' => [
-                        'article' => ['headline' => 'Test']
-                    ]
-                ]
-            ]
-        ]);
+        $html = $this->metaForTestPage(['jsonld' => $jsonld])->jsonld();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->jsonld();
-
-        $this->assertStringContainsString('"@type":"Article"', $html);
+        $this->assertStringContainsString($expected, $html);
+        $this->assertStringNotContainsString($forbidden, $html);
     }
 
     #[Test]
-    public function jsonldUsesCustomContext(): void
+    public function jsonld_preserves_a_top_level_id(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'jsonld' => [
-                        'product' => [
-                            '@context' => 'https://example.org/custom',
-                            'name' => 'Test Product'
-                        ]
-                    ]
-                ]
-            ]
-        ]);
+        $html = $this->metaForTestPage([
+            'jsonld' => ['person' => ['@id' => 'https://example.com/#person', 'name' => 'Johann']],
+        ])->jsonld();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->jsonld();
-
-        $this->assertStringContainsString('"@context":"https://example.org/custom"', $html);
-        $this->assertStringNotContainsString('"@context":"https://schema.org"', $html);
+        $this->assertStringContainsString('"@id":"https://example.com/#person"', $html);
+        // `@context` and `@type` stay pinned to the front, ahead of `@id`
+        $this->assertStringContainsString(
+            '{"@context":"https://schema.org","@type":"Person","@id":"https://example.com/#person"',
+            $html
+        );
     }
 
     #[Test]
-    public function jsonldUsesCustomType(): void
+    public function jsonld_renders_one_script_per_schema_entry(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'jsonld' => [
-                        'article' => [
-                            '@type' => 'BlogPosting',
-                            'headline' => 'Test Blog Post'
-                        ]
-                    ]
-                ]
-            ]
-        ]);
+        $html = $this->metaForTestPage([
+            'jsonld' => [
+                'article' => ['headline' => 'A'],
+                'person' => ['name' => 'B'],
+            ],
+        ])->jsonld();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->jsonld();
-
-        $this->assertStringContainsString('"@type":"BlogPosting"', $html);
-        $this->assertStringNotContainsString('"@type":"Article"', $html);
+        $this->assertSame(2, substr_count($html, '<script type="application/ld+json">'));
     }
 
-    // --- robots() method ---
+    #[Test]
+    public function jsonld_skips_non_array_entries(): void
+    {
+        $html = $this->metaForTestPage(['jsonld' => ['note' => 'just a string']])->jsonld();
+
+        $this->assertStringNotContainsString('<script', $html);
+    }
 
     #[Test]
-    public function robotsGeneratesMetaTag(): void
+    public function robots_renders_a_robots_meta_tag(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'robots' => 'noindex, nofollow'
-                ]
-            ]
-        ]);
+        $html = $this->metaForTestPage(['robots' => 'noindex, nofollow'])->robots();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->robots();
-
-        $this->assertStringContainsString('<meta', $html);
         $this->assertStringContainsString('name="robots"', $html);
         $this->assertStringContainsString('content="noindex, nofollow"', $html);
     }
 
     #[Test]
-    public function robotsGeneratesCanonicalLink(): void
+    public function robots_renders_a_canonical_link(): void
     {
-        $kirby = $this->createApp([
-            'urls' => ['index' => 'https://example.com']
-        ]);
+        $html = (new PageMeta($this->createApp()->page('test')))->robots();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->robots();
-
-        $this->assertStringContainsString('<link', $html);
         $this->assertStringContainsString('rel="canonical"', $html);
-        $this->assertStringContainsString('https://example.com/test', $html);
+        $this->assertStringContainsString('href="https://example.com/test"', $html);
     }
 
     #[Test]
-    public function robotsUsesCustomCanonical(): void
+    public function robots_uses_a_custom_canonical(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'canonical' => 'https://example.com/custom'
-                ]
-            ]
-        ]);
-
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->robots();
+        $html = $this->metaForTestPage(['canonical' => 'https://example.com/custom'])->robots();
 
         $this->assertStringContainsString('href="https://example.com/custom"', $html);
     }
 
-    // --- social() method ---
-
     #[Test]
-    public function socialGeneratesOpenGraphTags(): void
+    public function social_renders_open_graph_tags(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->social();
+        $html = (new PageMeta($this->createApp()->page('test')))->social();
 
         $this->assertStringContainsString('property="og:title"', $html);
         $this->assertStringContainsString('property="og:type"', $html);
@@ -350,22 +261,18 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
-    public function socialGeneratesTwitterTags(): void
+    public function social_renders_twitter_tags(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->social();
+        $html = (new PageMeta($this->createApp()->page('test')))->social();
 
         $this->assertStringContainsString('name="twitter:card"', $html);
         $this->assertStringContainsString('name="twitter:title"', $html);
     }
 
     #[Test]
-    public function socialIncludesDescription(): void
+    public function social_includes_the_description(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->social();
+        $html = (new PageMeta($this->createApp()->page('test')))->social();
 
         $this->assertStringContainsString('name="description"', $html);
         $this->assertStringContainsString('property="og:description"', $html);
@@ -373,130 +280,69 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
-    public function socialUsesTwitterConfigOptions(): void
+    public function social_uses_the_twitter_config(): void
     {
-        $kirby = $this->createApp([
+        $html = (new PageMeta($this->createApp([
             'options' => [
                 'johannschopplich.helpers.meta.twitter.site' => '@testsite',
-                'johannschopplich.helpers.meta.twitter.creator' => '@testcreator'
-            ]
-        ]);
+                'johannschopplich.helpers.meta.twitter.creator' => '@testcreator',
+            ],
+        ])->page('test')))->social();
 
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->social();
-
-        $this->assertStringContainsString('name="twitter:site"', $html);
         $this->assertStringContainsString('content="@testsite"', $html);
-        $this->assertStringContainsString('name="twitter:creator"', $html);
         $this->assertStringContainsString('content="@testcreator"', $html);
     }
 
     #[Test]
-    public function socialFallsBackToSummaryCardWithoutImage(): void
+    public function falls_back_to_a_summary_card_without_an_image(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->social();
+        $html = (new PageMeta($this->createApp()->page('test')))->social();
 
         $this->assertStringContainsString('content="summary"', $html);
         $this->assertStringNotContainsString('content="summary_large_image"', $html);
     }
 
     #[Test]
-    public function socialHandlesNestedOpenGraphProperties(): void
+    public function handles_nested_open_graph_properties(): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'opengraph' => [
-                        'namespace:article' => [
-                            'published_time' => '2024-01-01',
-                            'author' => 'Johann'
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->social();
+        $html = $this->metaForTestPage([
+            'opengraph' => [
+                'namespace:article' => ['published_time' => '2024-01-01', 'author' => 'Johann'],
+            ],
+        ])->social();
 
         $this->assertStringContainsString('property="article:published_time"', $html);
         $this->assertStringContainsString('property="article:author"', $html);
     }
 
-    // --- opensearch() method ---
-
     #[Test]
-    public function opensearchGeneratesLinkTag(): void
+    public function opensearch_renders_a_link_tag(): void
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
-        $html = $meta->opensearch();
+        $html = (new PageMeta($this->createApp()->page('test')))->opensearch();
 
-        $this->assertStringContainsString('<link', $html);
         $this->assertStringContainsString('rel="search"', $html);
         $this->assertStringContainsString('type="application/opensearchdescription+xml"', $html);
         $this->assertStringContainsString('open-search.xml', $html);
     }
 
-    // --- priority() method ---
-
-    #[Test]
-    public function priorityReturnsDefaultValue(): void
+    /** @return array<string, array{0: float|null, 1: float}> */
+    public static function priorities(): array
     {
-        $kirby = $this->createApp();
-        $meta = new PageMeta($kirby->page('test'));
-
-        $this->assertEquals(0.5, $meta->priority());
+        return [
+            'default' => [null, 0.5],
+            'configured' => [0.8, 0.8],
+            'clamped above one' => [1.5, 1.0],
+            'clamped below zero' => [-0.5, 0.0],
+        ];
     }
 
     #[Test]
-    public function priorityReturnsConfiguredValue(): void
+    #[DataProvider('priorities')]
+    public function clamps_priority_to_the_unit_range(float|null $configured, float $expected): void
     {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'priority' => 0.8
-                ]
-            ]
-        ]);
+        $defaults = $configured === null ? [] : ['priority' => $configured];
 
-        $meta = new PageMeta($kirby->page('test'));
-
-        $this->assertEquals(0.8, $meta->priority());
-    }
-
-    #[Test]
-    public function priorityClampsValueAboveOne(): void
-    {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'priority' => 1.5
-                ]
-            ]
-        ]);
-
-        $meta = new PageMeta($kirby->page('test'));
-
-        $this->assertEquals(1.0, $meta->priority());
-    }
-
-    #[Test]
-    public function priorityClampsNegativeValueToZero(): void
-    {
-        $kirby = $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.meta.defaults' => [
-                    'priority' => -0.5
-                ]
-            ]
-        ]);
-
-        $meta = new PageMeta($kirby->page('test'));
-
-        $this->assertEquals(0.0, $meta->priority());
+        $this->assertSame($expected, $this->metaForTestPage($defaults)->priority());
     }
 }
 
@@ -506,7 +352,7 @@ class PageWithMetadata extends Page
     {
         return [
             'author' => 'Page Author',
-            'custom' => 'page-specific'
+            'custom' => 'page-specific',
         ];
     }
 }

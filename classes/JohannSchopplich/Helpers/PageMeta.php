@@ -9,11 +9,12 @@ use Kirby\Content\Field;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Html;
 
-class PageMeta
+final class PageMeta
 {
+    protected array $metadata = [];
+
     public function __construct(
-        protected readonly Page $page,
-        protected array $metadata = []
+        protected readonly Page $page
     ) {
         $kirby = $page->kirby();
         $defaults = $kirby->option('johannschopplich.helpers.meta.defaults', []);
@@ -72,8 +73,8 @@ class PageMeta
 
     public function priority(): float
     {
-        $priority = $this->get('priority', false)->or(0.5)->value();
-        return (float)min(1, max(0, $priority));
+        $priority = (float)$this->get('priority', false)->or(0.5)->value();
+        return max(0.0, min(1.0, $priority));
     }
 
     public function jsonld(): string
@@ -87,16 +88,23 @@ class PageMeta
                 continue;
             }
 
+            // Pin `@context` and `@type` to the front, then spread the
+            // author's schema. Duplicate keys keep their first position but
+            // take the last value, so explicit `@context`/`@type` still win
+            // and `@id`/`@graph` survive instead of being filtered out.
             $schema = [
-                '@context' => $schema['@context'] ?? 'https://schema.org',
-                '@type' => $schema['@type'] ?? ucfirst($type),
-                ...array_filter($schema, fn ($key) => !str_starts_with($key, '@'), ARRAY_FILTER_USE_KEY)
+                '@context' => 'https://schema.org',
+                '@type' => ucfirst($type),
+                ...$schema,
             ];
 
+            $flags = JSON_UNESCAPED_SLASHES;
+            if ($this->page->kirby()->option('debug', false)) {
+                $flags |= JSON_PRETTY_PRINT;
+            }
+
             $html[] = '<script type="application/ld+json">';
-            $html[] = $this->page->kirby()->option('debug', false)
-                ? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-                : json_encode($schema, JSON_UNESCAPED_SLASHES);
+            $html[] = json_encode($schema, $flags);
             $html[] = '</script>';
         }
 
