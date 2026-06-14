@@ -8,7 +8,7 @@ use Kirby\Data\Data;
 use Kirby\Http\Uri;
 use Kirby\Toolkit\A;
 
-class Vite
+final class Vite
 {
     protected static Vite|null $instance = null;
     protected readonly App $kirby;
@@ -94,12 +94,7 @@ class Vite
             return null;
         }
 
-        $tags = array_map(
-            fn (string $file): string => Html::css($this->prodUrl($file)),
-            $files
-        );
-
-        return implode("\n", $tags);
+        return Html::css(array_map($this->prodUrl(...), $files));
     }
 
     /**
@@ -116,11 +111,13 @@ class Vite
             $this->hasInjectedClient = true;
         }
 
-        $url = $this->isDev
-            ? $this->devUrl($entry)
-            : $this->prodUrl($this->getEntryFile($entry));
-
-        $tags[] = Html::js($url, ['type' => 'module']);
+        // `file()` resolves the dev URL or the manifest entry; it returns
+        // `null` in production when the entry is missing, so skip the tag
+        // instead of passing `null` to `prodUrl()` and crashing the render.
+        $url = $this->file($entry);
+        if ($url !== null) {
+            $tags[] = Html::js($url, ['type' => 'module']);
+        }
 
         return implode("\n", $tags);
     }
