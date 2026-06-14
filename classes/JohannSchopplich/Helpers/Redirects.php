@@ -18,7 +18,6 @@ final class Redirects
             return null;
         }
 
-        // Turn into routes array
         $routes = array_map(
             fn ($from, $to) => [
                 'pattern' => $from,

@@ -88,10 +88,9 @@ final class PageMeta
                 continue;
             }
 
-            // Pin `@context` and `@type` to the front, then spread the
-            // author's schema. Duplicate keys keep their first position but
-            // take the last value, so explicit `@context`/`@type` still win
-            // and `@id`/`@graph` survive instead of being filtered out.
+            // Pin `@context`/`@type` to the front, then spread the author's
+            // schema. PHP keeps the first position but last value for duplicate
+            // keys, so explicit `@context`/`@type` win and `@id`/`@graph` survive.
             $schema = [
                 '@context' => 'https://schema.org',
                 '@type' => ucfirst($type),
@@ -147,17 +146,14 @@ final class PageMeta
         $description = $this->get('description');
         $thumbnail = $this->get('thumbnail')->toFile();
 
-        // Basic OpenGraph tags
         $opengraph['site_name'] ??= $this->page->site()->title()->value();
         $opengraph['url'] ??= $this->page->url();
         $opengraph['type'] ??= 'website';
         $opengraph['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
 
-        // Basic Twitter tags
         $twitter['card'] ??= 'summary_large_image';
         $twitter['title'] ??= $this->page->customTitle()->or($this->page->title())->value();
 
-        // Twitter site/creator from config
         $twitterSite = $kirby->option('johannschopplich.helpers.meta.twitter.site');
         $twitterCreator = $kirby->option('johannschopplich.helpers.meta.twitter.creator');
         if ($twitterSite) {
@@ -167,14 +163,12 @@ final class PageMeta
             $twitter['creator'] ??= $twitterCreator;
         }
 
-        // Meta, OpenGraph and Twitter description
         if ($description->isNotEmpty()) {
             $meta['description'] ??= $description->value();
             $opengraph['description'] ??= $description->value();
             $twitter['description'] ??= $description->value();
         }
 
-        // OpenGraph and Twitter image with dimensions
         if ($thumbnail) {
             $resized = $thumbnail->resize(1200);
             $imageUrl = $resized->url();
@@ -193,7 +187,6 @@ final class PageMeta
             $twitter['card'] = 'summary';
         }
 
-        // Generate meta tags
         foreach ($meta as $name => $content) {
             if ($content === null) {
                 continue;
@@ -205,7 +198,6 @@ final class PageMeta
             ]);
         }
 
-        // Generate OpenGraph tags
         foreach ($opengraph as $prop => $content) {
             if ($content === null) {
                 continue;
@@ -237,7 +229,6 @@ final class PageMeta
             }
         }
 
-        // Generate Twitter tags
         foreach ($twitter as $name => $content) {
             if ($content === null) {
                 continue;

@@ -186,10 +186,8 @@ final class Vite
             return [];
         }
 
-        // Get direct CSS files
         $files = $manifestEntry['css'] ?? [];
 
-        // Recursively collect CSS from imports
         foreach ($manifestEntry['imports'] ?? [] as $import) {
             $files = array_merge($files, $this->collectCss($import));
         }
