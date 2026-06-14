@@ -1,10 +1,31 @@
+<div align="center">
+  <img src="./.github/favicon.svg" alt="Kirby Helpers logo" width="120">
+
 # Kirby Helpers
 
-Environment variables, SEO meta tags, XML sitemaps, URL redirects, and Vite integration for Kirby – the utilities most projects re-implement, in one plugin.
+Environment variables, SEO meta, XML sitemaps, URL redirects, and Vite integration for Kirby – the utilities most projects re-implement, in one plugin.
+
+[Environment](./docs/env.md) •
+[SEO Meta](./docs/meta.md) •
+[Sitemaps](./docs/sitemap.md) •
+[Redirects](./docs/redirects.md) •
+[Vite](./docs/vite.md)
+
+</div>
+
+## When to Use
+
+| I want to…                                             | Use                              |
+| ------------------------------------------------------ | -------------------------------- |
+| Read typed values from a `.env` file                   | `env('KEY', $fallback)`          |
+| Emit meta description, OpenGraph, Twitter, and JSON-LD  | `$page->meta()->social()`        |
+| Auto-generate an XML sitemap with `hreflang`           | `sitemap.enabled` option         |
+| Redirect dead URLs without touching existing content   | `redirects` option               |
+| Serve Vite dev or built assets automatically           | `vite()->js()` / `vite()->css()` |
 
 ## Features
 
-### ⚡️ Environment Variables
+### 🔑 Environment Variables
 
 Load `.env` files and read variables through a global `env()` helper, with type coercion and fallbacks.
 
@@ -15,7 +36,7 @@ $apiKey = env('STRIPE_SECRET_KEY', 'fallback-key');
 
 **[Read more →](./docs/env.md)**
 
-### 🗂 SEO Meta Tags
+### 🏷️ SEO Meta Tags
 
 Generate meta description, OpenGraph, Twitter Card, JSON-LD, and canonical tags from page fields, page models, and global defaults.
 
@@ -77,14 +98,6 @@ composer require johannschopplich/kirby-helpers
 ### Manual Installation
 
 Download and copy this repository to `/site/plugins/kirby-helpers`.
-
-## Quick Start
-
-1. **Environment Variables**: Create a `.env` file in your project root and use `env('VARIABLE_NAME')`
-2. **Meta Tags**: Add `<?= $page->meta()->social() ?>` to your header snippet
-3. **Sitemap**: Enable it with `'johannschopplich.helpers.sitemap.enabled' => true`
-4. **Redirects**: Define rules under `'johannschopplich.helpers.redirects'`
-5. **Vite**: Use `vite()->js()` and `vite()->css()` in your templates
 
 ## License
 
