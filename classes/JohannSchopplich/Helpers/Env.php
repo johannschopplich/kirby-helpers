@@ -7,7 +7,7 @@ use Dotenv\Dotenv;
 use Dotenv\Repository\RepositoryBuilder;
 use Dotenv\Repository\RepositoryInterface;
 
-class Env
+final class Env
 {
     protected static bool $loaded = false;
     protected static RepositoryInterface|null $repository = null;
@@ -24,13 +24,15 @@ class Env
 
     public static function load(string $path, string $filename = '.env'): array
     {
-        static::$loaded = true;
-
-        return Dotenv::create(
+        $variables = Dotenv::create(
             static::getRepository(),
             $path,
             $filename
         )->load();
+
+        static::$loaded = true;
+
+        return $variables;
     }
 
     public static function get(string $key, mixed $default = null): mixed

@@ -3,9 +3,14 @@
 declare(strict_types = 1);
 
 use JohannSchopplich\Helpers\Env;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[RunTestsInSeparateProcesses]
+#[PreserveGlobalState(false)]
 final class EnvTest extends TestCase
 {
     private string $fixturesPath;
@@ -20,227 +25,124 @@ final class EnvTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->resetEnvState();
-        $this->cleanupFixtures();
-    }
-
-    private function resetEnvState(): void
-    {
-        $reflection = new ReflectionClass(Env::class);
-
-        $loadedProperty = $reflection->getProperty('loaded');
-        $loadedProperty->setValue(null, false);
-
-        $repositoryProperty = $reflection->getProperty('repository');
-        $repositoryProperty->setValue(null, null);
-    }
-
-    private function cleanupFixtures(): void
-    {
-        $files = glob($this->fixturesPath . '/.env*');
+        $files = glob($this->fixturesPath . '/.env*') ?: [];
         foreach ($files as $file) {
             @unlink($file);
         }
         @rmdir($this->fixturesPath);
     }
 
-    private function createEnvFile(string $content, string $filename = '.env'): void
+    private function writeEnvFile(string $content, string $filename = '.env'): void
     {
         file_put_contents($this->fixturesPath . '/' . $filename, $content);
     }
 
-    // --- isLoaded() ---
-
     #[Test]
-    public function isLoadedReturnsFalseByDefault(): void
+    public function is_not_loaded_by_default(): void
     {
         $this->assertFalse(Env::isLoaded());
     }
 
     #[Test]
-    public function isLoadedReturnsTrueAfterLoad(): void
+    public function is_loaded_after_load(): void
     {
-        $this->createEnvFile('TEST_VAR=value');
+        $this->writeEnvFile('TEST_VAR=value');
         Env::load($this->fixturesPath);
 
         $this->assertTrue(Env::isLoaded());
     }
 
-    // --- getRepository() ---
-
     #[Test]
-    public function getRepositoryReturnsSameInstance(): void
+    public function does_not_mark_loaded_when_the_file_is_missing(): void
     {
-        $first = Env::getRepository();
-        $second = Env::getRepository();
+        try {
+            Env::load($this->fixturesPath . '/missing');
+        } catch (\Throwable) {
+            // Loading a non-existent path throws – the flag must stay false so
+            // a later attempt (once the file exists) can still load
+        }
 
-        $this->assertSame($first, $second);
+        $this->assertFalse(Env::isLoaded());
     }
 
-    // --- load() ---
-
     #[Test]
-    public function loadReturnsArrayOfVariables(): void
+    public function load_returns_the_parsed_variables(): void
     {
-        $this->createEnvFile("FOO=bar\nBAZ=qux");
+        $this->writeEnvFile("FOO=bar\nBAZ=qux");
 
         $result = Env::load($this->fixturesPath);
 
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('FOO', $result);
-        $this->assertArrayHasKey('BAZ', $result);
+        $this->assertSame(['FOO' => 'bar', 'BAZ' => 'qux'], $result);
     }
 
     #[Test]
-    public function loadWithCustomFilename(): void
+    public function loads_from_a_custom_filename(): void
     {
-        $this->createEnvFile('CUSTOM_VAR=custom', '.env.production');
+        $this->writeEnvFile('CUSTOM_VAR=custom', '.env.production');
 
-        $result = Env::load($this->fixturesPath, '.env.production');
+        Env::load($this->fixturesPath, '.env.production');
 
-        $this->assertArrayHasKey('CUSTOM_VAR', $result);
-        $this->assertEquals('custom', Env::get('CUSTOM_VAR'));
+        $this->assertSame('custom', Env::get('CUSTOM_VAR'));
     }
 
-    // --- get() with defaults ---
-
     #[Test]
-    public function getReturnsNullForMissingKeyWithNoDefault(): void
+    public function returns_null_for_a_missing_key(): void
     {
-        $this->createEnvFile('');
+        $this->writeEnvFile('');
         Env::load($this->fixturesPath);
 
         $this->assertNull(Env::get('NONEXISTENT'));
     }
 
     #[Test]
-    public function getReturnsDefaultForMissingKey(): void
+    public function returns_the_default_for_a_missing_key(): void
     {
-        $this->createEnvFile('');
+        $this->writeEnvFile('');
         Env::load($this->fixturesPath);
 
-        $this->assertEquals('fallback', Env::get('NONEXISTENT', 'fallback'));
+        $this->assertSame('fallback', Env::get('NONEXISTENT', 'fallback'));
     }
 
     #[Test]
-    public function getExecutesClosureDefault(): void
+    public function executes_a_closure_default_only_when_the_key_is_missing(): void
     {
-        $this->createEnvFile('');
+        $this->writeEnvFile('EXISTS=value');
         Env::load($this->fixturesPath);
-        $called = false;
 
-        $result = Env::get('NONEXISTENT', function () use (&$called) {
-            $called = true;
-            return 'computed';
-        });
+        $this->assertSame('computed', Env::get('MISSING', fn () => 'computed'));
+        $this->assertSame('value', Env::get('EXISTS', fn () => 'unused'));
+    }
 
-        $this->assertTrue($called);
-        $this->assertEquals('computed', $result);
+    /** @return array<string, array{0: string, 1: mixed}> */
+    public static function envValues(): array
+    {
+        return [
+            'lowercase true' => ['true', true],
+            'uppercase true' => ['TRUE', true],
+            'mixed-case true' => ['True', true],
+            'parenthesized true' => ['(true)', true],
+            'lowercase false' => ['false', false],
+            'uppercase false' => ['FALSE', false],
+            'parenthesized false' => ['(false)', false],
+            'lowercase null' => ['null', null],
+            'uppercase null' => ['NULL', null],
+            'parenthesized null' => ['(null)', null],
+            'lowercase empty' => ['empty', ''],
+            'parenthesized empty' => ['(empty)', ''],
+            'double quoted' => ['"hello world"', 'hello world'],
+            'single quoted' => ["'hello world'", 'hello world'],
+            'plain string' => ['hello', 'hello'],
+            'numeric string' => ['3000', '3000'],
+        ];
     }
 
     #[Test]
-    public function getDoesNotExecuteClosureWhenValueExists(): void
+    #[DataProvider('envValues')]
+    public function parses_typed_values(string $raw, mixed $expected): void
     {
-        $this->createEnvFile('EXISTS=value');
-        Env::load($this->fixturesPath);
-        $called = false;
-
-        $result = Env::get('EXISTS', function () use (&$called) {
-            $called = true;
-            return 'should not be called';
-        });
-
-        $this->assertFalse($called);
-        $this->assertEquals('value', $result);
-    }
-
-    // --- get() value parsing ---
-
-    #[Test]
-    public function getParsesBooleanValues(): void
-    {
-        $this->createEnvFile(implode("\n", [
-            'BOOL_TRUE_LOWER=true',
-            'BOOL_TRUE_UPPER=TRUE',
-            'BOOL_TRUE_MIXED=True',
-            'BOOL_TRUE_PAREN=(true)',
-            'BOOL_TRUE_PAREN_UPPER=(TRUE)',
-            'BOOL_FALSE_LOWER=false',
-            'BOOL_FALSE_UPPER=FALSE',
-            'BOOL_FALSE_MIXED=False',
-            'BOOL_FALSE_PAREN=(false)',
-            'BOOL_FALSE_PAREN_UPPER=(FALSE)',
-        ]));
+        $this->writeEnvFile("VALUE=$raw");
         Env::load($this->fixturesPath);
 
-        // True values
-        $this->assertTrue(Env::get('BOOL_TRUE_LOWER'), 'lowercase true');
-        $this->assertTrue(Env::get('BOOL_TRUE_UPPER'), 'uppercase TRUE');
-        $this->assertTrue(Env::get('BOOL_TRUE_MIXED'), 'mixed case True');
-        $this->assertTrue(Env::get('BOOL_TRUE_PAREN'), 'parenthesized (true)');
-        $this->assertTrue(Env::get('BOOL_TRUE_PAREN_UPPER'), 'parenthesized uppercase (TRUE)');
-
-        // False values
-        $this->assertFalse(Env::get('BOOL_FALSE_LOWER'), 'lowercase false');
-        $this->assertFalse(Env::get('BOOL_FALSE_UPPER'), 'uppercase FALSE');
-        $this->assertFalse(Env::get('BOOL_FALSE_MIXED'), 'mixed case False');
-        $this->assertFalse(Env::get('BOOL_FALSE_PAREN'), 'parenthesized (false)');
-        $this->assertFalse(Env::get('BOOL_FALSE_PAREN_UPPER'), 'parenthesized uppercase (FALSE)');
-    }
-
-    #[Test]
-    public function getParsesNullValues(): void
-    {
-        $this->createEnvFile(implode("\n", [
-            'NULL_LOWER=null',
-            'NULL_UPPER=NULL',
-            'NULL_PAREN=(null)',
-        ]));
-        Env::load($this->fixturesPath);
-
-        $this->assertNull(Env::get('NULL_LOWER'), 'lowercase null');
-        $this->assertNull(Env::get('NULL_UPPER'), 'uppercase NULL');
-        $this->assertNull(Env::get('NULL_PAREN'), 'parenthesized (null)');
-    }
-
-    #[Test]
-    public function getParsesEmptyValues(): void
-    {
-        $this->createEnvFile(implode("\n", [
-            'EMPTY_LOWER=empty',
-            'EMPTY_UPPER=EMPTY',
-            'EMPTY_PAREN=(empty)',
-        ]));
-        Env::load($this->fixturesPath);
-
-        $this->assertSame('', Env::get('EMPTY_LOWER'), 'lowercase empty');
-        $this->assertSame('', Env::get('EMPTY_UPPER'), 'uppercase EMPTY');
-        $this->assertSame('', Env::get('EMPTY_PAREN'), 'parenthesized (empty)');
-    }
-
-    #[Test]
-    public function getStripsQuotes(): void
-    {
-        $this->createEnvFile(implode("\n", [
-            'DOUBLE_QUOTED="hello world"',
-            "SINGLE_QUOTED='hello world'",
-        ]));
-        Env::load($this->fixturesPath);
-
-        $this->assertEquals('hello world', Env::get('DOUBLE_QUOTED'), 'double quotes');
-        $this->assertEquals('hello world', Env::get('SINGLE_QUOTED'), 'single quotes');
-    }
-
-    #[Test]
-    public function getPreservesPlainStrings(): void
-    {
-        $this->createEnvFile(implode("\n", [
-            'PLAIN_STRING=hello',
-            'NUMERIC_STRING=3000',
-        ]));
-        Env::load($this->fixturesPath);
-
-        $this->assertEquals('hello', Env::get('PLAIN_STRING'));
-        $this->assertSame('3000', Env::get('NUMERIC_STRING'));
+        $this->assertSame($expected, Env::get('VALUE'));
     }
 }

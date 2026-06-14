@@ -7,7 +7,7 @@ if (!function_exists('env')) {
     /**
      * Gets the value of an environment variable
      */
-    function env(string $key, $default = null)
+    function env(string $key, mixed $default = null): mixed
     {
         return Env::get($key, $default);
     }
