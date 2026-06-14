@@ -7,7 +7,7 @@ use Kirby\Cms\App;
 use Kirby\Http\Router;
 use Throwable;
 
-class Redirects
+final class Redirects
 {
     public static function go(string|null $path, string $method = 'GET'): mixed
     {
@@ -23,30 +23,38 @@ class Redirects
             fn ($from, $to) => [
                 'pattern' => $from,
                 'action'  => function (...$parameters) use ($to) {
-                    // Resolve callback
+                    // A closure target consumes the matched segments directly
                     if ($to instanceof Closure) {
-                        $to = $to(...$parameters);
+                        return go($to(...$parameters));
                     }
 
-                    // Fill placeholders
-                    foreach ($parameters as $i => $parameter) {
-                        $to = str_replace('$' . ($i + 1), $parameter, $to);
-                    }
-
-                    return go($to);
+                    return go(self::fillPlaceholders($to, $parameters));
                 }
             ],
             array_keys($redirects),
             $redirects
         );
 
-        // Run router on redirects routes
-        $router = new Router($routes);
-
         try {
-            return $router->call($path, $method);
+            return Router::execute($path, $method, $routes);
         } catch (Throwable) {
-            return $kirby->site()->errorPage();
+            // No redirect matched: leave Kirby's own response untouched
+            return null;
         }
+    }
+
+    /**
+     * Replaces `$1`, `$2`, … placeholders in a redirect target with their
+     * matched route segments. Substitution runs in a single pass so that
+     * multi-digit tokens (`$10`) and replacements that themselves contain a
+     * `$n` sequence are never corrupted.
+     */
+    public static function fillPlaceholders(string $target, array $parameters): string
+    {
+        return preg_replace_callback(
+            '/\$(\d+)/',
+            fn ($matches) => $parameters[(int)$matches[1] - 1] ?? $matches[0],
+            $target
+        );
     }
 }
