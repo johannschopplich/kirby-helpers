@@ -9,7 +9,7 @@ use Kirby\Cms\Url;
 use Kirby\Http\Response;
 use Kirby\Toolkit\Xml;
 
-class SiteMeta
+final class SiteMeta
 {
     public static function robots(): Responder
     {
@@ -47,7 +47,7 @@ class SiteMeta
                         continue;
                     }
 
-                    if (preg_match('!^(?:' . implode('|', $excludePages) . ')$!i', $item->id())) {
+                    if ($excludePages !== [] && preg_match('!^(?:' . implode('|', $excludePages) . ')$!i', $item->id())) {
                         continue;
                     }
 
@@ -60,7 +60,12 @@ class SiteMeta
 
                     $sitemap[] = '<url>';
                     $sitemap[] = '  <loc>' . Xml::encode($item->url()) . '</loc>';
-                    $sitemap[] = '  <lastmod>' . $item->modified('Y-m-d', 'date') . '</lastmod>';
+
+                    $lastmod = $item->modified('Y-m-d', 'date');
+                    if ($lastmod !== null) {
+                        $sitemap[] = '  <lastmod>' . $lastmod . '</lastmod>';
+                    }
+
                     $sitemap[] = '  <priority>' . number_format($meta->priority(), 1, '.', '') . '</priority>';
 
                     $changefreq = $meta->changefreq();

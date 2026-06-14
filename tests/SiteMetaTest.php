@@ -2,12 +2,16 @@
 
 declare(strict_types = 1);
 
-use JohannSchopplich\Helpers\PageMeta;
 use JohannSchopplich\Helpers\SiteMeta;
 use Kirby\Cms\App;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+#[RunTestsInSeparateProcesses]
+#[PreserveGlobalState(false)]
 final class SiteMetaTest extends TestCase
 {
     protected function tearDown(): void
@@ -17,186 +21,149 @@ final class SiteMetaTest extends TestCase
 
     private function createApp(array $options = []): App
     {
-        $app = new App(array_merge([
-            'roots' => [
-                'index' => __DIR__
-            ],
-            'urls' => [
-                'index' => 'https://example.com'
-            ],
+        return new App(array_merge([
+            'roots' => ['index' => __DIR__],
+            'urls' => ['index' => 'https://example.com'],
             'site' => [
-                'content' => [
-                    'title' => 'Test Site'
-                ],
+                'content' => ['title' => 'Test Site'],
                 'children' => [
-                    [
-                        'slug' => 'about',
-                        'template' => 'default',
-                        'content' => ['title' => 'About']
-                    ],
-                    [
-                        'slug' => 'contact',
-                        'template' => 'contact',
-                        'content' => ['title' => 'Contact']
-                    ]
-                ]
-            ]
+                    ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About']],
+                    ['slug' => 'contact', 'template' => 'contact', 'content' => ['title' => 'Contact']],
+                ],
+            ],
         ], $options));
-
-        // Register page meta method (normally done by plugin)
-        $app->extend([
-            'pageMethods' => [
-                'meta' => fn () => new PageMeta($this)
-            ]
-        ]);
-
-        return $app;
-    }
-
-    // --- robots() method ---
-
-    #[Test]
-    public function robotsReturnsTextResponse(): void
-    {
-        $this->createApp();
-        $response = SiteMeta::robots();
-
-        $this->assertEquals('text/plain', $response->type());
     }
 
     #[Test]
-    public function robotsContainsUserAgentAndSitemapUrl(): void
+    public function robots_returns_a_text_response(): void
     {
         $this->createApp();
-        $response = SiteMeta::robots();
-        $body = $response->body();
+
+        $this->assertSame('text/plain', SiteMeta::robots()->type());
+    }
+
+    #[Test]
+    public function robots_lists_the_sitemap_url(): void
+    {
+        $this->createApp();
+        $body = SiteMeta::robots()->body();
 
         $this->assertStringContainsString('User-agent: *', $body);
         $this->assertStringContainsString('Allow: /', $body);
-        $this->assertStringContainsString('Sitemap:', $body);
-        $this->assertStringContainsString('sitemap.xml', $body);
-    }
-
-    // --- sitemap() method ---
-
-    #[Test]
-    public function sitemapReturnsXmlResponse(): void
-    {
-        $this->createApp();
-        $response = SiteMeta::sitemap();
-
-        $this->assertEquals('application/xml', $response->type());
+        $this->assertStringContainsString('Sitemap: https://example.com/sitemap.xml', $body);
     }
 
     #[Test]
-    public function sitemapGeneratesValidUrlsetStructure(): void
+    public function sitemap_renders_a_valid_urlset(): void
     {
         $this->createApp();
         $response = SiteMeta::sitemap();
         $body = $response->body();
 
+        $this->assertSame('application/xml', $response->type());
         $this->assertStringContainsString('<?xml version="1.0" encoding="UTF-8"?>', $body);
         $this->assertStringContainsString('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"', $body);
         $this->assertStringContainsString('</urlset>', $body);
-    }
-
-    #[Test]
-    public function sitemapIncludesUrlElements(): void
-    {
-        $this->createApp();
-        $response = SiteMeta::sitemap();
-        $body = $response->body();
-
-        $this->assertStringContainsString('<url>', $body);
-        $this->assertStringContainsString('<loc>', $body);
+        $this->assertStringContainsString('<loc>https://example.com/about</loc>', $body);
         $this->assertStringContainsString('<lastmod>', $body);
         $this->assertStringContainsString('<priority>', $body);
     }
 
     #[Test]
-    public function sitemapExcludesTemplates(): void
+    public function formats_the_default_priority(): void
+    {
+        $this->createApp();
+
+        $this->assertMatchesRegularExpression('/<priority>0\.\d<\/priority>/', SiteMeta::sitemap()->body());
+    }
+
+    #[Test]
+    public function includes_changefreq_when_set(): void
     {
         $this->createApp([
-            'options' => [
-                'johannschopplich.helpers.sitemap.exclude.templates' => ['contact']
-            ]
+            'site' => [
+                'children' => [
+                    ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About', 'changefreq' => 'weekly']],
+                ],
+            ],
         ]);
 
-        $response = SiteMeta::sitemap();
-        $body = $response->body();
+        $this->assertStringContainsString('<changefreq>weekly</changefreq>', SiteMeta::sitemap()->body());
+    }
 
-        $this->assertStringContainsString('about', $body);
+    #[Test]
+    public function excludes_templates(): void
+    {
+        $this->createApp([
+            'options' => ['johannschopplich.helpers.sitemap.exclude.templates' => ['contact']],
+        ]);
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('/about', $body);
         $this->assertStringNotContainsString('/contact', $body);
     }
 
-    #[Test]
-    public function sitemapExcludesPages(): void
+    /** @return array<string, array{0: string}> */
+    public static function pageExclusionKinds(): array
     {
+        return ['as array' => ['array'], 'as callable' => ['callable']];
+    }
+
+    #[Test]
+    #[DataProvider('pageExclusionKinds')]
+    public function excludes_pages(string $kind): void
+    {
+        $exclude = $kind === 'callable' ? fn () => ['hidden-page'] : ['hidden-page'];
+
         $this->createApp([
             'site' => [
                 'children' => [
                     ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About']],
-                    ['slug' => 'hidden-page', 'template' => 'default', 'content' => ['title' => 'Hidden']]
-                ]
+                    ['slug' => 'hidden-page', 'template' => 'default', 'content' => ['title' => 'Hidden']],
+                ],
             ],
-            'options' => [
-                'johannschopplich.helpers.sitemap.exclude.pages' => ['hidden-page']
-            ]
+            'options' => ['johannschopplich.helpers.sitemap.exclude.pages' => $exclude],
         ]);
+        $body = SiteMeta::sitemap()->body();
 
-        $response = SiteMeta::sitemap();
-        $body = $response->body();
-
-        $this->assertStringContainsString('about', $body);
+        $this->assertStringContainsString('/about', $body);
         $this->assertStringNotContainsString('hidden-page', $body);
     }
 
     #[Test]
-    public function sitemapExcludesPagesWithCallable(): void
+    public function excludes_pages_via_the_blueprint_option(): void
     {
         $this->createApp([
+            'blueprints' => [
+                'pages/hidden' => ['options' => ['sitemap' => false]],
+            ],
             'site' => [
                 'children' => [
                     ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About']],
-                    ['slug' => 'hidden-page', 'template' => 'default', 'content' => ['title' => 'Hidden']]
-                ]
+                    ['slug' => 'secret', 'template' => 'hidden', 'content' => ['title' => 'Secret']],
+                ],
             ],
-            'options' => [
-                'johannschopplich.helpers.sitemap.exclude.pages' => fn () => ['hidden-page']
-            ]
         ]);
+        $body = SiteMeta::sitemap()->body();
 
-        $response = SiteMeta::sitemap();
-        $body = $response->body();
-
-        $this->assertStringContainsString('about', $body);
-        $this->assertStringNotContainsString('hidden-page', $body);
+        $this->assertStringContainsString('/about', $body);
+        $this->assertStringNotContainsString('secret', $body);
     }
 
     #[Test]
-    public function sitemapIncludesChangefreqWhenSet(): void
+    public function emits_hreflang_alternates_for_multilingual_sites(): void
     {
         $this->createApp([
-            'site' => [
-                'children' => [
-                    ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About', 'changefreq' => 'weekly']]
-                ]
-            ]
+            'languages' => [
+                ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
+                ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
+            ],
         ]);
+        $body = SiteMeta::sitemap()->body();
 
-        $response = SiteMeta::sitemap();
-        $body = $response->body();
-
-        $this->assertStringContainsString('<changefreq>weekly</changefreq>', $body);
-    }
-
-    #[Test]
-    public function sitemapFormatsDefaultPriority(): void
-    {
-        $this->createApp();
-        $response = SiteMeta::sitemap();
-        $body = $response->body();
-
-        $this->assertMatchesRegularExpression('/<priority>0\.\d<\/priority>/', $body);
+        $this->assertStringContainsString('xmlns:xhtml="http://www.w3.org/1999/xhtml"', $body);
+        $this->assertStringContainsString('hreflang="en-us"', $body);
+        $this->assertStringContainsString('hreflang="de-de"', $body);
+        $this->assertStringContainsString('hreflang="x-default"', $body);
     }
 }
