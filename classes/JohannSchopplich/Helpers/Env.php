@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace JohannSchopplich\Helpers;
 
 use Closure;
@@ -14,30 +16,30 @@ final class Env
 
     public static function getRepository(): RepositoryInterface
     {
-        return static::$repository ??= RepositoryBuilder::createWithDefaultAdapters()->immutable()->make();
+        return self::$repository ??= RepositoryBuilder::createWithDefaultAdapters()->immutable()->make();
     }
 
     public static function isLoaded(): bool
     {
-        return static::$loaded;
+        return self::$loaded;
     }
 
     public static function load(string $path, string $filename = '.env'): array
     {
         $variables = Dotenv::create(
-            static::getRepository(),
+            self::getRepository(),
             $path,
             $filename
         )->load();
 
-        static::$loaded = true;
+        self::$loaded = true;
 
         return $variables;
     }
 
     public static function get(string $key, mixed $default = null): mixed
     {
-        $value = static::getRepository()->get($key);
+        $value = self::getRepository()->get($key);
 
         if ($value === null) {
             return $default instanceof Closure ? $default() : $default;

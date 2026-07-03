@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace JohannSchopplich\Helpers;
 
 use Kirby\Cms\App;
@@ -20,7 +22,7 @@ final class Vite
 
     public static function instance(): Vite
     {
-        return static::$instance ??= new static();
+        return self::$instance ??= new self();
     }
 
     public function __construct()
