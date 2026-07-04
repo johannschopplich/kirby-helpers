@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.6.0",
   "scripts": {
-    "release": "bumpp --all --execute \"npx zx scripts/pre-release.mjs\" ",
+    "release": "bumpp --all --execute \"npx zx scripts/pre-release.mjs\"",
     "format": "prettier \"{docs,scripts}/**/*\" --write"
   },
   "devDependencies": {
