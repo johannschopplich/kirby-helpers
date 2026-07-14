@@ -50,11 +50,11 @@ Generate meta description, OpenGraph, Twitter Card, JSON-LD, and canonical tags 
 
 ### 🧭 XML Sitemaps
 
-Auto-generate XML sitemaps with multilingual `hreflang`, template and page exclusion, and per-page control via blueprints.
+Auto-generate XML sitemaps with multilingual `hreflang`, template and page exclusion, and per-page control via blueprints – plus an optional generated `robots.txt`.
 
 ```php
-// Automatically available at /sitemap.xml
-// Supports hreflang for multilingual sites
+// Sitemap at /sitemap.xml, with hreflang for multilingual sites
+// Optional robots.txt via the robots.enabled option
 ```
 
 **[Read more →](./docs/sitemap.md)**
