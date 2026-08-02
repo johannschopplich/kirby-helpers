@@ -5,7 +5,7 @@ use JohannSchopplich\Helpers\Vite;
 
 if (!function_exists('env')) {
     /**
-     * Gets the value of an environment variable
+     * Gets the value of an environment variable.
      */
     function env(string $key, mixed $default = null): mixed
     {
@@ -15,7 +15,7 @@ if (!function_exists('env')) {
 
 if (!function_exists('vite')) {
     /**
-     * Returns the Vite singleton class instance
+     * Returns the Vite singleton class instance.
      */
     function vite(): Vite
     {

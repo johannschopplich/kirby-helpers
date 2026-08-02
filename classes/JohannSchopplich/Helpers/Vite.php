@@ -72,7 +72,7 @@ final class Vite
     }
 
     /**
-     * Returns the file path for an entry from the manifest
+     * Returns the file path for an entry from the manifest.
      */
     public function getEntryFile(string $entry): string|null
     {
@@ -81,7 +81,7 @@ final class Vite
 
     /**
      * Returns `<link>` tags for CSS files of an entry point,
-     * including CSS from imported modules
+     * including CSS from imported modules.
      */
     public function css(string $entry): string|null
     {
@@ -101,7 +101,7 @@ final class Vite
 
     /**
      * Returns a `<script>` tag for an entry point,
-     * including the Vite client in development mode
+     * including the Vite client in development mode.
      */
     public function js(string $entry): string
     {
@@ -122,7 +122,7 @@ final class Vite
     }
 
     /**
-     * Returns the processed asset URL for an entry point
+     * Returns the processed asset URL for an entry point.
      */
     public function file(string $entry): string|null
     {
@@ -135,7 +135,7 @@ final class Vite
     }
 
     /**
-     * Returns an array of file paths for Kirby Panel JS customization
+     * Returns an array of file paths for Kirby Panel JS customization.
      */
     public function panelJs(string|array $entries): array|null
     {
@@ -153,7 +153,7 @@ final class Vite
     }
 
     /**
-     * Returns an array of file paths for Kirby Panel CSS customization
+     * Returns an array of file paths for Kirby Panel CSS customization.
      */
     public function panelCss(string|array $entries): array|null
     {
@@ -174,7 +174,7 @@ final class Vite
     }
 
     /**
-     * Collects all CSS files for an entry, including CSS from imported modules
+     * Collects all CSS files for an entry, including CSS from imported modules.
      */
     protected function collectCss(string $entry): array
     {
