@@ -206,7 +206,8 @@ final class PageMeta
             }
 
             if (is_array($content)) {
-                // Handle namespace prefix (e.g., "namespace:article" → "article:")
+                // A `namespace:` prefix replaces the `og:` namespace, so
+                // `namespace:article` emits `article:*` properties
                 if (str_starts_with($prop, 'namespace:')) {
                     $prefix = substr($prop, 10);
                 } else {

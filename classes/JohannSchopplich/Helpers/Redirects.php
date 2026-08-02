@@ -46,9 +46,11 @@ final class Redirects
 
     /**
      * Replaces `$1`, `$2`, … placeholders in a redirect target with their
-     * matched route segments. Substitution runs in a single pass so that
-     * multi-digit tokens (`$10`) and replacements that themselves contain a
-     * `$n` sequence are never corrupted.
+     * matched route segments.
+     *
+     * Substitution runs in a single pass so that multi-digit tokens (`$10`)
+     * and replacements that themselves contain a `$n` sequence are never
+     * corrupted.
      */
     public static function fillPlaceholders(string $target, array $parameters): string
     {

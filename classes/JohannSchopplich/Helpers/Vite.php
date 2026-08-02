@@ -39,7 +39,7 @@ final class Vite
         try {
             $this->manifest = Data::read($path);
         } catch (\Throwable) {
-            // Vite is running in development mode
+            // A missing manifest means Vite is serving the assets in development mode
         }
 
         $this->isDev = $this->manifest === null;
@@ -71,9 +71,6 @@ final class Vite
         ], strlen(...)));
     }
 
-    /**
-     * Returns the file path for an entry from the manifest.
-     */
     public function getEntryFile(string $entry): string|null
     {
         return $this->manifest[$entry]['file'] ?? null;
@@ -107,7 +104,7 @@ final class Vite
     {
         $tags = [];
 
-        // Inject Vite client for HMR in development mode (only once)
+        // The Vite client drives HMR and must not be injected twice per response
         if ($this->isDev && !$this->hasInjectedClient) {
             $tags[] = Html::js($this->devUrl('@vite/client'), ['type' => 'module']);
             $this->hasInjectedClient = true;

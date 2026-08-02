@@ -10,8 +10,8 @@ use Kirby\Toolkit\Str;
 final class Util
 {
     /**
-     * Normalizes a Kirby language to a hreflang-compatible code.
-     * Drops any charset or modifier suffix and converts to lowercase with hyphens.
+     * Drops any charset or modifier suffix from a language's locale and
+     * converts it to lowercase with hyphens.
      *
      * @example `de_DE.utf8` → `de-de`
      * @example `de_DE.ISO-8859-1` → `de-de`
