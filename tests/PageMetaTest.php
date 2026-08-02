@@ -21,7 +21,7 @@ final class PageMetaTest extends TestCase
         App::destroy();
     }
 
-    private function createApp(array $options = []): App
+    private function app(array $options = []): App
     {
         return new App(array_merge([
             'roots' => ['index' => __DIR__],
@@ -45,7 +45,7 @@ final class PageMetaTest extends TestCase
 
     private function appWithMetaDefaults(array $defaults): App
     {
-        return $this->createApp([
+        return $this->app([
             'options' => ['johannschopplich.helpers.meta.defaults' => $defaults],
         ]);
     }
@@ -58,7 +58,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function merges_page_metadata_over_defaults(): void
     {
-        $kirby = $this->createApp([
+        $kirby = $this->app([
             'options' => [
                 'johannschopplich.helpers.meta.defaults' => ['author' => 'Default Author', 'keywords' => 'default'],
             ],
@@ -88,7 +88,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function executes_a_callable_default_config(): void
     {
-        $kirby = $this->createApp([
+        $kirby = $this->app([
             'options' => [
                 'johannschopplich.helpers.meta.defaults' => fn ($kirby, $site, $page) => [
                     'computed' => fn ($p) => 'Computed: ' . $p->title()->value(),
@@ -102,7 +102,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function falls_back_to_page_content(): void
     {
-        $meta = new PageMeta($this->createApp()->page('test'));
+        $meta = new PageMeta($this->app()->page('test'));
 
         $this->assertSame('Page description', $meta->get('description')->value());
     }
@@ -110,7 +110,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function falls_back_to_site_content(): void
     {
-        $meta = new PageMeta($this->createApp()->page('empty'));
+        $meta = new PageMeta($this->app()->page('empty'));
 
         $this->assertSame('Site description', $meta->get('description')->value());
     }
@@ -118,7 +118,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function returns_an_empty_field_when_nothing_matches(): void
     {
-        $meta = new PageMeta($this->createApp()->page('test'));
+        $meta = new PageMeta($this->app()->page('test'));
 
         $this->assertTrue($meta->get('nonexistent')->isEmpty());
     }
@@ -126,7 +126,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function skips_site_content_when_the_fallback_is_disabled(): void
     {
-        $meta = new PageMeta($this->createApp()->page('empty'));
+        $meta = new PageMeta($this->app()->page('empty'));
 
         $this->assertTrue($meta->get('description', false)->isEmpty());
     }
@@ -235,7 +235,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function robots_renders_a_canonical_link(): void
     {
-        $html = (new PageMeta($this->createApp()->page('test')))->robots();
+        $html = (new PageMeta($this->app()->page('test')))->robots();
 
         $this->assertStringContainsString('rel="canonical"', $html);
         $this->assertStringContainsString('href="https://example.com/test"', $html);
@@ -252,7 +252,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function social_renders_open_graph_tags(): void
     {
-        $html = (new PageMeta($this->createApp()->page('test')))->social();
+        $html = (new PageMeta($this->app()->page('test')))->social();
 
         $this->assertStringContainsString('property="og:title"', $html);
         $this->assertStringContainsString('property="og:type"', $html);
@@ -263,7 +263,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function social_renders_twitter_tags(): void
     {
-        $html = (new PageMeta($this->createApp()->page('test')))->social();
+        $html = (new PageMeta($this->app()->page('test')))->social();
 
         $this->assertStringContainsString('name="twitter:card"', $html);
         $this->assertStringContainsString('name="twitter:title"', $html);
@@ -272,7 +272,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function social_includes_the_description(): void
     {
-        $html = (new PageMeta($this->createApp()->page('test')))->social();
+        $html = (new PageMeta($this->app()->page('test')))->social();
 
         $this->assertStringContainsString('name="description"', $html);
         $this->assertStringContainsString('property="og:description"', $html);
@@ -282,7 +282,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function social_uses_the_twitter_config(): void
     {
-        $html = (new PageMeta($this->createApp([
+        $html = (new PageMeta($this->app([
             'options' => [
                 'johannschopplich.helpers.meta.twitter.site' => '@testsite',
                 'johannschopplich.helpers.meta.twitter.creator' => '@testcreator',
@@ -296,7 +296,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function falls_back_to_a_summary_card_without_an_image(): void
     {
-        $html = (new PageMeta($this->createApp()->page('test')))->social();
+        $html = (new PageMeta($this->app()->page('test')))->social();
 
         $this->assertStringContainsString('content="summary"', $html);
         $this->assertStringNotContainsString('content="summary_large_image"', $html);
@@ -318,7 +318,7 @@ final class PageMetaTest extends TestCase
     #[Test]
     public function opensearch_renders_a_link_tag(): void
     {
-        $html = (new PageMeta($this->createApp()->page('test')))->opensearch();
+        $html = (new PageMeta($this->app()->page('test')))->opensearch();
 
         $this->assertStringContainsString('rel="search"', $html);
         $this->assertStringContainsString('type="application/opensearchdescription+xml"', $html);

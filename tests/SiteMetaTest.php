@@ -20,7 +20,7 @@ final class SiteMetaTest extends TestCase
         App::destroy();
     }
 
-    private function createApp(array $options = []): App
+    private function app(array $options = []): App
     {
         return new App(array_merge([
             'roots' => ['index' => __DIR__],
@@ -38,7 +38,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function robots_returns_a_text_response(): void
     {
-        $this->createApp();
+        $this->app();
 
         $this->assertSame('text/plain', SiteMeta::robots()->type());
     }
@@ -46,7 +46,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function robots_lists_the_sitemap_url(): void
     {
-        $this->createApp();
+        $this->app();
         $body = SiteMeta::robots()->body();
 
         $this->assertStringContainsString('User-agent: *', $body);
@@ -57,7 +57,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function sitemap_renders_a_valid_urlset(): void
     {
-        $this->createApp();
+        $this->app();
         $response = SiteMeta::sitemap();
         $body = $response->body();
 
@@ -73,7 +73,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function formats_the_default_priority(): void
     {
-        $this->createApp();
+        $this->app();
 
         $this->assertMatchesRegularExpression('/<priority>0\.\d<\/priority>/', SiteMeta::sitemap()->body());
     }
@@ -81,7 +81,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function includes_changefreq_when_set(): void
     {
-        $this->createApp([
+        $this->app([
             'site' => [
                 'children' => [
                     ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About', 'changefreq' => 'weekly']],
@@ -95,7 +95,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function excludes_templates(): void
     {
-        $this->createApp([
+        $this->app([
             'options' => ['johannschopplich.helpers.sitemap.exclude.templates' => ['contact']],
         ]);
         $body = SiteMeta::sitemap()->body();
@@ -116,7 +116,7 @@ final class SiteMetaTest extends TestCase
     {
         $exclude = $kind === 'callable' ? fn () => ['hidden-page'] : ['hidden-page'];
 
-        $this->createApp([
+        $this->app([
             'site' => [
                 'children' => [
                     ['slug' => 'about', 'template' => 'default', 'content' => ['title' => 'About']],
@@ -134,7 +134,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function excludes_pages_via_the_blueprint_option(): void
     {
-        $this->createApp([
+        $this->app([
             'blueprints' => [
                 'pages/hidden' => ['options' => ['sitemap' => false]],
             ],
@@ -154,7 +154,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function emits_hreflang_alternates_for_multilingual_sites(): void
     {
-        $this->createApp([
+        $this->app([
             'languages' => [
                 ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
                 ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
@@ -171,7 +171,7 @@ final class SiteMetaTest extends TestCase
     #[Test]
     public function omits_lastmod_when_the_modification_date_is_null(): void
     {
-        $this->createApp([
+        $this->app([
             'pageModels' => ['no-mod' => PageWithoutModified::class],
             'site' => [
                 'children' => [

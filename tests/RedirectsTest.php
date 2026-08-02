@@ -19,7 +19,7 @@ final class RedirectsTest extends TestCase
         App::destroy();
     }
 
-    private function createApp(array $redirects = []): App
+    private function app(array $redirects = []): App
     {
         return new App([
             'roots' => ['index' => __DIR__],
@@ -33,7 +33,7 @@ final class RedirectsTest extends TestCase
     #[Test]
     public function returns_null_when_no_redirects_are_configured(): void
     {
-        $this->createApp();
+        $this->app();
 
         $this->assertNull(Redirects::go('some/path'));
     }
@@ -41,7 +41,7 @@ final class RedirectsTest extends TestCase
     #[Test]
     public function returns_null_when_no_pattern_matches(): void
     {
-        $this->createApp(['old-page' => 'new-page']);
+        $this->app(['old-page' => 'new-page']);
 
         $this->assertNull(Redirects::go('unrelated/path'));
     }
