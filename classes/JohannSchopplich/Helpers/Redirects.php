@@ -16,7 +16,7 @@ final class Redirects
         $kirby = App::instance();
         $redirects = $kirby->option('johannschopplich.helpers.redirects', []);
 
-        if (empty($redirects)) {
+        if ($redirects === []) {
             return null;
         }
 

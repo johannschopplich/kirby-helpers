@@ -12,7 +12,7 @@ use Kirby\Http\Route;
 App::plugin('johannschopplich/helpers', [
     'hooks' => [
         'route:after' => function (string $path, string $method, mixed $result, bool $final) {
-            if ($final && empty($result)) {
+            if ($final && ($result === null || $result === false)) {
                 Redirects::go($path, $method);
             }
         }
