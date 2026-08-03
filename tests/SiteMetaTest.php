@@ -71,7 +71,7 @@ final class SiteMetaTest extends TestCase
     }
 
     #[Test]
-    public function formats_the_default_priority(): void
+    public function sitemap_renders_the_priority_with_a_single_decimal(): void
     {
         $this->app();
 
@@ -93,7 +93,7 @@ final class SiteMetaTest extends TestCase
     }
 
     #[Test]
-    public function excludes_templates(): void
+    public function excludes_pages_by_their_template(): void
     {
         $this->app([
             'options' => ['johannschopplich.helpers.sitemap.exclude.templates' => ['contact']],

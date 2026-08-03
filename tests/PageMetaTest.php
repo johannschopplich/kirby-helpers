@@ -303,7 +303,7 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
-    public function handles_nested_open_graph_properties(): void
+    public function social_replaces_the_og_namespace_for_a_namespace_prefixed_group(): void
     {
         $html = $this->metaForTestPage([
             'opengraph' => [
@@ -338,7 +338,7 @@ final class PageMetaTest extends TestCase
 
     #[Test]
     #[DataProvider('priorities')]
-    public function clamps_priority_to_the_unit_range(float|null $configured, float $expected): void
+    public function priority_defaults_to_a_half_and_is_clamped_to_the_unit_range(float|null $configured, float $expected): void
     {
         $defaults = $configured === null ? [] : ['priority' => $configured];
 
