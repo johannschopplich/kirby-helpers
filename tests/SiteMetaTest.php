@@ -188,7 +188,7 @@ final class SiteMetaTest extends TestCase
 
 class PageWithoutModified extends Page
 {
-    // Force a null modification date so the sitemap must omit `<lastmod>` entirely
+    // Forces a null modification date so the sitemap must omit `<lastmod>` entirely.
     public function modified(
         string|null $format = null,
         string|null $handler = null,

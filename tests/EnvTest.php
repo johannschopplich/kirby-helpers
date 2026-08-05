@@ -59,7 +59,7 @@ final class EnvTest extends TestCase
             Env::load($this->fixturesPath . '/missing');
         } catch (\Throwable) {
             // Loading a non-existent path throws – the flag must stay false so
-            // a later attempt (once the file exists) can still load
+            // a later attempt (once the file exists) can still load.
         }
 
         $this->assertFalse(Env::isLoaded());

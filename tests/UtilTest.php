@@ -53,7 +53,7 @@ final class UtilTest extends TestCase
     #[Test]
     public function falls_back_to_the_language_code_without_an_lc_all_locale(): void
     {
-        // A partial array locale leaves LC_ALL unset, so the code is used
+        // A partial array locale leaves `LC_ALL` unset, so the language code is used.
         $language = $this->languageWith(['LC_TIME' => 'en_US.UTF-8']);
 
         $this->assertSame('en', Util::languageToHreflang($language));

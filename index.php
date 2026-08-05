@@ -12,7 +12,7 @@ use Kirby\Http\Route;
 App::plugin('johannschopplich/helpers', [
     'hooks' => [
         'route:after' => function (string $path, string $method, mixed $result, bool $final) {
-            // Kirby's `App::io()` turns any empty result into the error page, so the redirect map has to answer for exactly that set
+            // Kirby's `App::io()` turns any empty result into the error page, so the redirect map has to answer for exactly that set.
             if ($final && ($result === null || $result === false || $result === '' || $result === [])) {
                 Redirects::go($path, $method);
             }

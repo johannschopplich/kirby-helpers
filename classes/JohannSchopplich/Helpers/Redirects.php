@@ -24,7 +24,7 @@ final class Redirects
             fn ($from, $to) => [
                 'pattern' => $from,
                 'action'  => function (...$parameters) use ($to) {
-                    // A closure target consumes the matched segments directly
+                    // A closure target consumes the matched segments directly.
                     if ($to instanceof Closure) {
                         return go($to(...$parameters));
                     }
@@ -39,7 +39,7 @@ final class Redirects
         try {
             return Router::execute($path, $method, $routes);
         } catch (Throwable) {
-            // No redirect matched: leave Kirby's own response untouched
+            // No redirect matched: leave Kirby's own response untouched.
             return null;
         }
     }

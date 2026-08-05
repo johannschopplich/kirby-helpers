@@ -39,7 +39,7 @@ final class Vite
         try {
             $this->manifest = Data::read($path);
         } catch (\Throwable) {
-            // A missing manifest means Vite is serving the assets in development mode
+            // A missing manifest means Vite is serving the assets in development mode.
         }
 
         $this->isDev = $this->manifest === null;
@@ -82,7 +82,7 @@ final class Vite
      */
     public function css(string $entry): string|null
     {
-        // In dev mode, CSS is injected by Vite through JS
+        // In dev mode, CSS is injected by Vite through JS.
         if ($this->isDev) {
             return null;
         }
@@ -104,7 +104,7 @@ final class Vite
     {
         $tags = [];
 
-        // The Vite client drives HMR and must not be injected twice per response
+        // The Vite client drives HMR and must not be injected twice per response.
         if ($this->isDev && !$this->hasInjectedClient) {
             $tags[] = Html::js($this->devUrl('@vite/client'), ['type' => 'module']);
             $this->hasInjectedClient = true;
@@ -132,7 +132,8 @@ final class Vite
     }
 
     /**
-     * Returns an array of file paths for Kirby Panel JS customization.
+     * Returns the asset paths for Kirby's `panel.js` option,
+     * including the Vite client in development mode.
      */
     public function panelJs(string|array $entries): array|null
     {
@@ -150,11 +151,12 @@ final class Vite
     }
 
     /**
-     * Returns an array of file paths for Kirby Panel CSS customization.
+     * Returns the asset paths for Kirby's `panel.css` option,
+     * including CSS from imported modules.
      */
     public function panelCss(string|array $entries): array|null
     {
-        // In dev mode, CSS is injected by Vite through JS
+        // In dev mode, CSS is injected by Vite through JS.
         if ($this->isDev) {
             return null;
         }

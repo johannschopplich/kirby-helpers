@@ -195,7 +195,7 @@ final class PageMetaTest extends TestCase
         ])->jsonld();
 
         $this->assertStringContainsString('"@id":"https://example.com/#person"', $html);
-        // `@context` and `@type` stay pinned to the front, ahead of `@id`
+        // `@context` and `@type` stay pinned to the front, ahead of `@id`.
         $this->assertStringContainsString(
             '{"@context":"https://schema.org","@type":"Person","@id":"https://example.com/#person"',
             $html
