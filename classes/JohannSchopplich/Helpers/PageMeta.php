@@ -137,12 +137,12 @@ final class PageMeta
     {
         $html = [];
         $metaValue = $this->get('meta', false)->value();
-        $ogValue = $this->get('opengraph', false)->value();
+        $opengraphValue = $this->get('opengraph', false)->value();
         $twitterValue = $this->get('twitter', false)->value();
 
         $meta = is_array($metaValue) ? $metaValue : [];
-        $opengraph = is_array($ogValue) ? $ogValue : [];
-        $twitter = is_array($twitterValue) ? $twitterValue : [];
+        $opengraph = self::flattenNestedProperties(is_array($opengraphValue) ? $opengraphValue : []);
+        $twitter = self::flattenNestedProperties(is_array($twitterValue) ? $twitterValue : []);
 
         $kirby = $this->page->kirby();
         $description = $this->get('description');
@@ -171,23 +171,36 @@ final class PageMeta
             $twitter['description'] ??= $description->value();
         }
 
-        if ($thumbnail) {
-            $resized = $thumbnail->resize(1200);
-            $imageUrl = $resized->url();
+        if ($thumbnail && !array_key_exists('image', $opengraph)) {
+            // Dimensions and alt text describe the thumbnail, so they are only
+            // derived while the thumbnail is also the advertised image.
+            $resizedThumbnail = $thumbnail->resize(1200);
 
-            $opengraph['image'] ??= $imageUrl;
-            $opengraph['image:width'] ??= $resized->width();
-            $opengraph['image:height'] ??= $resized->height();
-
-            $twitter['image'] ??= $imageUrl;
+            $opengraph['image'] = $resizedThumbnail->url();
+            $opengraph['image:width'] ??= $resizedThumbnail->width();
+            $opengraph['image:height'] ??= $resizedThumbnail->height();
 
             if ($thumbnail->alt()->isNotEmpty()) {
                 $opengraph['image:alt'] ??= $thumbnail->alt()->value();
-                $twitter['image:alt'] ??= $thumbnail->alt()->value();
             }
-        } elseif (!isset($twitter['image']) && $twitter['card'] === 'summary_large_image') {
+        }
+
+        // Both networks point at the same asset unless Twitter is set explicitly.
+        if (isset($opengraph['image'])) {
+            $twitter['image'] ??= $opengraph['image'];
+
+            if (isset($opengraph['image:alt'])) {
+                $twitter['image:alt'] ??= $opengraph['image:alt'];
+            }
+        }
+
+        if (!isset($twitter['image']) && $twitter['card'] === 'summary_large_image') {
             $twitter['card'] = 'summary';
         }
+
+        // Twitter Cards are flat `name=` tags without root semantics, so only
+        // the OpenGraph map is reordered.
+        $opengraph = self::groupPropertiesByRoot($opengraph);
 
         foreach ($meta as $name => $content) {
             if ($content === null) {
@@ -200,7 +213,7 @@ final class PageMeta
             ]);
         }
 
-        foreach ($opengraph as $prop => $content) {
+        foreach ($opengraph as $property => $content) {
             if ($content === null) {
                 continue;
             }
@@ -208,25 +221,25 @@ final class PageMeta
             if (is_array($content)) {
                 // A `namespace:` prefix replaces the `og:` namespace, so
                 // `namespace:article` emits `article:*` properties.
-                if (str_starts_with($prop, 'namespace:')) {
-                    $prefix = substr($prop, 10);
+                if (str_starts_with($property, 'namespace:')) {
+                    $prefix = substr($property, 10);
                 } else {
-                    $prefix = "og:{$prop}";
+                    $prefix = "og:{$property}";
                 }
 
-                foreach ($content as $subProp => $subContent) {
+                foreach ($content as $subProperty => $subContent) {
                     if ($subContent === null) {
                         continue;
                     }
 
                     $html[] = Html::tag('meta', null, [
-                        'property' => "{$prefix}:{$subProp}",
+                        'property' => "{$prefix}:{$subProperty}",
                         'content'  => $subContent,
                     ]);
                 }
             } else {
                 $html[] = Html::tag('meta', null, [
-                    'property' => "og:{$prop}",
+                    'property' => "og:{$property}",
                     'content'  => $content,
                 ]);
             }
@@ -254,5 +267,60 @@ final class PageMeta
             'title' => $this->page->site()->title(),
             'href' => Url::to('open-search.xml'),
         ]) . PHP_EOL;
+    }
+
+    // Expands `['image' => ['alt' => …]]` into `['image:alt' => …]`, so both
+    // spellings resolve to the same key and cannot be emitted twice.
+    // `namespace:` values keep their array form, since the render loop maps
+    // them to a prefix of their own.
+    private static function flattenNestedProperties(array $properties): array
+    {
+        $flatProperties = [];
+        $expandedProperties = [];
+
+        foreach ($properties as $property => $content) {
+            $property = (string)$property;
+
+            if (!is_array($content) || str_starts_with($property, 'namespace:')) {
+                $flatProperties[$property] = $content;
+                continue;
+            }
+
+            foreach ($content as $subProperty => $subContent) {
+                $expandedProperties["{$property}:{$subProperty}"] = $subContent;
+            }
+        }
+
+        // The union operator keeps the left value, so an explicitly flat key
+        // wins over the nested spelling.
+        return $flatProperties + $expandedProperties;
+    }
+
+    // Reorders sub-properties to follow their root tag. They belong to the
+    // root that precedes them, so a stray `image:alt` in front of `image`
+    // would be attached to the previous root or dropped: https://ogp.me/#array
+    private static function groupPropertiesByRoot(array $properties): array
+    {
+        $groupedProperties = [];
+
+        foreach ($properties as $property => $content) {
+            $property = (string)$property;
+
+            $rootProperty = str_starts_with($property, 'namespace:') ? $property : explode(':', $property, 2)[0];
+            $groupedProperties[$rootProperty][$property] = $content;
+        }
+
+        $orderedProperties = [];
+
+        foreach ($groupedProperties as $rootProperty => $group) {
+            if (array_key_exists($rootProperty, $group)) {
+                $orderedProperties[$rootProperty] = $group[$rootProperty];
+            }
+
+            // The union operator keeps the root tag already pinned to the front.
+            $orderedProperties += $group;
+        }
+
+        return $orderedProperties;
     }
 }

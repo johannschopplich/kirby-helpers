@@ -6,6 +6,7 @@ use JohannSchopplich\Helpers\PageMeta;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Content\Field;
+use Kirby\Filesystem\Dir;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -16,8 +17,12 @@ use PHPUnit\Framework\TestCase;
 #[PreserveGlobalState(false)]
 final class PageMetaTest extends TestCase
 {
+    // A 24x12 JPEG, inlined because /tests/fixtures is not versioned.
+    private const THUMBNAIL_JPEG = '/9j/4AAQSkZJRgABAQEAYABgAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2NjIpLCBxdWFsaXR5ID0gMTAK/9sAQwBQNzxGPDJQRkFGWlVQX3jIgnhubnj1r7mRyP///////////////////////////////////////////////////9sAQwFVWlp4aXjrgoLr/////////////////////////////////////////////////////////////////////////8AAEQgADAAYAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/aAAwDAQACEQMRAD8ApUUUUAFFFFAH/9k=';
+
     protected function tearDown(): void
     {
+        Dir::remove(__DIR__ . '/tmp-meta');
         App::destroy();
     }
 
@@ -53,6 +58,38 @@ final class PageMetaTest extends TestCase
     private function metaForTestPage(array $defaults): PageMeta
     {
         return new PageMeta($this->appWithMetaDefaults($defaults)->page('test'));
+    }
+
+    private function metaForPageWithThumbnail(array $defaults = []): PageMeta
+    {
+        $contentRoot = __DIR__ . '/tmp-meta';
+        $pageRoot = $contentRoot . '/test';
+
+        Dir::make($pageRoot);
+        file_put_contents($pageRoot . '/thumbnail.jpg', base64_decode(self::THUMBNAIL_JPEG));
+
+        $kirby = $this->app([
+            'roots' => [
+                'index' => __DIR__,
+                'content' => $contentRoot,
+                'media' => $contentRoot . '/media',
+            ],
+            'options' => ['johannschopplich.helpers.meta.defaults' => $defaults],
+            'site' => [
+                'content' => ['title' => 'Test Site'],
+                'children' => [
+                    [
+                        'slug' => 'test',
+                        'content' => ['title' => 'Test Page', 'thumbnail' => 'thumbnail.jpg'],
+                        'files' => [
+                            ['filename' => 'thumbnail.jpg', 'content' => ['alt' => 'Thumbnail alt']],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        return new PageMeta($kirby->page('test'));
     }
 
     #[Test]
@@ -91,7 +128,7 @@ final class PageMetaTest extends TestCase
         $kirby = $this->app([
             'options' => [
                 'johannschopplich.helpers.meta.defaults' => fn ($kirby, $site, $page) => [
-                    'computed' => fn ($p) => 'Computed: ' . $p->title()->value(),
+                    'computed' => fn ($page) => 'Computed: ' . $page->title()->value(),
                 ],
             ],
         ]);
@@ -179,12 +216,12 @@ final class PageMetaTest extends TestCase
 
     #[Test]
     #[DataProvider('jsonldOverrides')]
-    public function jsonld_respects_an_explicit_context_and_type(array $jsonld, string $expected, string $forbidden): void
+    public function jsonld_respects_an_explicit_context_and_type(array $jsonld, string $expectedJson, string $forbiddenJson): void
     {
         $html = $this->metaForTestPage(['jsonld' => $jsonld])->jsonld();
 
-        $this->assertStringContainsString($expected, $html);
-        $this->assertStringNotContainsString($forbidden, $html);
+        $this->assertStringContainsString($expectedJson, $html);
+        $this->assertStringNotContainsString($forbiddenJson, $html);
     }
 
     #[Test]
@@ -316,6 +353,106 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
+    public function social_derives_the_image_tags_from_the_thumbnail(): void
+    {
+        $html = $this->metaForPageWithThumbnail()->social();
+
+        $this->assertStringContainsString('property="og:image"', $html);
+        // `resize(1200)` never upscales, so the source dimensions carry through.
+        $this->assertStringContainsString('content="24" property="og:image:width"', $html);
+        $this->assertStringContainsString('content="12" property="og:image:height"', $html);
+        $this->assertStringContainsString('content="Thumbnail alt" property="og:image:alt"', $html);
+        $this->assertStringContainsString('content="Thumbnail alt" name="twitter:image:alt"', $html);
+    }
+
+    #[Test]
+    public function social_renders_a_nested_og_image_alt_once(): void
+    {
+        $html = $this->metaForPageWithThumbnail([
+            'opengraph' => ['image' => ['alt' => 'Configured alt']],
+        ])->social();
+
+        $this->assertSame(1, substr_count($html, 'property="og:image:alt"'));
+        $this->assertStringContainsString('content="Configured alt" property="og:image:alt"', $html);
+        $this->assertStringNotContainsString('Thumbnail alt', $html);
+        $this->assertStringContainsString('content="https://example.com/media/pages/test/', $html);
+    }
+
+    #[Test]
+    public function social_prefers_an_explicit_flat_key_over_the_nested_spelling(): void
+    {
+        $html = $this->metaForPageWithThumbnail([
+            'opengraph' => [
+                'image' => ['alt' => 'Nested alt'],
+                'image:alt' => 'Flat alt',
+            ],
+        ])->social();
+
+        $this->assertSame(1, substr_count($html, 'property="og:image:alt"'));
+        $this->assertStringContainsString('content="Flat alt" property="og:image:alt"', $html);
+    }
+
+    #[Test]
+    public function social_renders_the_root_image_tag_before_its_sub_properties(): void
+    {
+        $html = $this->metaForPageWithThumbnail([
+            'opengraph' => ['image' => ['alt' => 'Configured alt']],
+        ])->social();
+
+        $rootPosition = strpos($html, 'property="og:image"');
+        $subPropertyPosition = strpos($html, 'property="og:image:alt"');
+
+        $this->assertIsInt($rootPosition);
+        $this->assertIsInt($subPropertyPosition);
+        $this->assertLessThan($subPropertyPosition, $rootPosition);
+    }
+
+    #[Test]
+    public function social_omits_derived_image_data_for_a_configured_image_url(): void
+    {
+        $html = $this->metaForPageWithThumbnail([
+            'opengraph' => ['image' => 'https://cdn.example.com/custom.jpg'],
+        ])->social();
+
+        $this->assertStringContainsString('content="https://cdn.example.com/custom.jpg" property="og:image"', $html);
+        $this->assertStringContainsString('content="https://cdn.example.com/custom.jpg" name="twitter:image"', $html);
+        $this->assertStringNotContainsString('property="og:image:width"', $html);
+        $this->assertStringNotContainsString('property="og:image:height"', $html);
+        $this->assertStringNotContainsString('Thumbnail alt', $html);
+    }
+
+    #[Test]
+    public function social_renders_an_og_locale_alternate_without_an_og_locale(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => ['locale' => ['alternate' => 'de_DE']],
+        ])->social();
+
+        $this->assertStringContainsString('content="de_DE" property="og:locale:alternate"', $html);
+    }
+
+    #[Test]
+    public function social_renders_a_twitter_app_card_without_a_root_tag(): void
+    {
+        $html = $this->metaForTestPage([
+            'twitter' => ['card' => 'app', 'app:id:iphone' => '307234931'],
+        ])->social();
+
+        $this->assertStringContainsString('content="307234931" name="twitter:app:id:iphone"', $html);
+    }
+
+    #[Test]
+    public function social_expands_a_nested_twitter_property(): void
+    {
+        $html = $this->metaForPageWithThumbnail([
+            'twitter' => ['image' => ['alt' => 'Configured alt']],
+        ])->social();
+
+        $this->assertStringContainsString('content="Configured alt" name="twitter:image:alt"', $html);
+        $this->assertStringNotContainsString('content="Configured alt" name="twitter:image"', $html);
+    }
+
+    #[Test]
     public function opensearch_renders_a_link_tag(): void
     {
         $html = (new PageMeta($this->app()->page('test')))->opensearch();
@@ -338,11 +475,11 @@ final class PageMetaTest extends TestCase
 
     #[Test]
     #[DataProvider('priorities')]
-    public function priority_defaults_to_a_half_and_is_clamped_to_the_unit_range(float|null $configured, float $expected): void
+    public function priority_defaults_to_a_half_and_is_clamped_to_the_unit_range(float|null $configuredPriority, float $expectedPriority): void
     {
-        $defaults = $configured === null ? [] : ['priority' => $configured];
+        $defaults = $configuredPriority === null ? [] : ['priority' => $configuredPriority];
 
-        $this->assertSame($expected, $this->metaForTestPage($defaults)->priority());
+        $this->assertSame($expectedPriority, $this->metaForTestPage($defaults)->priority());
     }
 }
 

@@ -16,5 +16,6 @@
 /phpunit.xml
 /tests/coverage
 /tests/fixtures
+/tests/tmp-meta
 /tests/tmp-vite
 /tools/**/vendor

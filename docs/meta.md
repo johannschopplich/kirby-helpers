@@ -112,9 +112,9 @@ return [
 ];
 ```
 
-### Nested and Namespaced OpenGraph Tags
+### Nested and Namespaced Tags
 
-An array value expands into `og:<property>:<key>` tags. A `namespace:` prefix drops the `og:` part entirely, which is the only way to emit `article:*`, `product:*`, and similar namespaced tags:
+An array value expands into `og:<property>:<key>` tags, in `opengraph` as well as in `twitter`, where it becomes `twitter:<property>:<key>`. A `namespace:` prefix drops the `og:` part entirely and applies to `opengraph` only, which is the only way to emit `article:*`, `product:*`, and similar namespaced tags:
 
 ```php
 'opengraph' => [
@@ -136,6 +136,8 @@ An array value expands into `og:<property>:<key>` tags. A `namespace:` prefix dr
 <meta property="article:author" content="Johann Schopplich" />
 ```
 
+`'image' => ['width' => 1200]` and `'image:width' => 1200` address the same tag, so neither can be emitted twice. Where both are given, the flat key wins.
+
 ## Default Values
 
 The plugin provides sensible defaults that work out of the box:
@@ -151,13 +153,15 @@ The plugin provides sensible defaults that work out of the box:
 - `image:width` / `image:height`: Automatic dimensions from thumbnail
 - `image:alt`: Thumbnail alt text (if set)
 
+Dimensions and alt text describe the thumbnail, so an `image` URL of your own suppresses all three. Set `image:width`, `image:height`, and `image:alt` alongside it.
+
 ### Twitter Cards
 
 - `card`: "summary_large_image" (or "summary" if no image)
 - `title`: Page title or custom title
 - `description`: From description field
-- `image`: From thumbnail field
-- `image:alt`: Thumbnail alt text (if set)
+- `image`: The resolved OpenGraph image
+- `image:alt`: The resolved OpenGraph image alt text
 
 ## Configuration Priority
 
