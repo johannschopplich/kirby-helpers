@@ -21,8 +21,8 @@ final class Util
     public static function languageToHreflang(Language $language): string
     {
         $locale = $language->locale(LC_ALL) ?? $language->code();
-        $normalized = preg_replace('/[.@].*$/', '', $locale);
+        $normalizedLocale = preg_replace('/[.@].*$/', '', $locale);
 
-        return Str::slug($normalized);
+        return Str::slug($normalizedLocale);
     }
 }

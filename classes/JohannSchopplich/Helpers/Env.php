@@ -11,7 +11,7 @@ use Dotenv\Repository\RepositoryInterface;
 
 final class Env
 {
-    protected static bool $loaded = false;
+    protected static bool $isLoaded = false;
     protected static RepositoryInterface|null $repository = null;
 
     public static function getRepository(): RepositoryInterface
@@ -21,7 +21,7 @@ final class Env
 
     public static function isLoaded(): bool
     {
-        return self::$loaded;
+        return self::$isLoaded;
     }
 
     public static function load(string $path, string $filename = '.env'): array
@@ -32,7 +32,7 @@ final class Env
             $filename
         )->load();
 
-        self::$loaded = true;
+        self::$isLoaded = true;
 
         return $variables;
     }

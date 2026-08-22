@@ -32,10 +32,10 @@ final class SiteMeta
         $sitemap = $kirby->cache('pages')->getOrSet(
             'sitemap.xml',
             function () use ($kirby) {
-                $xhtmlSchema = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd"';
-                $sitemap = [];
-                $sitemap[] = '<?xml version="1.0" encoding="UTF-8"?>';
-                $sitemap[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . ($kirby->multilang() ? " {$xhtmlSchema}" : '') . '>';
+                $xhtmlAttributes = 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd"';
+                $lines = [];
+                $lines[] = '<?xml version="1.0" encoding="UTF-8"?>';
+                $lines[] = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . ($kirby->multilang() ? " {$xhtmlAttributes}" : '') . '>';
 
                 $excludeTemplates = $kirby->option('johannschopplich.helpers.sitemap.exclude.templates', []);
                 $excludePages = $kirby->option('johannschopplich.helpers.sitemap.exclude.pages', []);
@@ -44,51 +44,51 @@ final class SiteMeta
                     $excludePages = $excludePages();
                 }
 
-                foreach ($kirby->site()->index() as $item) {
-                    if (in_array($item->intendedTemplate()->name(), $excludeTemplates, true)) {
+                foreach ($kirby->site()->index() as $page) {
+                    if (in_array($page->intendedTemplate()->name(), $excludeTemplates, true)) {
                         continue;
                     }
 
-                    if ($excludePages !== [] && preg_match('!^(?:' . implode('|', $excludePages) . ')$!i', $item->id())) {
+                    if ($excludePages !== [] && preg_match('!^(?:' . implode('|', $excludePages) . ')$!i', $page->id())) {
                         continue;
                     }
 
-                    $options = $item->blueprint()->options();
+                    $options = $page->blueprint()->options();
                     if (isset($options['sitemap']) && $options['sitemap'] === false) {
                         continue;
                     }
 
-                    $meta = $item->meta();
+                    $meta = $page->meta();
 
-                    $sitemap[] = '<url>';
-                    $sitemap[] = '  <loc>' . Xml::encode($item->url()) . '</loc>';
+                    $lines[] = '<url>';
+                    $lines[] = '  <loc>' . Xml::encode($page->url()) . '</loc>';
 
-                    $lastmod = $item->modified('Y-m-d', 'date');
+                    $lastmod = $page->modified('Y-m-d', 'date');
                     if ($lastmod !== null) {
-                        $sitemap[] = '  <lastmod>' . $lastmod . '</lastmod>';
+                        $lines[] = '  <lastmod>' . $lastmod . '</lastmod>';
                     }
 
-                    $sitemap[] = '  <priority>' . number_format($meta->priority(), 1, '.', '') . '</priority>';
+                    $lines[] = '  <priority>' . number_format($meta->priority(), 1, '.', '') . '</priority>';
 
                     $changefreq = $meta->changefreq();
                     if ($changefreq->isNotEmpty()) {
-                        $sitemap[] = '  <changefreq>' . Xml::encode($changefreq->value()) . '</changefreq>';
+                        $lines[] = '  <changefreq>' . Xml::encode($changefreq->value()) . '</changefreq>';
                     }
 
                     if ($kirby->multilang()) {
-                        foreach ($kirby->languages() as $lang) {
-                            $hreflang = Util::languageToHreflang($lang);
-                            $sitemap[] = '  <xhtml:link rel="alternate" hreflang="' . $hreflang . '" href="' . $item->url($lang->code()) . '" />';
+                        foreach ($kirby->languages() as $language) {
+                            $hreflang = Util::languageToHreflang($language);
+                            $lines[] = '  <xhtml:link rel="alternate" hreflang="' . $hreflang . '" href="' . $page->url($language->code()) . '" />';
                         }
-                        $sitemap[] = '  <xhtml:link rel="alternate" hreflang="x-default" href="' . $item->url() . '" />';
+                        $lines[] = '  <xhtml:link rel="alternate" hreflang="x-default" href="' . $page->url() . '" />';
                     }
 
-                    $sitemap[] = '</url>';
+                    $lines[] = '</url>';
                 }
 
-                $sitemap[] = '</urlset>';
+                $lines[] = '</urlset>';
 
-                return implode(PHP_EOL, $sitemap);
+                return implode(PHP_EOL, $lines);
             }
         );
 

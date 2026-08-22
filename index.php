@@ -45,8 +45,8 @@ App::plugin('johannschopplich/helpers', [
             if (!Env::isLoaded()) {
                 $kirby = App::instance();
                 $path = $kirby->option('johannschopplich.helpers.env.path', $kirby->root('base'));
-                $file = $kirby->option('johannschopplich.helpers.env.filename', '.env');
-                Env::load($path, $file);
+                $filename = $kirby->option('johannschopplich.helpers.env.filename', '.env');
+                Env::load($path, $filename);
             }
 
             return Env::get($key, $default);

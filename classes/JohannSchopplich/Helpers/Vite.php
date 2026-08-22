@@ -87,13 +87,13 @@ final class Vite
             return null;
         }
 
-        $files = $this->collectCss($entry);
+        $cssFiles = $this->collectCss($entry);
 
-        if ($files === []) {
+        if ($cssFiles === []) {
             return null;
         }
 
-        return Html::css(array_map($this->prodUrl(...), $files));
+        return Html::css(array_map($this->prodUrl(...), $cssFiles));
     }
 
     /**
@@ -137,17 +137,17 @@ final class Vite
      */
     public function panelJs(string|array $entries): array|null
     {
-        $files = [];
+        $urls = [];
 
         if ($this->isDev) {
-            $files[] = $this->devUrl('@vite/client');
+            $urls[] = $this->devUrl('@vite/client');
         }
 
         foreach (A::wrap($entries) as $entry) {
-            $files[] = $this->file($entry);
+            $urls[] = $this->file($entry);
         }
 
-        return $files !== [] ? $files : null;
+        return $urls !== [] ? $urls : null;
     }
 
     /**
@@ -161,15 +161,15 @@ final class Vite
             return null;
         }
 
-        $files = [];
+        $urls = [];
 
         foreach (A::wrap($entries) as $entry) {
-            foreach ($this->collectCss($entry) as $css) {
-                $files[] = $this->prodUrl($css);
+            foreach ($this->collectCss($entry) as $cssFile) {
+                $urls[] = $this->prodUrl($cssFile);
             }
         }
 
-        return $files !== [] ? $files : null;
+        return $urls !== [] ? $urls : null;
     }
 
     /**
@@ -187,12 +187,12 @@ final class Vite
             return [];
         }
 
-        $files = $manifestEntry['css'] ?? [];
+        $cssFiles = $manifestEntry['css'] ?? [];
 
         foreach ($manifestEntry['imports'] ?? [] as $import) {
-            $files = array_merge($files, $this->collectCss($import));
+            $cssFiles = array_merge($cssFiles, $this->collectCss($import));
         }
 
-        return array_unique($files);
+        return array_unique($cssFiles);
     }
 }
