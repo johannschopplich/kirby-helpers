@@ -269,10 +269,13 @@ final class PageMeta
         ]) . PHP_EOL;
     }
 
-    // Expands `['image' => ['alt' => …]]` into `['image:alt' => …]`, so both
-    // spellings resolve to the same key and cannot be emitted twice.
-    // `namespace:` values keep their array form, since the render loop maps
-    // them to a prefix of their own.
+    /**
+     * Expands `['image' => ['alt' => …]]` into `['image:alt' => …]`, so both
+     * spellings resolve to the same key and cannot be emitted twice.
+     *
+     * `namespace:` values keep their array form, since `social()` maps them
+     * to a prefix of their own.
+     */
     private static function flattenNestedProperties(array $properties): array
     {
         $flatProperties = [];
@@ -296,9 +299,13 @@ final class PageMeta
         return $flatProperties + $expandedProperties;
     }
 
-    // Reorders sub-properties to follow their root tag. They belong to the
-    // root that precedes them, so a stray `image:alt` in front of `image`
-    // would be attached to the previous root or dropped: https://ogp.me/#array
+    /**
+     * Reorders sub-properties to follow their root tag.
+     *
+     * They belong to the root that precedes them, so a stray `image:alt` in
+     * front of `image` would be attached to the previous root or dropped:
+     * https://ogp.me/#array
+     */
     private static function groupPropertiesByRoot(array $properties): array
     {
         $groupedProperties = [];
