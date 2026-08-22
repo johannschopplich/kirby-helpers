@@ -44,13 +44,13 @@ final class PageMeta
             $value = $this->metadata[$key];
 
             if ($value instanceof Closure) {
-                $result = $value($this->page);
+                $computedValue = $value($this->page);
 
-                if ($result instanceof Field) {
-                    return $result;
+                if ($computedValue instanceof Field) {
+                    return $computedValue;
                 }
 
-                return new Field($this->page, $key, $result);
+                return new Field($this->page, $key, $computedValue);
             }
 
             return new Field($this->page, $key, $value);
@@ -81,7 +81,7 @@ final class PageMeta
 
     public function jsonld(): string
     {
-        $html = [];
+        $lines = [];
         $jsonldValue = $this->get('jsonld', false)->value();
         $jsonld = is_array($jsonldValue) ? $jsonldValue : [];
 
@@ -104,38 +104,38 @@ final class PageMeta
                 $flags |= JSON_PRETTY_PRINT;
             }
 
-            $html[] = '<script type="application/ld+json">';
-            $html[] = json_encode($schema, $flags);
-            $html[] = '</script>';
+            $lines[] = '<script type="application/ld+json">';
+            $lines[] = json_encode($schema, $flags);
+            $lines[] = '</script>';
         }
 
-        return implode(PHP_EOL, $html) . PHP_EOL;
+        return implode(PHP_EOL, $lines) . PHP_EOL;
     }
 
     public function robots(): string
     {
-        $html = [];
+        $tags = [];
         $robots = $this->get('robots');
         $canonical = $this->get('canonical');
 
         if ($robots->isNotEmpty()) {
-            $html[] = Html::tag('meta', null, [
+            $tags[] = Html::tag('meta', null, [
                 'name' => 'robots',
                 'content' => $robots->value(),
             ]);
         }
 
-        $html[] = Html::tag('link', null, [
+        $tags[] = Html::tag('link', null, [
             'rel' => 'canonical',
             'href' => $canonical->or($this->page->url())->value(),
         ]);
 
-        return implode(PHP_EOL, $html) . PHP_EOL;
+        return implode(PHP_EOL, $tags) . PHP_EOL;
     }
 
     public function social(): string
     {
-        $html = [];
+        $tags = [];
         $metaValue = $this->get('meta', false)->value();
         $opengraphValue = $this->get('opengraph', false)->value();
         $twitterValue = $this->get('twitter', false)->value();
@@ -207,7 +207,7 @@ final class PageMeta
                 continue;
             }
 
-            $html[] = Html::tag('meta', null, [
+            $tags[] = Html::tag('meta', null, [
                 'name' => $name,
                 'content' => $content,
             ]);
@@ -232,13 +232,13 @@ final class PageMeta
                         continue;
                     }
 
-                    $html[] = Html::tag('meta', null, [
+                    $tags[] = Html::tag('meta', null, [
                         'property' => "{$prefix}:{$subProperty}",
                         'content'  => $subContent,
                     ]);
                 }
             } else {
-                $html[] = Html::tag('meta', null, [
+                $tags[] = Html::tag('meta', null, [
                     'property' => "og:{$property}",
                     'content'  => $content,
                 ]);
@@ -250,13 +250,13 @@ final class PageMeta
                 continue;
             }
 
-            $html[] = Html::tag('meta', null, [
+            $tags[] = Html::tag('meta', null, [
                 'name' => "twitter:{$name}",
                 'content' => $content,
             ]);
         }
 
-        return implode(PHP_EOL, $html) . PHP_EOL;
+        return implode(PHP_EOL, $tags) . PHP_EOL;
     }
 
     public function opensearch(): string
