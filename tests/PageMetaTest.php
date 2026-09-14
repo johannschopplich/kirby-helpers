@@ -331,7 +331,7 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
-    public function falls_back_to_a_summary_card_without_an_image(): void
+    public function social_falls_back_to_a_summary_card_without_an_image(): void
     {
         $html = (new PageMeta($this->app()->page('test')))->social();
 
@@ -432,7 +432,7 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
-    public function social_renders_a_twitter_app_card_without_a_root_tag(): void
+    public function social_renders_a_flat_twitter_app_key(): void
     {
         $html = $this->metaForTestPage([
             'twitter' => ['card' => 'app', 'app:id:iphone' => '307234931'],
@@ -475,7 +475,7 @@ final class PageMetaTest extends TestCase
 
     #[Test]
     #[DataProvider('priorities')]
-    public function priority_defaults_to_a_half_and_is_clamped_to_the_unit_range(float|null $configuredPriority, float $expectedPriority): void
+    public function priority_defaults_to_0_5_and_clamps_the_configured_value_between_0_and_1(float|null $configuredPriority, float $expectedPriority): void
     {
         $defaults = $configuredPriority === null ? [] : ['priority' => $configuredPriority];
 

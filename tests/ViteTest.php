@@ -137,7 +137,7 @@ final class ViteTest extends TestCase
     }
 
     #[Test]
-    public function returns_no_css_in_dev(): void
+    public function returns_null_for_css_in_dev(): void
     {
         $this->assertNull($this->devVite()->css('src/main.js'));
     }
