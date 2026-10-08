@@ -159,6 +159,18 @@ final class SiteMetaTest extends TestCase
                 ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
                 ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
             ],
+            'site' => [
+                'children' => [
+                    [
+                        'slug' => 'about',
+                        // The sitemap lists an alternate only for a language the page is translated into.
+                        'translations' => [
+                            ['code' => 'en', 'content' => ['title' => 'About']],
+                            ['code' => 'de', 'content' => ['title' => 'Über uns']],
+                        ],
+                    ],
+                ],
+            ],
         ]);
         $body = SiteMeta::sitemap()->body();
 
@@ -166,6 +178,52 @@ final class SiteMetaTest extends TestCase
         $this->assertStringContainsString('hreflang="en-us"', $body);
         $this->assertStringContainsString('hreflang="de-de"', $body);
         $this->assertStringContainsString('hreflang="x-default"', $body);
+    }
+
+    #[Test]
+    public function sitemap_leaves_an_untranslated_language_out_of_the_alternates(): void
+    {
+        $this->app([
+            'languages' => [
+                ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
+                ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
+            ],
+            'site' => [
+                'children' => [
+                    [
+                        'slug' => 'only-english',
+                        'translations' => [
+                            ['code' => 'en', 'content' => ['title' => 'Only English']],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('hreflang="en-us"', $body);
+        $this->assertStringNotContainsString('hreflang="de-de"', $body);
+    }
+
+    /**
+     * A virtual page without content props has no translation in any
+     * language, not even the default one.
+     */
+    #[Test]
+    public function sitemap_keeps_every_alternate_of_a_page_without_content(): void
+    {
+        $this->app([
+            'languages' => [
+                ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
+                ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
+            ],
+            'site' => [
+                'children' => [['slug' => 'virtual']],
+            ],
+        ]);
+
+        $this->assertStringContainsString('hreflang="de-de"', SiteMeta::sitemap()->body());
     }
 
     #[Test]

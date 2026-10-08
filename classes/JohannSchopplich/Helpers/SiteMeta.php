@@ -76,7 +76,17 @@ final class SiteMeta
                     }
 
                     if ($kirby->multilang()) {
-                        foreach ($kirby->languages() as $language) {
+                        // Kirby renders a missing translation from the default language.
+                        $sitemapLanguages = $kirby->languages()->filter(
+                            fn ($language) => $page->translation($language->code())->exists()
+                        );
+
+                        // A virtual page without content props exists in no language at all.
+                        if ($sitemapLanguages->isEmpty()) {
+                            $sitemapLanguages = $kirby->languages();
+                        }
+
+                        foreach ($sitemapLanguages as $language) {
                             $hreflang = Util::languageToHreflang($language);
                             $lines[] = '  <xhtml:link rel="alternate" hreflang="' . $hreflang . '" href="' . $page->url($language->code()) . '" />';
                         }

@@ -71,11 +71,10 @@ options:
 
 ## Multilingual Support
 
-For multilingual sites, the plugin automatically generates:
+For multilingual sites, each page gets one `<url>` with its default-language URL, plus:
 
-- Separate URLs for each language version
-- `hreflang` attributes for each language
-- `x-default` hreflang pointing to the default language
+- an `hreflang` alternate for each language the page is translated into – a page without any content, such as a virtual page without content props, gets one for every language
+- an `x-default` alternate pointing to the default-language URL
 
 Example multilingual sitemap output:
 
@@ -84,7 +83,7 @@ Example multilingual sitemap output:
   <loc>https://example.com/en/about</loc>
   <xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/about" />
   <xhtml:link rel="alternate" hreflang="de" href="https://example.com/de/uber-uns" />
-  <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/about" />
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/en/about" />
 </url>
 ```
 
