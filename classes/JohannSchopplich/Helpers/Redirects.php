@@ -29,7 +29,8 @@ final class Redirects
                         return go($to(...$parameters));
                     }
 
-                    return go(self::fillPlaceholders($to, $parameters));
+                    // Kirby binds the action to its route, where `self` names the route class.
+                    return go(Redirects::fillPlaceholders($to, $parameters));
                 }
             ],
             array_keys($redirects),
