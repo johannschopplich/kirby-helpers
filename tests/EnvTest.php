@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use JohannSchopplich\Helpers\Env;
+use Kirby\Cms\App;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -63,6 +64,20 @@ final class EnvTest extends TestCase
         }
 
         $this->assertFalse(Env::isLoaded());
+    }
+
+    #[Test]
+    public function site_env_reads_the_env_file_next_to_the_site_folder_by_default(): void
+    {
+        $this->writeEnvFile('TEST_VAR=value');
+        $kirby = new App([
+            'roots' => [
+                'index' => $this->fixturesPath . '/public',
+                'site' => $this->fixturesPath . '/site',
+            ],
+        ]);
+
+        $this->assertSame('value', $kirby->site()->env('TEST_VAR'));
     }
 
     #[Test]
