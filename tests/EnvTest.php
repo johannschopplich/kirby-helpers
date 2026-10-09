@@ -81,6 +81,21 @@ final class EnvTest extends TestCase
     }
 
     #[Test]
+    public function site_env_reads_the_env_file_in_a_custom_base_root(): void
+    {
+        $this->writeEnvFile('TEST_VAR=value');
+        $kirby = new App([
+            'roots' => [
+                'index' => $this->fixturesPath . '/public',
+                'base' => $this->fixturesPath,
+                'site' => $this->fixturesPath . '/src/site',
+            ],
+        ]);
+
+        $this->assertSame('value', $kirby->site()->env('TEST_VAR'));
+    }
+
+    #[Test]
     public function site_env_returns_the_default_without_an_env_file(): void
     {
         $kirby = new App([
