@@ -46,6 +46,23 @@ final class RedirectsTest extends TestCase
         $this->assertNull(Redirects::go('unrelated/path'));
     }
 
+    #[Test]
+    public function returns_null_when_a_closure_target_returns_null(): void
+    {
+        $this->app(['old-page' => fn () => null]);
+
+        $this->assertNull(Redirects::go('old-page'));
+    }
+
+    #[Test]
+    public function rethrows_an_Error_from_a_closure_target(): void
+    {
+        $this->app(['old-page' => fn () => throw new Error('Broken target')]);
+
+        $this->expectExceptionMessage('Broken target');
+        Redirects::go('old-page');
+    }
+
     /** @return array<string, array{0: string, 1: array<int, string>, 2: string}> */
     public static function placeholderCases(): array
     {

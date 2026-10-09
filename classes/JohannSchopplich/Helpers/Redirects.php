@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace JohannSchopplich\Helpers;
 
 use Closure;
+use Exception;
 use Kirby\Cms\App;
 use Kirby\Http\Router;
-use Throwable;
 
 final class Redirects
 {
@@ -24,9 +24,11 @@ final class Redirects
             fn ($from, $to) => [
                 'pattern' => $from,
                 'action'  => function (...$parameters) use ($to) {
-                    // A closure target consumes the matched segments directly.
+                    // A closure target consumes the matched segments directly;
+                    // one that returns `null` leaves Kirby's response untouched.
                     if ($to instanceof Closure) {
-                        return go($to(...$parameters));
+                        $target = $to(...$parameters);
+                        return $target === null ? null : go($target);
                     }
 
                     // Kirby binds the action to its route, where `self` names the route class.
@@ -39,8 +41,8 @@ final class Redirects
 
         try {
             return Router::execute($path, $method, $routes);
-        } catch (Throwable) {
-            // No redirect matched: leave Kirby's own response untouched.
+        } catch (Exception) {
+            // No redirect matched, or a target threw an exception: leave Kirby's own response untouched.
             return null;
         }
     }
