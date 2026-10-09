@@ -81,6 +81,19 @@ final class EnvTest extends TestCase
     }
 
     #[Test]
+    public function site_env_returns_the_default_without_an_env_file(): void
+    {
+        $kirby = new App([
+            'roots' => [
+                'index' => $this->fixturesPath . '/public',
+                'site' => $this->fixturesPath . '/site',
+            ],
+        ]);
+
+        $this->assertSame('fallback', $kirby->site()->env('TEST_VAR', 'fallback'));
+    }
+
+    #[Test]
     public function load_returns_the_parsed_variables(): void
     {
         $this->writeEnvFile("FOO=bar\nBAZ=qux");
