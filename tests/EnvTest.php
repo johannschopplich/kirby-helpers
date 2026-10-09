@@ -72,7 +72,7 @@ final class EnvTest extends TestCase
         $this->writeEnvFile('TEST_VAR=value');
         $kirby = new App([
             'roots' => [
-                'index' => $this->fixturesPath . '/public',
+                'index' => $this->fixturesPath . '/web/public',
                 'site' => $this->fixturesPath . '/site',
             ],
         ]);
