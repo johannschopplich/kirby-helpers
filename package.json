@@ -2,13 +2,13 @@
   "type": "module",
   "version": "7.1.1",
   "private": true,
-  "packageManager": "pnpm@11.22.0",
+  "packageManager": "pnpm@11.25.0",
   "scripts": {
     "release": "bumpp --all --execute \"npx zx scripts/pre-release.mjs\" && zx scripts/post-release.mjs",
-    "format": "prettier \"{docs,scripts}/**/*\" --write"
+    "format": "prettier \"scripts/**\" --write"
   },
   "devDependencies": {
-    "bumpp": "^12.2.1",
+    "bumpp": "^12.3.0",
     "prettier": "^3.9.6",
     "zx": "^8.8.5"
   }
