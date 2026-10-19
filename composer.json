@@ -2,7 +2,7 @@
   "name": "johannschopplich/kirby-helpers",
   "description": "Environment variables, meta tags, sitemap, redirects, and Vite",
   "type": "kirby-plugin",
-  "version": "7.1.1",
+  "version": "7.1.2",
   "keywords": [
     "kirby",
     "kirby-cms",

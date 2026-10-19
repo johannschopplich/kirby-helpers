@@ -4,13 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22
+class ComposerStaticInitf0ac9040b4e7342a4780665edad9e15a
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        'a14d633e3c7e6d2a0914d958e340f4fa' => __DIR__ . '/../..' . '/helpers.php',
+        'f8ab60cab29e394b7ed2faad6da28b70' => __DIR__ . '/../..' . '/src/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -65,7 +65,7 @@ class ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22
         ),
         'JohannSchopplich\\' =>
         array (
-            0 => __DIR__ . '/../..' . '/classes/JohannSchopplich',
+            0 => __DIR__ . '/../..' . '/src/classes',
         ),
         'GrahamCampbell\\ResultType\\' =>
         array (
@@ -124,12 +124,12 @@ class ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
-        'JohannSchopplich\\Helpers\\Env' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Env.php',
-        'JohannSchopplich\\Helpers\\PageMeta' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/PageMeta.php',
-        'JohannSchopplich\\Helpers\\Redirects' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Redirects.php',
-        'JohannSchopplich\\Helpers\\SiteMeta' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/SiteMeta.php',
-        'JohannSchopplich\\Helpers\\Util' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Util.php',
-        'JohannSchopplich\\Helpers\\Vite' => __DIR__ . '/../..' . '/classes/JohannSchopplich/Helpers/Vite.php',
+        'JohannSchopplich\\Helpers\\Env' => __DIR__ . '/../..' . '/src/classes/Helpers/Env.php',
+        'JohannSchopplich\\Helpers\\PageMeta' => __DIR__ . '/../..' . '/src/classes/Helpers/PageMeta.php',
+        'JohannSchopplich\\Helpers\\Redirects' => __DIR__ . '/../..' . '/src/classes/Helpers/Redirects.php',
+        'JohannSchopplich\\Helpers\\SiteMeta' => __DIR__ . '/../..' . '/src/classes/Helpers/SiteMeta.php',
+        'JohannSchopplich\\Helpers\\Util' => __DIR__ . '/../..' . '/src/classes/Helpers/Util.php',
+        'JohannSchopplich\\Helpers\\Vite' => __DIR__ . '/../..' . '/src/classes/Helpers/Vite.php',
         'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
@@ -151,9 +151,9 @@ class ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb2a3f5547e6df04ae5d08d390f475b22::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf0ac9040b4e7342a4780665edad9e15a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf0ac9040b4e7342a4780665edad9e15a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf0ac9040b4e7342a4780665edad9e15a::$classMap;
 
         }, null, ClassLoader::class);
     }
