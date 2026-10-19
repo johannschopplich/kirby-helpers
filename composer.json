@@ -33,10 +33,10 @@
   },
   "autoload": {
     "files": [
-      "helpers.php"
+      "src/helpers.php"
     ],
     "psr-4": {
-      "JohannSchopplich\\": "classes/JohannSchopplich/"
+      "JohannSchopplich\\": "src/classes/"
     }
   },
   "scripts": {

@@ -21,7 +21,7 @@
   </testsuites>
   <source>
     <include>
-      <directory>classes</directory>
+      <directory>src</directory>
     </include>
   </source>
 </phpunit>
