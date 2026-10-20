@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "bumpp": "^12.3.0",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.10",
     "zx": "^8.8.5"
   }
 }
