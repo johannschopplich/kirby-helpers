@@ -144,7 +144,10 @@ final class Vite
         }
 
         foreach (A::wrap($entries) as $entry) {
-            $urls[] = $this->file($entry);
+            $url = $this->file($entry);
+            if ($url !== null) {
+                $urls[] = $url;
+            }
         }
 
         return $urls !== [] ? $urls : null;

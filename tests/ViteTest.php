@@ -128,6 +128,15 @@ final class ViteTest extends TestCase
     }
 
     #[Test]
+    public function panel_js_skips_a_missing_entry_in_prod(): void
+    {
+        $this->assertSame(
+            ['https://example.com/dist/assets/main-abc.js'],
+            $this->prodVite()->panelJs(['src/main.js', 'src/missing.js'])
+        );
+    }
+
+    #[Test]
     public function collects_imported_module_css_in_prod(): void
     {
         $html = $this->prodVite()->css('src/main.js');
