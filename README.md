@@ -25,7 +25,7 @@ Kirby Helpers is a plugin for [Kirby CMS](https://getkirby.com) with five helper
 
 ## Requirements
 
-- Kirby 5
+- Kirby 5 or 6
 
 ## Installation
 
