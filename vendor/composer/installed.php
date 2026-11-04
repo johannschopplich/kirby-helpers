@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'johannschopplich/kirby-helpers',
-        'pretty_version' => '7.1.2',
-        'version' => '7.1.2.0',
+        'pretty_version' => '7.2.0',
+        'version' => '7.2.0.0',
         'reference' => null,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -29,8 +29,8 @@
             'dev_requirement' => false,
         ),
         'johannschopplich/kirby-helpers' => array(
-            'pretty_version' => '7.1.2',
-            'version' => '7.1.2.0',
+            'pretty_version' => '7.2.0',
+            'version' => '7.2.0.0',
             'reference' => null,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
@@ -74,9 +74,9 @@
             'dev_requirement' => false,
         ),
         'vlucas/phpdotenv' => array(
-            'pretty_version' => 'v5.7.0',
-            'version' => '5.7.0.0',
-            'reference' => '301c07936b16d88628b126b01d082ba153cf4c40',
+            'pretty_version' => 'v5.8.0',
+            'version' => '5.8.0.0',
+            'reference' => '96149103e62ac67e915f6d2ef59b72dee2e011e0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
             'aliases' => array(),
