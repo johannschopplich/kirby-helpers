@@ -6,7 +6,9 @@ use JohannSchopplich\Helpers\Env;
 use JohannSchopplich\Helpers\PageMeta;
 use JohannSchopplich\Helpers\Redirects;
 use JohannSchopplich\Helpers\SiteMeta;
+use JohannSchopplich\Helpers\Util;
 use Kirby\Cms\App;
+use Kirby\Content\Field;
 use Kirby\Http\Route;
 
 App::plugin('johannschopplich/helpers', [
@@ -39,6 +41,11 @@ App::plugin('johannschopplich/helpers', [
                 Route::next();
             }
         ]
+    ],
+    'fieldMethods' => [
+        'toExcerpt' => function (Field $field, int $chars = 140): string {
+            return Util::excerpt($field, $chars);
+        }
     ],
     'siteMethods' => [
         'env' => function (string $key, mixed $default = null) {
