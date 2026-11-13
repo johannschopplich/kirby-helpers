@@ -115,6 +115,28 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
+    public function page_metadata_replaces_a_list_from_the_defaults(): void
+    {
+        $kirby = $this->app([
+            'options' => [
+                'johannschopplich.helpers.meta.defaults' => [
+                    'jsonld' => ['person' => ['name' => 'Johann', 'sameAs' => ['https://a.example', 'https://b.example']]],
+                ],
+            ],
+            'pageModels' => ['with-same-as' => PageWithSameAs::class],
+            'site' => [
+                'children' => [
+                    ['slug' => 'with-same-as', 'template' => 'with-same-as', 'content' => ['title' => 'Page With sameAs']],
+                ],
+            ],
+        ]);
+
+        $html = (new PageMeta($kirby->page('with-same-as')))->jsonld();
+
+        $this->assertStringContainsString('"name":"Johann","sameAs":["https://c.example"]', $html);
+    }
+
+    #[Test]
     public function returns_metadata_from_the_config_defaults(): void
     {
         $meta = $this->metaForTestPage(['author' => 'Johann']);
@@ -605,6 +627,16 @@ class PageWithMetadata extends Page
         return [
             'author' => 'Page Author',
             'custom' => 'page-specific',
+        ];
+    }
+}
+
+class PageWithSameAs extends Page
+{
+    public function metadata(): array
+    {
+        return [
+            'jsonld' => ['person' => ['sameAs' => ['https://c.example']]],
         ];
     }
 }

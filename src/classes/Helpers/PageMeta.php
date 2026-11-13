@@ -27,7 +27,7 @@ final class PageMeta
         };
 
         if (method_exists($this->page, 'metadata')) {
-            $this->metadata = A::merge($this->metadata, $this->page->metadata());
+            $this->metadata = A::merge($this->metadata, $this->page->metadata(), A::MERGE_REPLACE);
         }
     }
 
