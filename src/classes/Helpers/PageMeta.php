@@ -99,7 +99,7 @@ final class PageMeta
                 ...$schema,
             ];
 
-            $flags = JSON_UNESCAPED_SLASHES;
+            $flags = JSON_UNESCAPED_SLASHES | JSON_HEX_TAG;
             if ($this->page->kirby()->option('debug', false)) {
                 $flags |= JSON_PRETTY_PRINT;
             }

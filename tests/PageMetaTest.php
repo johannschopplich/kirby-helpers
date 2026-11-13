@@ -253,6 +253,20 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
+    public function jsonld_escapes_a_closing_script_tag_in_a_value(): void
+    {
+        $html = $this->metaForTestPage([
+            'jsonld' => ['article' => ['headline' => 'A </script><script>alert(1)</script> B']],
+        ])->jsonld();
+
+        $this->assertSame(1, substr_count($html, '</script>'));
+        $this->assertStringContainsString(
+            '"headline":"A \u003C/script\u003E\u003Cscript\u003Ealert(1)\u003C/script\u003E B"',
+            $html
+        );
+    }
+
+    #[Test]
     public function jsonld_skips_non_array_entries(): void
     {
         $html = $this->metaForTestPage(['jsonld' => ['note' => 'just a string']])->jsonld();
