@@ -80,7 +80,7 @@ final class RedirectsTest extends TestCase
             'reordered segments' => ['$2/$1', ['a', 'b'], 'b/a'],
             'multi-digit token' => ['p/$10/$1', ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'X'], 'p/X/1'],
             'replacement containing a token' => ['p/$1/$2', ['foo$2', 'bar'], 'p/foo$2/bar'],
-            'unmatched token kept verbatim' => ['p/$3', ['only-one'], 'p/$3'],
+            'unmatched token removed' => ['p/$1/$2', ['only-one'], 'p/only-one/'],
         ];
     }
 

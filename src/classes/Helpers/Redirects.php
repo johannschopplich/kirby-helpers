@@ -51,7 +51,7 @@ final class Redirects
 
     /**
      * Replaces `$1`, `$2`, … placeholders in a redirect target with their
-     * matched route segments.
+     * matched route segments, and a placeholder without a match with nothing.
      *
      * Substitution runs in a single pass so that multi-digit tokens (`$10`)
      * and replacements that themselves contain a `$n` sequence are never
@@ -61,7 +61,7 @@ final class Redirects
     {
         return preg_replace_callback(
             '/\$(\d+)/',
-            fn ($matches) => $parameters[(int)$matches[1] - 1] ?? $matches[0],
+            fn ($matches) => $parameters[(int)$matches[1] - 1] ?? '',
             $target
         );
     }
