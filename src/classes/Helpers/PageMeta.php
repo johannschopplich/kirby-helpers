@@ -187,9 +187,11 @@ final class PageMeta
 
         // Both networks point at the same asset unless Twitter is set explicitly.
         if (isset($opengraph['image'])) {
-            $twitter['image'] ??= $opengraph['image'];
+            $twitter['image'] ??= A::first(A::wrap($opengraph['image']));
 
-            if (isset($opengraph['image:alt'])) {
+            // Open Graph attaches `image:alt` to the last of several images,
+            // not to the first one Twitter shows.
+            if (isset($opengraph['image:alt']) && !is_array($opengraph['image'])) {
                 $twitter['image:alt'] ??= $opengraph['image:alt'];
             }
         }
@@ -214,38 +216,25 @@ final class PageMeta
         }
 
         foreach ($opengraph as $property => $content) {
-            if ($content === null) {
-                continue;
-            }
+            // A `namespace:` prefix replaces the `og:` namespace, so
+            // `namespace:article` emits `article:*` properties.
+            if (str_starts_with($property, 'namespace:') && is_array($content)) {
+                $prefix = substr($property, 10);
 
-            if (is_array($content)) {
-                // A `namespace:` prefix replaces the `og:` namespace, so
-                // `namespace:article` emits `article:*` properties.
-                if (str_starts_with($property, 'namespace:')) {
-                    $prefix = substr($property, 10);
-                } else {
-                    $prefix = "og:{$property}";
-                }
-
-                foreach ($content as $subProperty => $subContent) {
-                    if ($subContent === null) {
-                        continue;
-                    }
-
-                    $tags[] = Html::tag('meta', null, [
-                        'property' => "{$prefix}:{$subProperty}",
-                        'content'  => $subContent,
-                    ]);
+                foreach (self::flattenNestedProperties($content) as $subProperty => $subContent) {
+                    array_push($tags, ...self::propertyTags("{$prefix}:{$subProperty}", $subContent));
                 }
             } else {
-                $tags[] = Html::tag('meta', null, [
-                    'property' => "og:{$property}",
-                    'content'  => $content,
-                ]);
+                array_push($tags, ...self::propertyTags("og:{$property}", $content));
             }
         }
 
         foreach ($twitter as $name => $content) {
+            // Twitter Cards have no arrays, so a list renders its first item.
+            if (is_array($content)) {
+                $content = A::first($content);
+            }
+
             if ($content === null) {
                 continue;
             }
@@ -270,11 +259,13 @@ final class PageMeta
     }
 
     /**
-     * Expands `['image' => ['alt' => …]]` into `['image:alt' => …]`, so both
-     * spellings resolve to the same key and cannot be emitted twice.
+     * Expands `['image' => ['alt' => …]]` into `['image:alt' => …]`, at any
+     * depth, so both spellings resolve to the same key and cannot be emitted
+     * twice.
      *
-     * `namespace:` values keep their array form, since `social()` maps them
-     * to a prefix of their own.
+     * Lists and `namespace:` values keep their array form, since `social()`
+     * repeats an Open Graph list's property and maps a namespace to a prefix
+     * of its own.
      */
     private static function flattenNestedProperties(array $properties): array
     {
@@ -284,12 +275,12 @@ final class PageMeta
         foreach ($properties as $property => $content) {
             $property = (string)$property;
 
-            if (!is_array($content) || str_starts_with($property, 'namespace:')) {
+            if (!is_array($content) || array_is_list($content) || str_starts_with($property, 'namespace:')) {
                 $flatProperties[$property] = $content;
                 continue;
             }
 
-            foreach ($content as $subProperty => $subContent) {
+            foreach (self::flattenNestedProperties($content) as $subProperty => $subContent) {
                 $expandedProperties["{$property}:{$subProperty}"] = $subContent;
             }
         }
@@ -329,5 +320,27 @@ final class PageMeta
         }
 
         return $orderedProperties;
+    }
+
+    /**
+     * Renders one tag per item of a list:
+     * https://ogp.me/#array
+     */
+    private static function propertyTags(string $property, mixed $content): array
+    {
+        $tags = [];
+
+        foreach (A::wrap($content) as $item) {
+            if ($item === null) {
+                continue;
+            }
+
+            $tags[] = Html::tag('meta', null, [
+                'property' => $property,
+                'content'  => $item,
+            ]);
+        }
+
+        return $tags;
     }
 }

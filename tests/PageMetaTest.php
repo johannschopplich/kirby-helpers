@@ -446,6 +446,107 @@ final class PageMetaTest extends TestCase
     }
 
     #[Test]
+    public function social_expands_a_map_inside_a_namespace_value(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => [
+                'namespace:article' => ['author' => ['name' => 'Jo', 'url' => 'https://example.com/jo']],
+            ],
+        ])->social();
+
+        $this->assertStringContainsString('content="Jo" property="article:author:name"', $html);
+        $this->assertStringContainsString('content="https://example.com/jo" property="article:author:url"', $html);
+        $this->assertStringNotContainsString('property="article:author"', $html);
+    }
+
+    #[Test]
+    public function social_renders_one_tag_per_item_of_a_list_value(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => [
+                'locale:alternate' => ['de_DE', 'es_ES'],
+                'namespace:article' => ['tag' => ['kirby', 'php']],
+            ],
+        ])->social();
+
+        $this->assertStringContainsString('content="de_DE" property="og:locale:alternate"', $html);
+        $this->assertStringContainsString('content="es_ES" property="og:locale:alternate"', $html);
+        $this->assertStringContainsString('content="kirby" property="article:tag"', $html);
+        $this->assertStringContainsString('content="php" property="article:tag"', $html);
+    }
+
+    #[Test]
+    public function social_expands_a_two_level_nested_og_property(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => ['image' => ['secure' => ['url' => 'https://cdn.example.com/a.jpg']]],
+        ])->social();
+
+        $this->assertStringContainsString('content="https://cdn.example.com/a.jpg" property="og:image:secure:url"', $html);
+    }
+
+    #[Test]
+    public function social_prefers_an_explicit_flat_key_over_a_two_level_nested_spelling(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => [
+                'image:secure:url' => 'https://cdn.example.com/flat.jpg',
+                'image' => ['secure' => ['url' => 'https://cdn.example.com/nested.jpg']],
+            ],
+        ])->social();
+
+        $this->assertSame(1, substr_count($html, 'property="og:image:secure:url"'));
+        $this->assertStringContainsString('content="https://cdn.example.com/flat.jpg" property="og:image:secure:url"', $html);
+    }
+
+    #[Test]
+    public function social_expands_a_two_level_nested_twitter_property(): void
+    {
+        $html = $this->metaForTestPage([
+            'twitter' => ['card' => 'app', 'app' => ['id' => ['iphone' => '307234931', 'ipad' => '307234932']]],
+        ])->social();
+
+        $this->assertStringContainsString('content="307234931" name="twitter:app:id:iphone"', $html);
+        $this->assertStringContainsString('content="307234932" name="twitter:app:id:ipad"', $html);
+    }
+
+    #[Test]
+    public function social_uses_the_first_of_several_og_images_as_the_twitter_image(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => ['image' => ['https://cdn.example.com/a.jpg', 'https://cdn.example.com/b.jpg']],
+        ])->social();
+
+        $this->assertStringContainsString('content="https://cdn.example.com/b.jpg" property="og:image"', $html);
+        $this->assertStringContainsString('content="https://cdn.example.com/a.jpg" name="twitter:image"', $html);
+    }
+
+    #[Test]
+    public function social_leaves_the_og_image_alt_out_of_twitter_for_several_og_images(): void
+    {
+        $html = $this->metaForTestPage([
+            'opengraph' => [
+                'image' => ['https://cdn.example.com/a.jpg', 'https://cdn.example.com/b.jpg'],
+                'image:alt' => 'Alt of b',
+            ],
+        ])->social();
+
+        $this->assertStringContainsString('content="Alt of b" property="og:image:alt"', $html);
+        $this->assertStringNotContainsString('name="twitter:image:alt"', $html);
+    }
+
+    #[Test]
+    public function social_renders_the_first_item_of_a_twitter_list_value(): void
+    {
+        $html = $this->metaForTestPage([
+            'twitter' => ['creator' => ['@first"quote', '@second']],
+        ])->social();
+
+        $this->assertSame(1, substr_count($html, 'name="twitter:creator"'));
+        $this->assertStringContainsString('content="@first&quot;quote" name="twitter:creator"', $html);
+    }
+
+    #[Test]
     public function social_renders_a_flat_twitter_app_key(): void
     {
         $html = $this->metaForTestPage([
