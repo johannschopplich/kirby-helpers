@@ -55,6 +55,20 @@ final class RedirectsTest extends TestCase
     }
 
     #[Test]
+    public function runs_the_target_for_a_HEAD_request(): void
+    {
+        $isTargetCalled = false;
+        $this->app(['old-page' => function () use (&$isTargetCalled) {
+            $isTargetCalled = true;
+            return null;
+        }]);
+
+        Redirects::go('old-page', 'HEAD');
+
+        $this->assertTrue($isTargetCalled);
+    }
+
+    #[Test]
     public function rethrows_an_Error_from_a_closure_target(): void
     {
         $this->app(['old-page' => fn () => throw new Error('Broken target')]);

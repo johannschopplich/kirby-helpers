@@ -23,6 +23,7 @@ final class Redirects
         $routes = array_map(
             fn ($from, $to) => [
                 'pattern' => $from,
+                'method'  => 'GET|HEAD',
                 'action'  => function (...$parameters) use ($to) {
                     // A closure target consumes the matched segments directly;
                     // one that returns `null` leaves Kirby's response untouched.
