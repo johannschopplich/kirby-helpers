@@ -40,11 +40,13 @@ final class Redirects
         );
 
         try {
-            return Router::execute($path, $method, $routes);
+            $route = (new Router($routes))->find($path ?? '', $method);
         } catch (Exception) {
-            // No redirect matched, or a target threw an exception: leave Kirby's own response untouched.
             return null;
         }
+
+        // Runs outside the `try`, so an exception from a target surfaces.
+        return $route->action()->call($route, ...$route->arguments());
     }
 
     /**

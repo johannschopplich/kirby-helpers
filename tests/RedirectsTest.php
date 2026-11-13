@@ -63,6 +63,15 @@ final class RedirectsTest extends TestCase
         Redirects::go('old-page');
     }
 
+    #[Test]
+    public function rethrows_an_Exception_from_a_closure_target(): void
+    {
+        $this->app(['old-page' => fn () => throw new Exception('Broken target')]);
+
+        $this->expectExceptionMessage('Broken target');
+        Redirects::go('old-page');
+    }
+
     /** @return array<string, array{0: string, 1: array<int, string>, 2: string}> */
     public static function placeholderCases(): array
     {
