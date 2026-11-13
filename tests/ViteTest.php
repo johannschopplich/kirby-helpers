@@ -146,6 +146,32 @@ final class ViteTest extends TestCase
     }
 
     #[Test]
+    public function collects_css_from_circular_chunk_imports_once(): void
+    {
+        file_put_contents($this->prodRoot . '/dist/.vite/manifest.json', json_encode([
+            'src/main.js' => [
+                'file' => 'assets/main-abc.js',
+                'imports' => ['_a.js'],
+            ],
+            '_a.js' => [
+                'file' => 'assets/a.js',
+                'css' => ['assets/a.css'],
+                'imports' => ['_b.js'],
+            ],
+            '_b.js' => [
+                'file' => 'assets/b.js',
+                'css' => ['assets/b.css'],
+                'imports' => ['_a.js'],
+            ],
+        ]));
+
+        $this->assertSame(
+            ['https://example.com/dist/assets/a.css', 'https://example.com/dist/assets/b.css'],
+            $this->prodVite()->panelCss('src/main.js')
+        );
+    }
+
+    #[Test]
     public function returns_null_for_css_in_dev(): void
     {
         $this->assertNull($this->devVite()->css('src/main.js'));

@@ -178,11 +178,14 @@ final class Vite
     /**
      * Collects all CSS files for an entry, including CSS from imported modules.
      */
-    protected function collectCss(string $entry): array
+    protected function collectCss(string $entry, array &$visitedEntries = []): array
     {
-        if ($this->manifest === null) {
+        // Rollup emits circular chunk imports, so each entry is visited once.
+        if ($this->manifest === null || isset($visitedEntries[$entry])) {
             return [];
         }
+
+        $visitedEntries[$entry] = true;
 
         $manifestEntry = $this->manifest[$entry] ?? null;
 
@@ -193,7 +196,7 @@ final class Vite
         $cssFiles = $manifestEntry['css'] ?? [];
 
         foreach ($manifestEntry['imports'] ?? [] as $import) {
-            $cssFiles = array_merge($cssFiles, $this->collectCss($import));
+            $cssFiles = array_merge($cssFiles, $this->collectCss($import, $visitedEntries));
         }
 
         return array_unique($cssFiles);
