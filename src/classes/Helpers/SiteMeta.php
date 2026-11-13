@@ -88,9 +88,9 @@ final class SiteMeta
 
                         foreach ($sitemapLanguages as $language) {
                             $hreflang = Util::languageToHreflang($language);
-                            $lines[] = '  <xhtml:link rel="alternate" hreflang="' . $hreflang . '" href="' . $page->url($language->code()) . '" />';
+                            $lines[] = '  <xhtml:link rel="alternate" hreflang="' . $hreflang . '" href="' . Xml::encode($page->url($language->code())) . '" />';
                         }
-                        $lines[] = '  <xhtml:link rel="alternate" hreflang="x-default" href="' . $page->url() . '" />';
+                        $lines[] = '  <xhtml:link rel="alternate" hreflang="x-default" href="' . Xml::encode($page->url()) . '" />';
                     }
 
                     $lines[] = '</url>';

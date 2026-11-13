@@ -181,6 +181,24 @@ final class SiteMetaTest extends TestCase
     }
 
     #[Test]
+    public function sitemap_encodes_an_ampersand_in_the_alternate_urls(): void
+    {
+        $this->app([
+            'languages' => [
+                ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
+                ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
+            ],
+            'site' => [
+                'children' => [['slug' => 'a&b']],
+            ],
+        ]);
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('hreflang="de-de" href="https://example.com/de/a&#38;b"', $body);
+        $this->assertStringContainsString('hreflang="x-default" href="https://example.com/en/a&#38;b"', $body);
+    }
+
+    #[Test]
     public function sitemap_leaves_an_untranslated_language_out_of_the_alternates(): void
     {
         $this->app([
