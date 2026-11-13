@@ -68,20 +68,19 @@ final class RedirectsTest extends TestCase
         $this->assertTrue($isTargetCalled);
     }
 
-    #[Test]
-    public function rethrows_an_Error_from_a_closure_target(): void
+    /** @return array<string, array{0: class-string<Throwable>}> */
+    public static function throwableClasses(): array
     {
-        $this->app(['old-page' => fn () => throw new Error('Broken target')]);
-
-        $this->expectExceptionMessage('Broken target');
-        Redirects::go('old-page');
+        return ['Error' => [Error::class], 'Exception' => [Exception::class]];
     }
 
     #[Test]
-    public function rethrows_an_Exception_from_a_closure_target(): void
+    #[DataProvider('throwableClasses')]
+    public function rethrows_a_Throwable_from_a_closure_target(string $throwableClass): void
     {
-        $this->app(['old-page' => fn () => throw new Exception('Broken target')]);
+        $this->app(['old-page' => fn () => throw new $throwableClass('Broken target')]);
 
+        $this->expectException($throwableClass);
         $this->expectExceptionMessage('Broken target');
         Redirects::go('old-page');
     }
