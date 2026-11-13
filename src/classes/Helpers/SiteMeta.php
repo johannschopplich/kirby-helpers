@@ -49,7 +49,7 @@ final class SiteMeta
                         continue;
                     }
 
-                    if ($excludePages !== [] && preg_match('!^(?:' . implode('|', $excludePages) . ')$!i', $page->id())) {
+                    if ($excludePages !== [] && preg_match('#^(?:' . implode('|', $excludePages) . ')$#i', $page->id())) {
                         continue;
                     }
 

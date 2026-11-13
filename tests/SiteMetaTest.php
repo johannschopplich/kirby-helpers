@@ -132,6 +132,18 @@ final class SiteMetaTest extends TestCase
     }
 
     #[Test]
+    public function excludes_pages_by_a_pattern_containing_an_exclamation_mark(): void
+    {
+        $this->app([
+            'options' => ['johannschopplich.helpers.sitemap.exclude.pages' => ['(?!about).*']],
+        ]);
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('/about', $body);
+        $this->assertStringNotContainsString('/contact', $body);
+    }
+
+    #[Test]
     public function excludes_pages_via_the_blueprint_option(): void
     {
         $this->app([
