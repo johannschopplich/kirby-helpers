@@ -20,6 +20,7 @@ Kirby Helpers is a plugin for [Kirby CMS](https://getkirby.com) with five helper
 | Read values from a `.env` file                              | `env('KEY', $default)`                  |
 | Render description, Open Graph, Twitter, and JSON-LD tags   | `$page->meta()`                         |
 | Serve a sitemap with `hreflang` alternates                  | `sitemap.enabled` option                |
+| Serve a `robots.txt` that points to the sitemap             | `robots.enabled` option                 |
 | Redirect URLs that no longer exist                          | `redirects` option                      |
 | Load Vite's dev server or built assets                      | `vite()->js()` and `vite()->css()`      |
 
