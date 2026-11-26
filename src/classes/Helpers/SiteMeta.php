@@ -44,6 +44,12 @@ final class SiteMeta
                     $excludePages = $excludePages();
                 }
 
+                $excludeLanguages = $kirby->option('johannschopplich.helpers.sitemap.exclude.languages', []);
+
+                if ($excludeLanguages instanceof Closure) {
+                    $excludeLanguages = $excludeLanguages();
+                }
+
                 foreach ($kirby->site()->index() as $page) {
                     if (in_array($page->intendedTemplate()->name(), $excludeTemplates, true)) {
                         continue;
@@ -85,6 +91,11 @@ final class SiteMeta
                         if ($sitemapLanguages->isEmpty()) {
                             $sitemapLanguages = $kirby->languages();
                         }
+
+                        // The entry's `<loc>` and `x-default` alternate are the default-language URL.
+                        $sitemapLanguages = $sitemapLanguages->filter(
+                            fn ($language) => $language->isDefault() || !in_array($language->code(), $excludeLanguages, true)
+                        );
 
                         foreach ($sitemapLanguages as $language) {
                             $hreflang = Util::languageToHreflang($language);

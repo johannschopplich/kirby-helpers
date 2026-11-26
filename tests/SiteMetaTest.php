@@ -105,13 +105,13 @@ final class SiteMetaTest extends TestCase
     }
 
     /** @return array<string, array{0: string}> */
-    public static function pageExclusionKinds(): array
+    public static function exclusionKinds(): array
     {
         return ['as array' => ['array'], 'as callable' => ['callable']];
     }
 
     #[Test]
-    #[DataProvider('pageExclusionKinds')]
+    #[DataProvider('exclusionKinds')]
     public function excludes_pages(string $kind): void
     {
         $exclude = $kind === 'callable' ? fn () => ['hidden-page'] : ['hidden-page'];
@@ -254,6 +254,55 @@ final class SiteMetaTest extends TestCase
         ]);
 
         $this->assertStringContainsString('hreflang="de-de"', SiteMeta::sitemap()->body());
+    }
+
+    #[Test]
+    #[DataProvider('exclusionKinds')]
+    public function sitemap_leaves_an_excluded_language_out_of_the_alternates(string $kind): void
+    {
+        $exclude = $kind === 'callable' ? fn () => ['de'] : ['de'];
+
+        $this->app([
+            'options' => ['johannschopplich.helpers.sitemap.exclude.languages' => $exclude],
+            'languages' => [
+                ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
+                ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
+            ],
+            'site' => [
+                'children' => [
+                    [
+                        'slug' => 'about',
+                        'translations' => [
+                            ['code' => 'en', 'content' => ['title' => 'About']],
+                            ['code' => 'de', 'content' => ['title' => 'Über uns']],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('hreflang="en-us"', $body);
+        $this->assertStringNotContainsString('hreflang="de-de"', $body);
+    }
+
+    #[Test]
+    public function sitemap_leaves_every_excluded_language_but_the_default_out_of_a_page_without_content(): void
+    {
+        $this->app([
+            'options' => ['johannschopplich.helpers.sitemap.exclude.languages' => ['en', 'de']],
+            'languages' => [
+                ['code' => 'en', 'name' => 'English', 'default' => true, 'locale' => 'en_US.UTF-8'],
+                ['code' => 'de', 'name' => 'Deutsch', 'locale' => 'de_DE.UTF-8'],
+            ],
+            'site' => [
+                'children' => [['slug' => 'virtual']],
+            ],
+        ]);
+        $body = SiteMeta::sitemap()->body();
+
+        $this->assertStringContainsString('hreflang="en-us"', $body);
+        $this->assertStringNotContainsString('hreflang="de-de"', $body);
     }
 
     #[Test]
